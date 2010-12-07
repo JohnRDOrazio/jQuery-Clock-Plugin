@@ -22,16 +22,16 @@
  *   $("#mydiv").clock({"langSet":"it"}); >> will have 24 hour format
  *   $("#mydiv").clock({"langSet":"en"}); >> will have 12 hour format 
  *   $("#mydiv").clock({"langSet":"en","format":"24"}); >> will have military style 24 hour format
+ *   $("#mydiv").clock({"calendar":true}); >> will include the date with the time, and will update the date at midnight
  *         
  */
 
 (function($, undefined) {
 
-$.clock = { version: "1.0.0", locale: {} };
-
+$.clock = { version: "1.0.0", locale: {} }
+  
 $.fn.clock = function(options) {
-
-  this.locale = {
+  var locale = {
     "it":{
       "weekdays":["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"],
       "months":["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"]
@@ -57,23 +57,28 @@ $.fn.clock = function(options) {
       "months":["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     }
   }
-  $.extend(this.locale,$.clock.locale);
 
   return this.each(function(){
+    $.extend(locale,$.clock.locale);
     options = options || {};  
     if(options=="destroy"){ $(this).updateClock($(this),"destroy"); }
     if(options.timestamp!=undefined){
       mytimestamp = options.timestamp;
       mytimestamp = new Date(options.timestamp);
     }
-    else{ mytimestamp = new Date(); }
+    else{ 
+      options.timestamp = new Date();
+      mytimestamp = options.timestamp;
+      options.timestamp = options.timestamp.getTime();
+    }
     options.langSet = options.langSet || "en";
-    options.format = options.format || (options.langSet!="en") ? "24" : "12";
+    options.format = options.format || ((options.langSet!="en") ? "24" : "12");
+    options.calendar = options.calendar || "true";
 
     options.timestamp += 1000;
     var addleadingzero = function(i){
-    	if (i<10){i="0" + i;}
-    	return i;    
+      if (i<10){i="0" + i;}
+      return i;    
     },
     h=mytimestamp.getHours(),
     m=mytimestamp.getMinutes(),
@@ -82,41 +87,43 @@ $.fn.clock = function(options) {
     dt=mytimestamp.getDate(),
     mo=mytimestamp.getMonth(),
     y=mytimestamp.getFullYear(),
-    ap="";
+    ap="",
+    calend="";
   
     if(options.format=="12"){
       ap=" AM";
       if (h > 11) { ap = " PM"; }
-    	if (h > 12) { h = h - 12; }
-    	if (h == 0) { h = 12; }
+      if (h > 12) { h = h - 12; }
+      if (h == 0) { h = 12; }
     }
-    if(options.langSet=="en"&&options.format=="12"){
-    	if(s==0&&m==0&&h==12){ $("div#currentdate").html(this.locale[langSet].weekdays[dy]+', '+this.locale[langset].months[mo]+' '+dt+', '+y); }
-    }
-    if(options.langSet=="en"&&options.format=="24"){
-    	if(s==0&&m==0&&h==0){ $("div#currentdate").html(this.locale[langSet].weekdays[dy]+', '+this.locale[langset].months[mo]+' '+dt+', '+y); }
-    }
-    else{     
-      if(options.format=="24"){
-        if(s==0&&m==0&&h==0){ $("div#currentdate").html(this.locale[langSet].weekdays[dy]+', '+dt+' '+this.locale[langSet].months[mo]+' '+y); }
-      }
-      else{
-        if(s==0&&m==0&&h==12){ $("div#currentdate").html(this.locale[langSet].weekdays[dy]+', '+dt+' '+this.locale[langSet].months[mo]+' '+y); }
-      }
-    }
+
     // add a zero in front of numbers 0-9
     h=addleadingzero(h);
     m=addleadingzero(m);
     s=addleadingzero(s);
 
-    $(this).html(h+":"+m+":"+s+ap);
-    $(this).updateClock($(this),{"timestamp":options.timestamp,"langSet":options.langSet,"format":options.format});
+    if(options.calendar!="false") {
+      if (options.langSet=="en") {
+        calend = "<span class='clockdate'>"+locale[options.langSet].weekdays[dy]+', '+locale[options.langSet].months[mo]+' '+dt+', '+y+"</span>";
+      }
+      else {
+        calend = "<span class='clockdate'>"+locale[options.langSet].weekdays[dy]+', '+dt+' '+locale[options.langSet].months[mo]+' '+y+"</span>";
+      }
+    }
+    if ( !$(this).hasClass("jqclock") ) {
+      $(this).addClass("jqclock");
+    }
+    $(this).html(calend+"<span class='clocktime'>"+h+":"+m+":"+s+ap+"</span>");
+    $(this).updateClock($(this),{"calendar":options.calendar,"timestamp":options.timestamp,"langSet":options.langSet,"format":options.format});
   });
 }
-    $.fn.updateClock = function(el,myoptions) {
-        if(myoptions=="destroy"){ clearTimeout(t); }
-        else { t = setTimeout(function() {$(el).clock(myoptions)}, 1000); }
+  t = new Array();
+  $.fn.updateClock = function(el,myoptions) {
+    var el_id = $(el).attr("id");
+    if(myoptions=="destroy"){ clearTimeout(t[el_id]); }
+    else { t[el_id] = setTimeout(function() {$(el).clock(myoptions)}, 1000); }
     }
-return this;
+
+  return this;
 
 })(jQuery);
