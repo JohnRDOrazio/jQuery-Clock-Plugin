@@ -28,7 +28,7 @@
 
 (function($, undefined) {
 
-$.clock = { version: "1.0.0", locale: {} }
+$.clock = { version: "2.0.0", locale: {} }
 
 t = new Array();
   
