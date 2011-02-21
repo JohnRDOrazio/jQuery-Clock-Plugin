@@ -28,7 +28,7 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.0", locale: {} }
+$.clock = { version: "2.0.1", locale: {} }
 
 t = new Array();
   
@@ -87,7 +87,7 @@ $.fn.clock = function(options) {
       else {
         mytimestamp = new Date();
         mytimestamp = mytimestamp.getTime();
-        mytimestamp = mytimestamp - myoptions.sysdiff;
+        mytimestamp = mytimestamp + myoptions.sysdiff;
         mytimestamp = new Date(mytimestamp);
         var h=mytimestamp.getHours(),
         m=mytimestamp.getMinutes(),
