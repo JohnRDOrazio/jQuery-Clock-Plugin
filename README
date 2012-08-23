@@ -19,7 +19,7 @@ Includes 6 language translations for days of the week and months of the year: En
 $("div#clock").clock({"langSet":"de"});
 
 
-The language translations can be easily extended. To add portughese language:
+The language translations can be easily extended. To add Portuguese language:
 
 $.clock.locale.pt = {"weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],"months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"] };
 
