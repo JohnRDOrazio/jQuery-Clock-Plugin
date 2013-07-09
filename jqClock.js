@@ -74,6 +74,7 @@ $.fn.clock = function(options) {
     options.langSet = options.langSet || "en";
     options.format = options.format || ((options.langSet!="en") ? "24" : "12");
     options.calendar = options.calendar || "true";
+    options.seconds = options.seconds || "true";
 
     if (!$(this).hasClass("jqclock")){$(this).addClass("jqclock");}
 
@@ -119,7 +120,12 @@ $.fn.clock = function(options) {
             calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
           }
         }
-        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+":"+s+ap+"</span>");
+        clockString = "<span class='clocktime'>"+h+":"+m;
+        if(options.seconds == "true") {
+          clockString = clockString+":"+s;
+        }
+        clockString = clockString+ap+"</span>";
+        $(el).html(calend+clockString);
         t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
       }
 
