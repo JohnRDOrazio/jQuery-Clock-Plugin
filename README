@@ -14,6 +14,11 @@ By default prints the date together with the time, but can be used for time only
 $("div#clock").clock({"calendar":"false"});
 
 
+By default, output includes seconds. If you would prefer to hide the seconds add the following option:
+
+$("div#clock").clock({"seconds":"false"});
+
+
 Includes 6 language translations for days of the week and months of the year: English, French, Spanish, Italian, German, Russian. 
 
 $("div#clock").clock({"langSet":"de"});
