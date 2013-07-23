@@ -5,51 +5,52 @@ Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the 
 USAGE:
 
 Use defaults:
-
+```
 $("div#clock").clock();
-
+```
 
 By default prints the date together with the time, but can be used for time only:
-
+```
 $("div#clock").clock({"calendar":"false"});
-
+```
 
 Includes 6 language translations for days of the week and months of the year: English, French, Spanish, Italian, German, Russian. 
-
+```
 $("div#clock").clock({"langSet":"de"});
-
+```
 
 The language translations can be easily extended. To add Portuguese language:
-
+```
 $.clock.locale.pt = {"weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],"months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"] };
-
+```
 Then you can pass in your custom language set:
-
+```
 $("div#clock").clock({"langSet":"pt"});
-
+```
 
 
 Can take a custom timestamp:
-
+```
 customtimestamp = new Date();
 customtimestamp = customtimestamp.getTime();
 customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13 days, 3 hours and 14 seconds ahead
 $("#clock").clock({"timestamp":customtimestamp});
-
+```
 
 This functionality can be useful to use server timestamp instead of client timestamp. Say you use php to set the value of a hidden input field to the server timestamp:
-
+```
 <?php
 echo "<input id='servertime' type='hidden' val='".time()."' />";
 ?>
-
+```
 You can then start your clock using that timestamp (you must turn the string into a number with parseFloat, then multiply by 1000 for milliseconds):
-
+```
 servertime = parseFloat( $("input#servertime").val() ) * 1000;
 $("#clock").clock({"timestamp":servertime});
-
+```
 It would be interesting to call an ntp timeserver and start clock with ntp's timestamp, in order to have precise time. I have never succeeded in calling an ntp timeserver myself...
 
 Includes a handler to stop the clock, just pass "destroy".
-
+```
 $("div#clock").clock("destroy");
+```
