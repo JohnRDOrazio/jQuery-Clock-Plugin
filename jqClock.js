@@ -13,8 +13,9 @@
  *   >> will turn div into clock using client computer's current time
  * @timestamp server-side example:
  *   Say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time
- *   $("#mydiv").clock({"timestamp":$("#timestmp").val()});
- *   >> will turn div into clock passing in server's current time as retrieved from hidden input
+ *   tmstmp = parseFloat($("#timestmp").val()) * 1000;
+ *   $("#mydiv").clock({"timestamp":tmstmp});
+ *   >> will turn div into clock passing in server's current time as retrieved from hidden input, and after being converted to a javascript style timestamp
  *    
  * @format defaults to 12 hour format,
  *   or if langSet is indicated defaults to most appropriate format for that langSet
@@ -28,7 +29,7 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.1", locale: {} }
+$.clock = { version: "2.0.2", locale: {} }
 
 t = new Array();
   
@@ -74,6 +75,7 @@ $.fn.clock = function(options) {
     options.langSet = options.langSet || "en";
     options.format = options.format || ((options.langSet!="en") ? "24" : "12");
     options.calendar = options.calendar || "true";
+    options.seconds = options.seconds || "true";
 
     if (!$(this).hasClass("jqclock")){$(this).addClass("jqclock");}
 
@@ -119,7 +121,7 @@ $.fn.clock = function(options) {
             calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
           }
         }
-        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+":"+s+ap+"</span>");
+        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
         t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
       }
 
