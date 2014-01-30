@@ -1,6 +1,9 @@
 Turns a given div element into a dynamic clock that updates every second, main advantage compared to other similar plugins is that this one can also take an initial timestamp instead of client system time.
-Try the demo at http://jsbin.com/ugapo3/8.
+You can see a demo that you can edit and play around with yourself at http://jsbin.com/ugapo3/8.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
+
+If you would like to see a live demo with a server-side example, take a look over here:
+http://jqclock-server-side-example.lwangaman.boxes.codiodev.com:3000/
 
 USAGE:
 
