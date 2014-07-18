@@ -115,10 +115,10 @@ $.fn.clock = function(options) {
 
         if(myoptions.calendar!="false") {
           if (myoptions.langSet=="en") {
-            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+locale[myoptions.langSet].months[mo]+' '+dt+', '+y+"</span>";
+            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+locale[myoptions.langSet].months[mo]+' '+dt+', '+y+" </span>";
           }
           else {
-            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
+            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+" </span>";
           }
         }
         $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
