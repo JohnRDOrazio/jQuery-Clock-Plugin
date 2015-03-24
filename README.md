@@ -3,7 +3,9 @@ You can see a demo that you can edit and play around with yourself at http://jsb
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
 If you would like to see a live demo with a server-side example, take a look here:
+
 SERVER SIDE CODE EXAMPLE: https://codio.com/Lwangaman/jqClock/tree/index.php
+
 Once you have opened the code example page, the server listener should be activated, and you should now be able to see the code working live at this link: http://pelvis-falser.codio.io:3000/ 
 
 USAGE:
