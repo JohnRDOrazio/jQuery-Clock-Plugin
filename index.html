@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
 
-  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
        Remove this if you use the .htaccess -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
@@ -22,26 +22,26 @@
   <script type="text/javascript" src="jqClock.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-    
+
       $.clock.locale = {"pt":{"weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],"months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"] } };
-      
+
       $("#clock1").clock();
       $("#clock2").clock({"langSet":"it"});
       $("#clock3").clock({"langSet":"pt"});
       $("#clock4").clock({"format":"24","calendar":"false"});
-      
+
       customtimestamp = new Date();
       customtimestamp = customtimestamp.getTime();
       customtimestamp = customtimestamp+1123200000+10800000+14000;
       $("#clock5").clock({"timestamp":customtimestamp});
-      
+
       $("#destroyclock1").click(function(){ $("#clock1").clock("destroy") });
       $("#destroyclock2").click(function(){ $("#clock2").clock("destroy") });
       $("#destroyclock3").click(function(){ $("#clock3").clock("destroy") });
       $("#destroyclock4").click(function(){ $("#clock4").clock("destroy") });
       $("#destroyclock5").click(function(){ $("#clock5").clock("destroy") });
-                                           
-    });    
+
+    });
   </script>
 </head>
 
@@ -83,7 +83,7 @@
   </div>
   <hr style="clear:both;" />
   <h2>The advantage of this clock plugin is that it can also handle a server timestamp! Unfortunately it is not possible to give an example of this on jsbin.</h2>
-  
+
 
     <footer>
      <p>&copy; Copyright 2011 by Lwangaman <a href="mailto:donjohn.fmmi@gmail.com"></a> </p>
