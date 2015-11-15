@@ -169,7 +169,7 @@ $.fn.clock = function(options) {
 
           calend = "<span class='clockdate'>" + dateStr + "</span>";
         }
-        $(el).html(calend+" <span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
+        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
         t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
       }
 
