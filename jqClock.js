@@ -5,9 +5,9 @@
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Turns a jQuery dom element into a dynamic clock
- *  
+ *
  * @timestamp defaults to clients current time
  *   $("#mydiv").clock();
  *   >> will turn div into clock using client computer's current time
@@ -16,15 +16,15 @@
  *   tmstmp = parseFloat($("#timestmp").val()) * 1000;
  *   $("#mydiv").clock({"timestamp":tmstmp});
  *   >> will turn div into clock passing in server's current time as retrieved from hidden input, and after being converted to a javascript style timestamp
- *    
+ *
  * @format defaults to 12 hour format,
  *   or if langSet is indicated defaults to most appropriate format for that langSet
  *   $("#mydiv").clock(); >> will have 12 hour format
  *   $("#mydiv").clock({"langSet":"it"}); >> will have 24 hour format
- *   $("#mydiv").clock({"langSet":"en"}); >> will have 12 hour format 
+ *   $("#mydiv").clock({"langSet":"en"}); >> will have 12 hour format
  *   $("#mydiv").clock({"langSet":"en","format":"24"}); >> will have military style 24 hour format
  *   $("#mydiv").clock({"calendar":true}); >> will include the date with the time, and will update the date at midnight
- *         
+ *
  */
 
 (function($, undefined) {
@@ -32,7 +32,7 @@
 $.clock = { version: "2.0.2", locale: {} }
 
 t = new Array();
-  
+
 $.fn.clock = function(options) {
   var locale = {
     "it":{
@@ -41,7 +41,9 @@ $.fn.clock = function(options) {
     },
     "en":{
       "weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-      "months":["January","February","March","April","May","June","July","August","September","October","November","December"]
+      "shortWeekdays":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+      "months":["January","February","March","April","May","June","July","August","September","October","November","December"],
+      "shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     },
     "es":{
       "weekdays":["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
@@ -63,7 +65,7 @@ $.fn.clock = function(options) {
 
   return this.each(function(){
     $.extend(locale,$.clock.locale);
-    options = options || {};  
+    options = options || {};
     options.timestamp = options.timestamp || "systime";
     systimestamp = new Date();
     systimestamp = systimestamp.getTime();
@@ -76,12 +78,13 @@ $.fn.clock = function(options) {
     options.format = options.format || ((options.langSet!="en") ? "24" : "12");
     options.calendar = options.calendar || "true";
     options.seconds = options.seconds || "true";
+    options.dateFormat = options.dateFormat || "l, F j, Y";
 
     if (!$(this).hasClass("jqclock")){$(this).addClass("jqclock");}
 
     var addleadingzero = function(i){
       if (i<10){i="0" + i;}
-      return i;    
+      return i;
     },
     updateClock = function(el,myoptions) {
       var el_id = $(el).attr("id");
@@ -114,19 +117,64 @@ $.fn.clock = function(options) {
         s=addleadingzero(s);
 
         if(myoptions.calendar!="false") {
-          if (myoptions.langSet=="en") {
-            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+locale[myoptions.langSet].months[mo]+' '+dt+', '+y+"</span>";
+          var dateStr = "";
+
+          for(n = 0; n <= myoptions.dateFormat.length; n++) {
+            var chr = myoptions.dateFormat.charAt(n);
+            switch(chr) {
+              case "d":
+                dateStr += addleadingzero(dt);
+              break;
+
+              case "D":
+                dateStr += locale[myoptions.langSet].shortWeekdays[dy];
+              break;
+
+              case "j":
+                dateStr += dt;
+              break;
+
+              case "l":
+                dateStr += locale[myoptions.langSet].weekdays[dy];
+              break;
+
+              case "F":
+                dateStr += locale[myoptions.langSet].months[mo];
+              break;
+
+              case "m":
+                dateStr += addleadingzero(mo);
+              break;
+
+              case "M":
+                dateStr += locale[myoptions.langSet].shortMonths[mo];
+              break;
+
+              case "n":
+                dateStr += mo;
+              break;
+
+              case "Y":
+                dateStr += y;
+              break;
+
+              case "y":
+                dateStr += y.toString().substr(2,2);
+              break;
+
+              default:
+                dateStr += chr;
+            }
           }
-          else {
-            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
-          }
+
+          calend = "<span class='clockdate'>" + dateStr + "</span>";
         }
-        $(el).html(calend+" <span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
+        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
         t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
       }
 
     }
-      
+
     updateClock($(this),options);
   });
 }
