@@ -29,7 +29,7 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.2", locale: {} }
+$.clock = { version: "2.0.2", locale: {} };
 
 t = [];
 
@@ -59,7 +59,7 @@ $.fn.clock = function(options) {
       "weekdays":["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
       "months":["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
     }
-  }
+  };
 
   return this.each(function(){
     $.extend(locale,$.clock.locale);
@@ -122,14 +122,14 @@ $.fn.clock = function(options) {
           }
         }
         $(el).html(calend+" <span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
-        t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
+        t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ); }, 1000);
       }
 
-    }
+    };
 
     updateClock($(this),options);
   });
-}
+};
 
   return this;
 
