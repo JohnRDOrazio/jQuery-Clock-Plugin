@@ -105,7 +105,7 @@ $.fn.clock = function(options) {
           ap=" AM";
           if (h > 11) { ap = " PM"; }
           if (h > 12) { h = h - 12; }
-          if (h == 0) { h = 12; }
+          if (h === 0) { h = 12; }
         }
 
         // add a zero in front of numbers 0-9
