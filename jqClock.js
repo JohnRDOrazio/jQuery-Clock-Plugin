@@ -29,9 +29,9 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.2", locale: {} }
+$.clock = { version: "2.0.2", locale: {} };
 
-t = new Array();
+jqClock = new Array();
   
 $.fn.clock = function(options) {
   var locale = {
@@ -61,6 +61,7 @@ $.fn.clock = function(options) {
     }
   }
 
+  
   return this.each(function(){
     $.extend(locale,$.clock.locale);
     options = options || {};  
@@ -68,7 +69,7 @@ $.fn.clock = function(options) {
     systimestamp = new Date();
     systimestamp = systimestamp.getTime();
     options.sysdiff = 0;
-    if(options.timestamp!="systime"){
+    if( options.timestamp != "systime" ){
       mytimestamp = new Date(options.timestamp);
       options.sysdiff = options.timestamp - systimestamp;
     }
@@ -77,15 +78,21 @@ $.fn.clock = function(options) {
     options.calendar = options.calendar || "true";
     options.seconds = options.seconds || "true";
 
-    if (!$(this).hasClass("jqclock")){$(this).addClass("jqclock");}
-
     var addleadingzero = function(i){
       if (i<10){i="0" + i;}
       return i;    
     },
-    updateClock = function(el,myoptions) {
+    newGuid = function() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+        function(c) {
+          var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        }).toUpperCase();
+    },
+    updateClock = function(el,myoptions) {      
       var el_id = $(el).attr("id");
-      if(myoptions=="destroy"){ clearTimeout(t[el_id]); }
+      if(myoptions=="destroy"){ clearTimeout(jqClock[el_id]); }
       else {
         mytimestamp = new Date();
         mytimestamp = mytimestamp.getTime();
@@ -122,11 +129,14 @@ $.fn.clock = function(options) {
           }
         }
         $(el).html(calend+" <span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
-        t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
+        jqClock[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
       }
 
     }
       
+    if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
+    if ( !$(this).is("[id]") ){ $(this).attr("id", newGuid()); }
+
     updateClock($(this),options);
   });
 }
