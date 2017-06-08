@@ -66,12 +66,12 @@ $.fn.clock = function(options) {
     $.extend(locale,$.clock.locale);
     options = options || {};  
     options.timestamp = options.timestamp || "systime";
-    systimestamp = new Date();
-    systimestamp = systimestamp.getTime();
+    var sysDateObj = new Date();
     options.sysdiff = 0;
-    if( options.timestamp != "systime" ){
-      mytimestamp = new Date(options.timestamp);
-      options.sysdiff = options.timestamp - systimestamp;
+    if( options.timestamp != "systime" ){      
+      //mytimestamp = new Date(options.timestamp);
+      sysDateObj.setTime( sysDateObj.getTime() + sysDateObj.getTimezoneOffset()*60*1000 );
+      options.sysdiff = options.timestamp - sysDateObj.getTime();
     }
     options.langSet = options.langSet || "en";
     options.format = options.format || ((options.langSet!="en") ? "24" : "12");
