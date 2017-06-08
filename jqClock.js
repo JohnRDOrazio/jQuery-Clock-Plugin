@@ -29,7 +29,7 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.3", locale: {} };
+$.clock = { version: "2.0.4", locale: {} };
 
 jqClock = new Array();
   
@@ -66,12 +66,14 @@ $.fn.clock = function(options) {
     $.extend(locale,$.clock.locale);
     options = options || {};  
     options.timestamp = options.timestamp || "systime";
-    var sysDateObj = new Date();
+    /* If we are using a local timestamp, our difference from local system time will be calculated as zero */
     options.sysdiff = 0;
+    /* If instead we are using a server timestamp, our difference from local system time will be calculated as server time minus local time 
+     * taking also into account the timezone offset that the local time will automatically compensate for 
+     */
     if( options.timestamp != "systime" ){      
-      //mytimestamp = new Date(options.timestamp);
-      sysDateObj.setTime( sysDateObj.getTime() + sysDateObj.getTimezoneOffset()*60*1000 );
-      options.sysdiff = options.timestamp - sysDateObj.getTime();
+      var sysDateObj = new Date();
+      options.sysdiff = options.timestamp - sysDateObj.getTime() - (sysDateObj.getTimezoneOffset()*60*1000);
     }
     options.langSet = options.langSet || "en";
     options.format = options.format || ((options.langSet!="en") ? "24" : "12");
@@ -94,17 +96,15 @@ $.fn.clock = function(options) {
       var el_id = $(el).attr("id");
       if(myoptions=="destroy"){ clearTimeout(jqClock[el_id]); }
       else {
-        mytimestamp = new Date();
-        mytimestamp = mytimestamp.getTime();
-        mytimestamp = mytimestamp + myoptions.sysdiff;
-        mytimestamp = new Date(mytimestamp);
-        var h=mytimestamp.getHours(),
-        m=mytimestamp.getMinutes(),
-        s=mytimestamp.getSeconds(),
-        dy=mytimestamp.getDay(),
-        dt=mytimestamp.getDate(),
-        mo=mytimestamp.getMonth(),
-        y=mytimestamp.getFullYear(),
+        var mytimestamp = new Date().getTime() + myoptions.sysdiff;
+        var mytimestamp_sysdiff = new Date(mytimestamp);
+        var h=mytimestamp_sysdiff.getHours(),
+        m=mytimestamp_sysdiff.getMinutes(),
+        s=mytimestamp_sysdiff.getSeconds(),
+        dy=mytimestamp_sysdiff.getDay(),
+        dt=mytimestamp_sysdiff.getDate(),
+        mo=mytimestamp_sysdiff.getMonth(),
+        y=mytimestamp_sysdiff.getFullYear(),
         ap="",
         calend="";
 
