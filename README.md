@@ -52,20 +52,26 @@ This functionality can be useful to use a **server timestamp** (such as produced
 Let's say you use php to set the value of a hidden input field to the server timestamp:
 ```PHP
 <?php
-echo "<input id='servertime' type='hidden' val='".time()."' />";
+//Get a server side unix timestamp
+$time = time();
 ?>
+<input id="servertime" type="hidden" val="<?php echo $time; ?>" />
 ```
 Note however that **if a timezone is set in your PHP interpreter** (either using the *date.timezone = 'America/Los_Angeles'* directive in a php.ini or similar configuration file, or during runtime using *date_default_timezone_set('America/Los_Angeles')* or using *ini_set('date.timezone','America/Los_Angeles')*), then you would have to **compensate for that before feeding the timestamp** to your jQuery Clock. For example you could do this:
 ```PHP
 <?php
+//Get a server side unix timestamp compenating for timezone offset
 $time = time() + date('Z');
 ?>
 <input id="servertime" type="hidden" val="<?php echo $time; ?>" />
 ```
 You can then start your clock using that timestamp. 
-Remember however that **php timestamps don't include milliseconds**, whereas javascript timestamps do, so you must **first multiply the value by 1000 before passing it into the plugin** (it can also be a good idea to make sure it's a number and not a text value using parseInt):
+***In the latest version of the jQuery Clock plugin it is no longer necessary to compensate a server generated timestamp for the missing milliseconds by multiplying the value by 1000 before passing it into the plugin; this will be taken care of by the plugin itself, actually now it's important not to do so because the plugin will detect whether to compensate for local timezone offset or not depending on whether the timestamp is server generated or client generated.***
 ```JavaScript
-servertime = parseInt( $("input#servertime").val() ) * 1000;
+/* Please do not do this anymore! */
+//servertime = parseInt( $("input#servertime").val() ) * 1000;
+/* Just do this: */
+servertime = parseInt( $("input#servertime").val() );
 $("#clock").clock({"timestamp":servertime});
 ```
 It would be interesting to call an ntp timeserver and start clock with ntp's timestamp, in order to have precise time. I have never succeeded in calling an ntp timeserver myself...
