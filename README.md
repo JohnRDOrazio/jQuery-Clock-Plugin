@@ -1,11 +1,14 @@
 Turns a given div element into a dynamic clock that updates every second, main advantage compared to other similar plugins is that this one can also take an initial timestamp instead of client system time.
-You can see a demo that you can edit and play around with yourself at http://jsbin.com/hozure/1/.
+
+# DEMOS
+
+You can see a demo that you can edit and play around with yourself at **http://jsbin.com/qoduzacabi/1/edit?html,css,js,output**.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
 If you would like to see a live demo with a server-side example, take a look here: 
 **SERVER SIDE CODE EXAMPLE: https://www.johnromanodorazio.com/jQueryClock.php**
 
-==USAGE:==
+# USAGE
 
 Use defaults:
 ```JavaScript
