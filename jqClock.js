@@ -75,6 +75,7 @@ $.fn.clock = function(options) {
       var sysDateObj = new Date();
       var digitCountDiff = (sysDateObj.getTime()+'').length - (options.timestamp+'').length;
       if(digitCountDiff > 2){
+        options.timestamp = options.timestamp * 1000;
         options.sysdiff = (options.timestamp - sysDateObj.getTime()) + (sysDateObj.getTimezoneOffset()*60*1000);    
       }
       else{
