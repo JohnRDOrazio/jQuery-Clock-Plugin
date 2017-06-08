@@ -29,7 +29,7 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.7", locale: {} };
+$.clock = { version: "2.0.8", locale: {} };
 
 jqClock = new Array();
   
