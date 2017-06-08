@@ -74,9 +74,12 @@ You can then start your clock using that timestamp.
 servertime = parseInt( $("input#servertime").val() );
 $("#clock").clock({"timestamp":servertime});
 ```
-It would be interesting to call an ntp timeserver and start clock with ntp's timestamp, in order to have precise time. I have never succeeded in calling an ntp timeserver myself...
 
-Includes a handler to stop the clock, just pass "destroy".
+It is also possible to use a timestamp from an NTP timeserver and start the clock with the ntp's timestamp, in order to have precise atomic time. An example of this can be found here: **https://www.johnromanodorazio.com/ntptest.php**. In the example the ntp timestamp is adjusted on the server to reflect the Europe/Rome timezone.
+
+## Destroy handler
+
+Includes a handler so that each clock can be stopped, just pass "destroy".
 ```JavaScript
 $("div#clock").clock("destroy");
 ```
