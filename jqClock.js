@@ -29,7 +29,7 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.5", locale: {} };
+$.clock = { version: "2.0.6", locale: {} };
 
 jqClock = new Array();
   
@@ -73,7 +73,7 @@ $.fn.clock = function(options) {
      */
     if( options.timestamp != "systime" ){      
       var sysDateObj = new Date();
-      options.sysdiff = options.timestamp - (sysDateObj.getTime() + (sysDateObj.getTimezoneOffset()*60*1000));
+      options.sysdiff = (options.timestamp - sysDateObj.getTime()) + sysDateObj.getTimezoneOffset()*60*1000);
     }
     options.langSet = options.langSet || "en";
     options.format = options.format || ((options.langSet!="en") ? "24" : "12");
