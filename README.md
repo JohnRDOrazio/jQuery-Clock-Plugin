@@ -15,6 +15,8 @@ Use defaults:
 $("div#clock").clock();
 ```
 
+## Show or hide specific elements
+
 By default prints the date together with the time, but can be used for time only:
 ```JavaScript
 $("div#clock").clock({"calendar":"false"});
@@ -24,6 +26,8 @@ By default, output includes seconds, but you can hide the seconds if you prefer:
 ```JavaScript
 $("div#clock").clock({"seconds":"false"});
 ```
+
+## Language options
 
 Includes 6 language translations for days of the week and months of the year: English, French, Spanish, Italian, German, Russian. 
 ```JavaScript
@@ -39,6 +43,7 @@ You can then pass in your custom language set:
 $("div#clock").clock({"langSet":"pt"});
 ```
 
+## Custom client generated timestamp
 
 You can pass in a custom javascript timestamp:
 ```JavaScript
@@ -47,6 +52,8 @@ customtimestamp = customtimestamp.getTime();
 customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13 days, 3 hours and 14 seconds ahead
 $("#clock").clock({"timestamp":customtimestamp});
 ```
+
+## Custom server generated timestamp
 
 This functionality can be useful to use a **server timestamp** (such as produced by a php script) instead of a client timestamp (such as produced by javascript).
 Let's say you use php to set the value of a hidden input field to the server timestamp:
@@ -74,6 +81,8 @@ You can then start your clock using that timestamp.
 servertime = parseInt( $("input#servertime").val() );
 $("#clock").clock({"timestamp":servertime});
 ```
+
+## Custom NTP Timeserver generated timestamp
 
 It is also possible to use a timestamp from an NTP timeserver and start the clock with the ntp's timestamp, in order to have precise atomic time. An example of this can be found here: **https://www.johnromanodorazio.com/ntptest.php**. In the example the ntp timestamp is adjusted on the server to reflect the Europe/Rome timezone.
 
