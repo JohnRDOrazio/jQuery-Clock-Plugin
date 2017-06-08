@@ -48,17 +48,24 @@ customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13
 $("#clock").clock({"timestamp":customtimestamp});
 ```
 
-This functionality can be useful to use a server timestamp (such as produced by a php script) instead of a client timestamp (such as produced by javascript).
+This functionality can be useful to use a **server timestamp** (such as produced by a php script) instead of a client timestamp (such as produced by javascript).
 Let's say you use php to set the value of a hidden input field to the server timestamp:
 ```PHP
 <?php
 echo "<input id='servertime' type='hidden' val='".time()."' />";
 ?>
 ```
+Note however that **if a timezone is set in your PHP interpreter** (either using the *date.timezone = 'America/Los_Angeles'* directive in a php.ini or similar configuration file, or during runtime using *date_default_timezone_set('America/Los_Angeles')* or using *ini_set('date.timezone','America/Los_Angeles')*), then you would have to **compensate for that before feeding the timestamp** to your jQuery Clock. For example you could do this:
+```PHP
+<?php
+$time = time() + date('Z');
+?>
+<input id="servertime" type="hidden" val="<?php echo $time; ?>" />
+```
 You can then start your clock using that timestamp. 
-Remember however that php timestamps don't include milliseconds, whereas javascript timestamps do, so you must first multiply the value by 1000 before passing it into the plugin (it can also be a good idea to make sure it's a number and not a text value using parseFloat):
+Remember however that **php timestamps don't include milliseconds**, whereas javascript timestamps do, so you must **first multiply the value by 1000 before passing it into the plugin** (it can also be a good idea to make sure it's a number and not a text value using parseInt):
 ```JavaScript
-servertime = parseFloat( $("input#servertime").val() ) * 1000;
+servertime = parseInt( $("input#servertime").val() ) * 1000;
 $("#clock").clock({"timestamp":servertime});
 ```
 It would be interesting to call an ntp timeserver and start clock with ntp's timestamp, in order to have precise time. I have never succeeded in calling an ntp timeserver myself...
