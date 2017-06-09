@@ -135,7 +135,7 @@ $.fn.clock = function(options) {
           }
         }
         $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
-        jqClock[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
+        jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, 1000);
       }
 
     }
