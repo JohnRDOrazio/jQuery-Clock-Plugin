@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <head>
-  <title>jQuery Clock Plugin client side example</title>
+ <!-- version 1.0.1 -->
+ <title>jQuery Clock Plugin client side example</title>
   <meta charset="UTF-8">
 
   <link rel="icon" type="image/png" href="clock_favicon.png" /> 
   
   <link rel="stylesheet" type="text/css" href="jqClock.css" />  
   <style>
-    button { clear: both; }
+    table { width: 100%; }
+    table td { width: 50%; text-align: center; }
+    .button-wrapper { clear: both; display: block; text-align: center; }
   </style>
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -38,25 +41,28 @@
 </head>
 
 <body>
-  <!-- version 1.0.0 -->
   <header>
     <h1>Example page for Lwangaman's dynamic jquery clock plugin</h1>
   </header>
 
-  <table>
+  <table align="center">
     <tr>
       <td>
-        <div style="clear:both;">
+        <div>
           <h2>Clock that uses default options</h2>
           <div id="clock1">This div will be turned into a dynamic clock</div>
-          <button id="destroyclock1">DESTROY CLOCK 1</button>
+          <div class="button-wrapper">
+            <button id="destroyclock1">DESTROY CLOCK 1</button>
+          </div>
         </div>
       </td>
       <td>
-        <div style="clear:both;">
+        <div>
           <h2>Clock that uses included italian language</h2>
           <div id="clock2">This div will be turned into a dynamic clock</div>
-          <button id="destroyclock2">DESTROY CLOCK 2</button>
+          <div class="button-wrapper">
+            <button id="destroyclock2">DESTROY CLOCK 2</button>
+          </div>
         </div>
       </td>
     </tr>
