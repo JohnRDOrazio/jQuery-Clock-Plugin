@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
- <!-- version 1.0.4 -->
+ <!-- version 1.0.5 -->
  <title>jQuery Clock Plugin client side example</title>
   <meta charset="UTF-8">
 
@@ -9,11 +9,33 @@
   <link rel="stylesheet" type="text/css" href="jqClock.css" />  
   <style>
     table { width: 100%; border-collapse: collapse; }
-    table td { width: 50%; text-align: center; border: 1px groove #FDD; }
+    table td { 
+      width: 50%; 
+      text-align: center; 
+      border: 1px solid rgba(255, 221, 221, 0.1); 
+      padding-bottom: 12px; 
+      background-color: lightslategray;
+      box-shadow: 1px 1px 3px Black;
+    }
     table td > div { text-align: center; }
     /* let's override the float:left in jqClock.css */
-    .jqclock { float: none; clear: both; display: inline-block; }
-    .button-wrapper { clear: both; display: block; text-align: center; }
+    .jqclock { 
+      float: none; 
+      display: inline-block; 
+      box-shadow: 0px 0px 10px Black;
+    }
+    .button-wrapper { text-align: center; }
+    .button-wrapper button {
+      box-shadow: 2px 2px 5px black;
+      color: #fff900;
+      font-weight: bold;
+      font-family: Arial;
+      padding: 5px 10px;
+      text-shadow: 0px 0px 6px #000000;
+      border-radius: 6px;
+      background-color: darkslategrey;
+      border: outset darkgray;    
+    }
   </style>
 
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
