@@ -5,8 +5,13 @@ Turns a given div element into a dynamic clock that updates every second, main a
 You can see a demo that you can edit and play around with yourself at **http://jsbin.com/qoduzacabi/1/edit?html,css,js,output**.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
-If you would like to see a live demo with a server-side example, take a look here: 
+If you would like to see a live demo that uses a server generated timestamp, take a look here: 
+
 **SERVER SIDE CODE EXAMPLE: https://www.johnromanodorazio.com/jQueryClock.php**
+
+Yet another demo using an NTP server generated timestamp can be found here:
+
+**NTP server timestamp example: https://www.johnromanodorazio.com/ntptest.php**
 
 # USAGE
 
@@ -53,6 +58,8 @@ customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13
 $("#clock").clock({"timestamp":customtimestamp});
 ```
 
+See an example of this in action here: **http://jsbin.com/qoduzacabi/1/edit?html,css,js,output**
+
 ## Custom server generated timestamp
 
 This functionality can be useful to use a **server timestamp** (such as produced by a php script) instead of a client timestamp (such as produced by javascript).
@@ -82,6 +89,8 @@ servertime = parseInt( $("input#servertime").val() );
 $("#clock").clock({"timestamp":servertime});
 ```
 
+See an example of this in action here: **https://www.johnromanodorazio.com/jQueryClock.php**
+
 ## Custom NTP Timeserver generated timestamp
 
 It is also possible to use a timestamp from an NTP timeserver and start the clock with the ntp's timestamp, in order to have precise atomic time. An example of this can be found here: **https://www.johnromanodorazio.com/ntptest.php**. In the example the ntp timestamp is adjusted on the server to reflect the Europe/London timezone.
@@ -91,4 +100,20 @@ It is also possible to use a timestamp from an NTP timeserver and start the cloc
 Includes a handler so that each clock can be stopped, just pass "destroy".
 ```JavaScript
 $("div#clock").clock("destroy");
+```
+
+# Styling
+
+The plugin adds a "jqclock" class to the dom element that the clock is applied to (usually a div). And the internal html structure that is created is like this:
+```HTML
+<div class="jqclock">
+  <span class="clockdate"></span>
+  <span class="clocktime"></span>
+</div>
+```
+The clock can be styled accordingly in one's own stylesheet. Some sample styling is included to give an idea:
+```CSS
+  .jqclock { float:left; text-align:center; border: 1px Black solid; background: LightYellow; padding: 10px; margin:20px; }
+  .clockdate { color: DarkRed; margin-bottom: 10px; font-size: 18px; display: block;}
+  .clocktime { border: 2px inset White; background: Black; padding: 5px; font-size: 14px; font-family: "Courier"; color: LightGreen; margin: 2px; display: block; }
 ```
