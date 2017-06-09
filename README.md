@@ -35,6 +35,7 @@ $("div#clock").clock({"calendar":"false"});
 There are two options that allow us to use PHP style Format Characters:
 * "dateFormat" -> for formatting the date string
 * "timeFormat" -> for formatting the time string
+
 PHP Format Characters (such as those found [here](http://php.net/manual/en/function.date.php "PHP Format Characters")) supported by the ***dateFormat*** parameter are:
 
 | Format Character  | Description                                | Example Returned values |
