@@ -1,3 +1,29 @@
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="jqClock.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+    
+      $.clock.locale = {"pt":{"weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],"months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"] } };
+      
+      $("#clock1").clock();
+      $("#clock2").clock({"langSet":"it"});
+      $("#clock3").clock({"langSet":"pt"});
+      $("#clock4").clock({"format":"24","calendar":"false"});
+      
+      customtimestamp = new Date();
+      customtimestamp = customtimestamp.getTime();
+      customtimestamp = customtimestamp+1123200000+10800000+14000;
+      $("#clock5").clock({"timestamp":customtimestamp});
+      
+      $("#destroyclock1").click(function(){ $("#clock1").clock("destroy") });
+      $("#destroyclock2").click(function(){ $("#clock2").clock("destroy") });
+      $("#destroyclock3").click(function(){ $("#clock3").clock("destroy") });
+      $("#destroyclock4").click(function(){ $("#clock4").clock("destroy") });
+      $("#destroyclock5").click(function(){ $("#clock5").clock("destroy") });
+                                           
+    });    
+  </script>
+  <link rel="stylesheet" type="text/css" href="jqClock.css" />
 
 <div>
   <header>
