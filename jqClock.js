@@ -55,7 +55,7 @@ $.fn.clock = function(options) {
     "de":{
       "weekdays":["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
       "shortWeekdays":["Son","Mon","Dien","Mitt","Don","Frei","Sam"],
-      "months":["Januar", "Februar", "März", "April", "Könnte", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
+      "months":["Januar", "Februar", "März", "April", "Könnte", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
       "shortMonths":["Jan","Feb","Mar","Apr","Kon","Jun","Jul","Aug","Sep","Okt","Nov","Dez"]
     },
     "fr":{
