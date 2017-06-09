@@ -28,10 +28,10 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.8", locale: {} };
+$.clock = { version: "2.0.9", locale: {} };
 
-jqClock = new Array();
-  
+jqClock = [];
+
 $.fn.clock = function(options) {
   var locale = {
     "it":{
@@ -118,7 +118,7 @@ $.fn.clock = function(options) {
           ap=" AM";
           if (h > 11) { ap = " PM"; }
           if (h > 12) { h = h - 12; }
-          if (h == 0) { h = 12; }
+          if (h === 0) { h = 12; }
         }
 
         // add a zero in front of numbers 0-9
@@ -134,7 +134,7 @@ $.fn.clock = function(options) {
             calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
           }
         }
-        $(el).html(calend+" <span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
+        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
         jqClock[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
       }
 
