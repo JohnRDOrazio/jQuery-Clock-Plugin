@@ -5,7 +5,7 @@ Turns a given div element into a dynamic clock that updates every second, main a
 ## Client Timestamp Live examples
 
 See a client side demo in action here at github: **http://lwangaman.github.io/jQuery-Clock-Plugin/**
-You can see a demo that you can edit and play around with yourself at **http://jsbin.com/qoduzacabi/1/edit?html,css,js,output**.
+You can see a demo that you can edit and play around with yourself at **http://jsbin.com/maqegib/edit?html,css,js,output**.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
 ## Server Timestamp Live examples
@@ -23,16 +23,58 @@ Use defaults:
 $("div#clock").clock();
 ```
 
-## Show or hide specific elements
+## Show or hide calendar
 
 By default prints the date together with the time, but can be used for time only:
 ```JavaScript
 $("div#clock").clock({"calendar":"false"});
 ```
 
-By default, output includes seconds, but you can hide the seconds if you prefer:
+## Format Date and Time using PHP style Format Characters
+
+There are two options that allow us to use PHP style Format Characters:
+* "dateFormat" -> for formatting the date string
+* "timeFormat" -> for formatting the time string
+PHP Format Characters (such as those found [here](http://php.net/manual/en/function.date.php PHP Format Characters)) supported by the ***dateFormat*** parameter are:
+
+| Format Character  | Description                                | Example Returned values |
+| ----------------- | ------------------------------------------ | ------------------- |
+| *Day*             | ---                                        | ---                 |
+| *d* | Day of the month, 2 digits with leading zeros            | *01* to *31*        |
+| *D* | A textual representation of a day, three letters         | *Mon* through *Sun* |
+| *j* | Day of the month without leading zeros                   | *1* to *31*         |
+| *l* (lowercase 'L') | A full textual representation of the day of the week | *Sunday* through *Saturday* |
+| *Month*           | ---                                        | ---                 |
+| *F* | A full textual representation of a month, such as January or March | *January* through *December* |
+| *m* | Numeric representation of a month, with leading zeros    | *01* through *12*   |
+| *M* | A short textual representation of a month, three letters | *Jan* through *Dec* |
+| *n* | Numeric representation of a month, without leading zeros | *1* through *12*    |
+| *Year*            | ---                                        | ---                 |
+| *Y* | A full numeric representation of a year, 4 digits        | Examples: *1999* or *2003* |
+| *y* | A two digit representation of a year                     | Examples: *99* or *03* |
+
+**Example:**
 ```JavaScript
-$("div#clock").clock({"seconds":"false"});
+$("div#clock").clock({"dateFormat":"D, F n, Y"});
+```
+
+PHP Format Characters (such as those found [here](http://php.net/manual/en/function.date.php PHP Format Characters)) supported by the ***timeFormat*** parameter are:
+
+| Format Character  | Description                                | Example Returned values |
+| ----------------- | ------------------------------------------ | ----------------- |
+| *Time*            | ---                                        | ---               |
+| *a* | Lowercase Ante meridiem and Post meridiem                | *am* or *pm*      |
+| *A* | Uppercase Ante meridiem and Post meridiem                | *AM* or *PM*      |
+| *g* | 12-hour format of an hour without leading zeros          | *1* through *12*  |
+| *G* | 24-hour format of an hour without leading zeros          | *0* through *23*  |
+| *h* | 12-hour format of an hour with leading zeros             | *01* through *12* |
+| *H* | 24-hour format of an hour with leading zeros             | *00* through *23* |
+| *i* | Minutes with leading zeros                               | *00* to *59*      |
+| *s* | Seconds with leading zeros                               | *00* to *59*      |
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"timeFormat":"h:i:s A"});
 ```
 
 ## Language options
@@ -44,9 +86,15 @@ $("div#clock").clock({"langSet":"de"});
 
 The language translations can be easily extended. To add Portuguese language:
 ```JavaScript
-$.clock.locale.pt = {"weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],"months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"] };
+$.clock.locale.pt = {
+  "weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],
+  "shortWeekdays":["Dom","Seg","Ter","Quar","Quin","Sext"],
+  "months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"],
+  "shortMonths":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Oct","Nov","Dez"] 
+};
 ```
-You can then pass in your custom language set:
+
+You can then set a clock to use this language set:
 ```JavaScript
 $("div#clock").clock({"langSet":"pt"});
 ```
@@ -61,7 +109,7 @@ customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13
 $("#clock").clock({"timestamp":customtimestamp});
 ```
 
-See an example of this in action here: **http://jsbin.com/qoduzacabi/1/edit?html,css,js,output**
+See an example of this in action here: **http://jsbin.com/maqegib/edit?html,css,js,output**
 
 ## Custom server generated timestamp
 
