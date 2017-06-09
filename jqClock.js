@@ -28,7 +28,11 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.9", locale: {} };
+$.clock = { locale: {} };
+Object.defineProperty($.clock,"version",{
+  value: "2.1.0",
+  writable: false
+});
 
 jqClock = [];
 
@@ -76,7 +80,13 @@ $.fn.clock = function(options) {
   return this.each(function(){
     $.extend(locale,$.clock.locale);
     options = options || {};  
+    /* User passable options: make sure we have default values if user doesn't pass them! */
     options.timestamp = options.timestamp || "systime";
+    options.langSet = options.langSet || "en";
+    options.calendar = options.calendar || "true";
+    options.dateFormat = options.dateFormat || ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
+    options.hourFormat = options.hourFormat || ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
+    
     /* If we are using a local timestamp, our difference from local system time will be calculated as zero */
     options.sysdiff = 0;
     /* If instead we are using a server timestamp, our difference from local system time will be calculated as server time minus local time 
@@ -93,10 +103,6 @@ $.fn.clock = function(options) {
         options.sysdiff = options.timestamp - sysDateObj.getTime();
       }
     }
-    options.langSet = options.langSet || "en";
-    options.format = options.format || ((options.langSet!="en") ? "24" : "12");
-    options.calendar = options.calendar || "true";
-    options.seconds = options.seconds || "true";
 
     var addleadingzero = function(i){
       if (i<10){i="0" + i;}
@@ -123,30 +129,92 @@ $.fn.clock = function(options) {
         dt=mytimestamp_sysdiff.getDate(),
         mo=mytimestamp_sysdiff.getMonth(),
         y=mytimestamp_sysdiff.getFullYear(),
-        ap="",
+        ap=" AM",
         calend="";
-
-        if(myoptions.format=="12"){
-          ap=" AM";
-          if (h > 11) { ap = " PM"; }
-          if (h > 12) { h = h - 12; }
-          if (h === 0) { h = 12; }
-        }
-
-        // add a zero in front of numbers 0-9
-        h=addleadingzero(h);
-        m=addleadingzero(m);
-        s=addleadingzero(s);
+        if (h > 11) { ap = " PM"; }
 
         if(myoptions.calendar!="false") {
-          if (myoptions.langSet=="en") {
-            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+locale[myoptions.langSet].months[mo]+' '+dt+', '+y+"</span>";
+          /* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
+          var dateStr = "";
+          for(var n = 0; n <= myoptions.dateFormat.length; n++) {
+            var chr = myoptions.dateFormat.charAt(n);
+            switch(chr){
+              case "d":
+                dateStr += addleadingzero(dt);
+                break;
+              case "D":
+                dateStr += locale[myoptions.langSet].shortWeekdays[dy];
+                break;
+              case "j":
+                dateStr += dt;
+                break;
+              case "l":
+                dateStr += locale[myoptions.langSet].weekdays[dy];
+                break;
+              case "F":
+                dateStr += locale[myoptions.langSet].months[mo];
+                break;
+              case "m":
+                dateStr += addleadingzero(mo);
+                break;
+              case "M":
+                dateStr += locale[myoptions.langSet].shortMonths[mo];
+                break;
+              case "n":
+                dateStr += mo;
+                break;
+              case "Y":
+                dateStr += y;
+                break;
+              case "y":
+                dateStr += y.toString().substr(2,2);
+                break;
+              default:
+                dateStr += chr;
+            }
           }
-          else {
-            calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
+          calend = '<span class="clockdate">'+dateStr+'</span>';
+        }
+        
+        /* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
+        var timeStr = "";
+        for(var n = 0; n <= myoptions.dateFormat.length; n++) {
+          var chr = myoptions.hourFormat.charAt(n);
+          switch(chr){
+            case "a":
+              timeStr += ap.toLowerCase();
+              break;
+            case "A":
+              timeStr += ap;
+              break;
+            case "g":
+              if (h > 12) { h = h - 12; }
+              else if (h === 0) { h = 12; }
+              timeStr += h;
+              break;
+            case "G":
+              timeStr += h;
+              break;
+            case "h":
+              if (h > 12) { h = h - 12; }
+              else if (h === 0) { h = 12; }
+              timeStr += addleadingzero(h);
+              break;
+            case "H":
+              timeStr += addleadingzero(h);
+              break;
+            case "i":
+              timeStr += addleadingzero(m);
+              break;
+            case "s":
+              timeStr += addleadingzero(s);
+              break;
+            default:
+              timeStr += chr;
           }
         }
-        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
+        
+        $(el).html(calend+"<span class='clocktime'>"+timeStr+"</span>");
         jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, 1000);
       }
 
