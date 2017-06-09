@@ -1,3 +1,4 @@
+<head>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script type="text/javascript" src="jqClock.min.js"></script>
   <script type="text/javascript">
@@ -24,7 +25,8 @@
     });    
   </script>
   <link rel="stylesheet" type="text/css" href="jqClock.css" />
-
+</head>
+<body>
 <div>
   <header>
     <h1>Example page for Lwangaman's dynamic jquery clock plugin</h1>
@@ -67,3 +69,4 @@
      <p>&copy; Copyright 2011 by Lwangaman <a href="mailto:priest@johnromanodorazio.com"></a> </p>
     </footer>
 </div>
+</body>
