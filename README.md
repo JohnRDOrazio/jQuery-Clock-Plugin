@@ -59,7 +59,7 @@ PHP Format Characters (such as those found [here](http://php.net/manual/en/funct
 $("div#clock").clock({"dateFormat":"D, F n, Y"});
 ```
 
-PHP Format Characters (such as those found [here](http://php.net/manual/en/function.date.php PHP Format Characters)) supported by the ***timeFormat*** parameter are:
+PHP Format Characters (such as those found [here](http://php.net/manual/en/function.date.php "PHP Format Characters")) supported by the ***timeFormat*** parameter are:
 
 | Format Character  | Description                                | Example Returned values |
 | ----------------- | ------------------------------------------ | ----------------- |
