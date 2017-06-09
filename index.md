@@ -1,9 +1,9 @@
-  <div>
-    <header>
-      <h1>index</h1>
-    </header>
 
-   <h1>Example page for Lwangaman's dynamic jquery clock plugin</h1>
+<div>
+  <header>
+    <h1>Example page for Lwangaman's dynamic jquery clock plugin</h1>
+  </header>
+
   <div style="clear:both;">
     <h2>Clock that uses default options</h2>
     <div id="clock1">This div will be turned into a dynamic clock</div>
@@ -34,10 +34,10 @@
     <button id="destroyclock5">DESTROY CLOCK 5</button>
   </div>
   <hr style="clear:both;" />
-  <h2>The advantage of this clock plugin is that it can also handle a server timestamp! Unfortunately it is not possible to give an example of this on jsbin.</h2>
+  <h2>The advantage of this clock plugin is that it can also handle a server timestamp! Unfortunately it is not possible to give an example of this on github pages.</h2>
   
 
     <footer>
      <p>&copy; Copyright 2011 by Lwangaman <a href="mailto:priest@johnromanodorazio.com"></a> </p>
     </footer>
-  </div>
+</div>
