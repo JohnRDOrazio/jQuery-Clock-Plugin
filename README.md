@@ -2,16 +2,21 @@ Turns a given div element into a dynamic clock that updates every second, main a
 
 # DEMOS
 
+## Client Timestamp Live examples
+
+See a client side demo in action here at github: **http://lwangaman.github.io/jQuery-Clock-Plugin/**
 You can see a demo that you can edit and play around with yourself at **http://jsbin.com/qoduzacabi/1/edit?html,css,js,output**.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
-If you would like to see a live demo that uses a server generated timestamp, take a look here: 
+## Server Timestamp Live examples
 
-**SERVER SIDE CODE EXAMPLE: https://www.johnromanodorazio.com/jQueryClock.php**
+If you would like to see a live demo that uses a server generated timestamp, take a look here: **https://www.johnromanodorazio.com/jQueryClock.php**
 
 Yet another demo using an NTP server generated timestamp can be found here:
 
-**NTP server timestamp example: https://www.johnromanodorazio.com/ntptest.php**
+## NTP Timestamp Live example
+
+A timestamp generated from an NTP server can also be used. See the example here: **https://www.johnromanodorazio.com/ntptest.php**
 
 # USAGE
 
@@ -113,7 +118,7 @@ The plugin adds a "jqclock" class to the dom element that the clock is applied t
 ```
 The clock can be styled accordingly in one's own stylesheet. Some sample styling is included to give an idea:
 ```CSS
-  .jqclock { float:left; text-align:center; border: 1px Black solid; background: LightYellow; padding: 10px; margin:20px; }
+  .jqclock { display:inline-block; text-align:center; border: 1px Black solid; background: LightYellow; padding: 10px; margin:20px; }
   .clockdate { color: DarkRed; margin-bottom: 10px; font-size: 18px; display: block;}
   .clocktime { border: 2px inset White; background: Black; padding: 5px; font-size: 14px; font-family: "Courier"; color: LightGreen; margin: 2px; display: block; }
 ```
