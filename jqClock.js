@@ -129,9 +129,9 @@ $.fn.clock = function(options) {
         dt=mytimestamp_sysdiff.getDate(),
         mo=mytimestamp_sysdiff.getMonth(),
         y=mytimestamp_sysdiff.getFullYear(),
-        ap=" AM",
+        ap="AM",
         calend="";
-        if (h > 11) { ap = " PM"; }
+        if (h > 11) { ap = "PM"; }
 
         if(myoptions.calendar!="false") {
           /* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
