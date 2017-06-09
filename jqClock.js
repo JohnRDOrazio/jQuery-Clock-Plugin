@@ -1,10 +1,8 @@
-/* Sets time in clock div and calls itself every second */
 /**
- * Clock plugin
- * Copyright (c) 2010 John R D'Orazio (donjohn.fmmi@gmail.com)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
+ * jQuery Clock plugin
+ * Copyright (c) 2010 John R D'Orazio (priest@johnromanodorazio.com)
+ * Licensed under the Apache 2.0 license:
+ * https://www.apache.org/licenses/LICENSE-2.0
  * 
  * Turns a jQuery dom element into a dynamic clock
  *  
@@ -13,7 +11,7 @@
  *   >> will turn div into clock using client computer's current time
  * @timestamp server-side example:
  *   Say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time
- *   tmstmp = parseFloat($("#timestmp").val()) * 1000;
+ *   tmstmp = parseInt($("#timestmp").val());
  *   $("#mydiv").clock({"timestamp":tmstmp});
  *   >> will turn div into clock passing in server's current time as retrieved from hidden input, and after being converted to a javascript style timestamp
  *    
@@ -26,6 +24,7 @@
  *   $("#mydiv").clock({"calendar":true}); >> will include the date with the time, and will update the date at midnight
  *         
  */
+/* Sets time in clock div and calls itself every second */
 
 (function($, undefined) {
 
