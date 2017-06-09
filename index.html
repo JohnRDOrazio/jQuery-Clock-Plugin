@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
- <!-- version 1.0.1 -->
+ <!-- version 1.0.2 -->
  <title>jQuery Clock Plugin client side example</title>
   <meta charset="UTF-8">
 
@@ -9,7 +9,9 @@
   <link rel="stylesheet" type="text/css" href="jqClock.css" />  
   <style>
     table { width: 100%; }
-    table td { width: 50%; text-align: center; }
+    table td { width: 50%; text-align: center; border: 1px groove LightRed; }
+    /* let's override the float:left in jqClock.css */
+    .jqclock { clear: both; }
     .button-wrapper { clear: both; display: block; text-align: center; }
   </style>
 
@@ -46,6 +48,7 @@
   </header>
 
   <table align="center">
+    <!-- FIRST ROW -->
     <tr>
       <td>
         <div>
@@ -66,29 +69,54 @@
         </div>
       </td>
     </tr>
+   
+    <!-- SECOND ROW -->
+    <tr>
+      <td>
+        <div>
+          <h2>Clock that uses extended portoguese language</h2>
+          <div id="clock3">This div will be turned into a dynamic clock</div>
+          <div class="button-wrapper">
+            <button id="destroyclock3">DESTROY CLOCK 3</button>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div>
+          <h2>CClock in 24 hour format, without calendar</h2>
+          <div id="clock4">This div will be turned into a dynamic clock</div>
+          <div class="button-wrapper">
+            <button id="destroyclock4">DESTROY CLOCK 4</button>
+          </div>
+        </div>
+      </td>
+    </tr>
+   
+    <!-- THIRD ROW -->
+    <tr>
+      <td>
+        <div>
+          <h2>Clock with custom timestamp (13 days, 3 hours and 14 seconds ahead)</h2>
+          <div id="clock5">This div will be turned into a dynamic clock</div>
+          <div class="button-wrapper">
+            <button id="destroyclock5">DESTROY CLOCK 5</button>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div>
+          <h2>The advantage of this clock plugin is that it can also handle a server timestamp! Unfortunately it is not possible to give an example of this on GitHub Pages.</h2>
+          <!--
+          <div id="clock">This div will be turned into a dynamic clock</div>
+          <div class="button-wrapper">
+            <button id="destroyclock">DESTROY CLOCK</button>
+          </div>
+          -->
+        </div>
+      </td>
+    </tr>
   </table>
-  <hr style="clear:both;" />
-  <hr style="clear:both;" />
-  <div style="clear:both;">
-    <h2>Clock that uses extended portoguese language</h2>
-    <div id="clock3">This div will be turned into a dynamic clock</div>
-    <button id="destroyclock3">DESTROY CLOCK 3</button>
-  </div>
-  <hr style="clear:both;" />
-  <div style="clear:both;">
-    <h2>Clock in 24 hour format, without calendar</h2>
-    <div id="clock4">This div will be turned into a dynamic clock</div>
-    <button id="destroyclock4">DESTROY CLOCK 4</button>
-  </div>
-  <hr style="clear:both;" />
-  <div style="clear:both;">
-    <h2>Clock with custom timestamp (13 days, 3 hours and 14 seconds ahead)</h2>
-    <div id="clock5">This div will be turned into a dynamic clock</div>
-    <button id="destroyclock5">DESTROY CLOCK 5</button>
-  </div>
-  <hr style="clear:both;" />
-  <h2>The advantage of this clock plugin is that it can also handle a server timestamp! Unfortunately it is not possible to give an example of this on jsbin.</h2>
-  
+ 
 
   <footer>
     <p>&copy; Copyright 2011 by <a href="mailto:priest@johnromanodorazio.com">John Romano D'Orazio</a> (screen name Lwangaman)</p>
