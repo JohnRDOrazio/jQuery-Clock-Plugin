@@ -28,35 +28,47 @@
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.8", locale: {} };
+$.clock = { version: "2.0.9", locale: {} };
 
-jqClock = new Array();
-  
+jqClock = [];
+
 $.fn.clock = function(options) {
   var locale = {
     "it":{
       "weekdays":["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"],
-      "months":["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"]
+      "shortWeekdays":["Dom","Lun","Mart","Merc","Giov","Ven","Sab"],
+      "months":["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"],
+      "shortMonths":["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"]
     },
     "en":{
       "weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-      "months":["January","February","March","April","May","June","July","August","September","October","November","December"]
+      "shortWeekdays":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+      "months":["January","February","March","April","May","June","July","August","September","October","November","December"],
+      "shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     },
     "es":{
       "weekdays":["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-      "months":["Enero", "Febrero", "Marzo", "Abril", "May", "junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+      "shortWeekdays":["Dom","Lun","Mart","Mier","Jue","Vier","Sab"],
+      "months":["Enero", "Febrero", "Marzo", "Abril", "May", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      "shortMonths":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]
     },
     "de":{
       "weekdays":["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-      "months":["Januar", "Februar", "März", "April", "könnte", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]
+      "shortWeekdays":["Son","Mon","Dien","Mitt","Don","Frei","Sam"],
+      "months":["Januar", "Februar", "März", "April", "Könnte", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+      "shortMonths":["Jan","Feb","Mar","Apr","Kon","Jun","Jul","Aug","Sep","Okt","Nov","Dez"]
     },
     "fr":{
       "weekdays":["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
-      "months":["Janvier", "Février", "Mars", "Avril", "May", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+      "shortWeekdays":["Dim","Lun","Mar","Merc","Jeu","Ven","Sam"],
+      "months":["Janvier", "Février", "Mars", "Avril", "May", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+      "shortMonths":["Jan","Fev","Mar","Avr","May","Juin","Juil","Aout","Sep","Oct","Nov","Dec"]
     },
     "ru":{
       "weekdays":["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
-      "months":["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+      "shortWeekdays":["Воск", "Пон", "Втор", "Сре", "Чет", "Пят", "Суб"],
+      "months":["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+      "shortMonths":["Янв", "Фев", "Март", "Апр", "Май", "Июнь", "Июль", "Авг", "Сент", "Окт", "Ноя", "Дек"]
     }
   }
 
@@ -118,7 +130,7 @@ $.fn.clock = function(options) {
           ap=" AM";
           if (h > 11) { ap = " PM"; }
           if (h > 12) { h = h - 12; }
-          if (h == 0) { h = 12; }
+          if (h === 0) { h = 12; }
         }
 
         // add a zero in front of numbers 0-9
@@ -134,8 +146,8 @@ $.fn.clock = function(options) {
             calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
           }
         }
-        $(el).html(calend+" <span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
-        jqClock[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
+        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
+        jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, 1000);
       }
 
     }
