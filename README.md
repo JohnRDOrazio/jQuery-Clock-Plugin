@@ -104,8 +104,8 @@ $("div#clock").clock({"langSet":"pt"});
 
 You can pass in a custom javascript timestamp:
 ```JavaScript
-customtimestamp = new Date();
-customtimestamp = customtimestamp.getTime();
+var customDateObj = new Date();
+var customtimestamp = customDateObj.getTime();
 customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13 days, 3 hours and 14 seconds ahead
 $("#clock").clock({"timestamp":customtimestamp});
 ```
