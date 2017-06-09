@@ -1,10 +1,8 @@
-/* Sets time in clock div and calls itself every second */
 /**
- * Clock plugin
- * Copyright (c) 2010 John R D'Orazio (donjohn.fmmi@gmail.com)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
+ * jQuery Clock plugin
+ * Copyright (c) 2010 John R D'Orazio (priest@johnromanodorazio.com)
+ * Licensed under the Apache 2.0 license:
+ * https://www.apache.org/licenses/LICENSE-2.0
  * 
  * Turns a jQuery dom element into a dynamic clock
  *  
@@ -13,8 +11,9 @@
  *   >> will turn div into clock using client computer's current time
  * @timestamp server-side example:
  *   Say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time
- *   $("#mydiv").clock({"timestamp":$("#timestmp").val()});
- *   >> will turn div into clock passing in server's current time as retrieved from hidden input
+ *   tmstmp = parseInt($("#timestmp").val());
+ *   $("#mydiv").clock({"timestamp":tmstmp});
+ *   >> will turn div into clock passing in server's current time as retrieved from hidden input, and after being converted to a javascript style timestamp
  *    
  * @format defaults to 12 hour format,
  *   or if langSet is indicated defaults to most appropriate format for that langSet
@@ -25,12 +24,13 @@
  *   $("#mydiv").clock({"calendar":true}); >> will include the date with the time, and will update the date at midnight
  *         
  */
+/* Sets time in clock div and calls itself every second */
 
 (function($, undefined) {
 
-$.clock = { version: "2.0.1", locale: {} }
+$.clock = { version: "2.0.8", locale: {} };
 
-t = new Array();
+jqClock = new Array();
   
 $.fn.clock = function(options) {
   var locale = {
@@ -60,42 +60,57 @@ $.fn.clock = function(options) {
     }
   }
 
+  
   return this.each(function(){
     $.extend(locale,$.clock.locale);
     options = options || {};  
     options.timestamp = options.timestamp || "systime";
-    systimestamp = new Date();
-    systimestamp = systimestamp.getTime();
+    /* If we are using a local timestamp, our difference from local system time will be calculated as zero */
     options.sysdiff = 0;
-    if(options.timestamp!="systime"){
-      mytimestamp = new Date(options.timestamp);
-      options.sysdiff = options.timestamp - systimestamp;
+    /* If instead we are using a server timestamp, our difference from local system time will be calculated as server time minus local time 
+     * taking also into account the timezone offset that the local time will automatically compensate for 
+     */
+    if( options.timestamp != "systime" ){      
+      var sysDateObj = new Date();
+      var digitCountDiff = (sysDateObj.getTime()+'').length - (options.timestamp+'').length;
+      if(digitCountDiff > 2){
+        options.timestamp = options.timestamp * 1000;
+        options.sysdiff = (options.timestamp - sysDateObj.getTime()) + (sysDateObj.getTimezoneOffset()*60*1000);    
+      }
+      else{
+        options.sysdiff = options.timestamp - sysDateObj.getTime();
+      }
     }
     options.langSet = options.langSet || "en";
     options.format = options.format || ((options.langSet!="en") ? "24" : "12");
     options.calendar = options.calendar || "true";
-
-    if (!$(this).hasClass("jqclock")){$(this).addClass("jqclock");}
+    options.seconds = options.seconds || "true";
 
     var addleadingzero = function(i){
       if (i<10){i="0" + i;}
       return i;    
     },
-    updateClock = function(el,myoptions) {
+    newGuid = function() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+        function(c) {
+          var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        }).toUpperCase();
+    },
+    updateClock = function(el,myoptions) {      
       var el_id = $(el).attr("id");
-      if(myoptions=="destroy"){ clearTimeout(t[el_id]); }
+      if(myoptions=="destroy"){ clearTimeout(jqClock[el_id]); }
       else {
-        mytimestamp = new Date();
-        mytimestamp = mytimestamp.getTime();
-        mytimestamp = mytimestamp + myoptions.sysdiff;
-        mytimestamp = new Date(mytimestamp);
-        var h=mytimestamp.getHours(),
-        m=mytimestamp.getMinutes(),
-        s=mytimestamp.getSeconds(),
-        dy=mytimestamp.getDay(),
-        dt=mytimestamp.getDate(),
-        mo=mytimestamp.getMonth(),
-        y=mytimestamp.getFullYear(),
+        var mytimestamp = new Date().getTime() + myoptions.sysdiff;
+        var mytimestamp_sysdiff = new Date(mytimestamp);
+        var h=mytimestamp_sysdiff.getHours(),
+        m=mytimestamp_sysdiff.getMinutes(),
+        s=mytimestamp_sysdiff.getSeconds(),
+        dy=mytimestamp_sysdiff.getDay(),
+        dt=mytimestamp_sysdiff.getDate(),
+        mo=mytimestamp_sysdiff.getMonth(),
+        y=mytimestamp_sysdiff.getFullYear(),
         ap="",
         calend="";
 
@@ -119,12 +134,15 @@ $.fn.clock = function(options) {
             calend = "<span class='clockdate'>"+locale[myoptions.langSet].weekdays[dy]+', '+dt+' '+locale[myoptions.langSet].months[mo]+' '+y+"</span>";
           }
         }
-        $(el).html(calend+"<span class='clocktime'>"+h+":"+m+":"+s+ap+"</span>");
-        t[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
+        $(el).html(calend+" <span class='clocktime'>"+h+":"+m+(options.seconds == "true"?":"+s:"")+ap+"</span>");
+        jqClock[el_id] = setTimeout(function() { updateClock( $(el),myoptions ) }, 1000);
       }
 
     }
       
+    if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
+    if ( !$(this).is("[id]") ){ $(this).attr("id", newGuid()); }
+
     updateClock($(this),options);
   });
 }
