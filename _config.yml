@@ -1,3 +1,4 @@
 theme: jekyll-theme-slate
 title: jQuery Clock Plugin - Client Side Example
 description: Turns any given div into a clock that updates every second. Supports server generated timestamps.
+baseurl: /jQuery-Clock-Plugin
