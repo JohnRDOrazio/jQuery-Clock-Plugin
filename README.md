@@ -12,8 +12,6 @@ Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the 
 
 If you would like to see a live demo that uses a server generated timestamp, take a look here: **https://www.johnromanodorazio.com/jQueryClock.php**
 
-Yet another demo using an NTP server generated timestamp can be found here:
-
 ## NTP Timestamp Live example
 
 A timestamp generated from an NTP server can also be used. See the example here: **https://www.johnromanodorazio.com/ntptest.php**
