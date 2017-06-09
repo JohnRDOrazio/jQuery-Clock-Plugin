@@ -28,25 +28,36 @@
     });    
   </script>
   <link rel="stylesheet" type="text/css" href="jqClock.css" />
+  <style>
+    button { clear: both; }
+  </style>
 </head>
 
 <body>
-<div>
+  <!-- version 1.0.0 -->
   <header>
     <h1>Example page for Lwangaman's dynamic jquery clock plugin</h1>
   </header>
 
-  <div style="clear:both;">
-    <h2>Clock that uses default options</h2>
-    <div id="clock1">This div will be turned into a dynamic clock</div>
-    <button id="destroyclock1">DESTROY CLOCK 1</button>
-  </div>
+  <table>
+    <tr>
+      <td>
+        <div style="clear:both;">
+          <h2>Clock that uses default options</h2>
+          <div id="clock1">This div will be turned into a dynamic clock</div>
+          <button id="destroyclock1">DESTROY CLOCK 1</button>
+        </div>
+      </td>
+      <td>
+        <div style="clear:both;">
+          <h2>Clock that uses included italian language</h2>
+          <div id="clock2">This div will be turned into a dynamic clock</div>
+          <button id="destroyclock2">DESTROY CLOCK 2</button>
+        </div>
+      </td>
+    </tr>
+  </table>
   <hr style="clear:both;" />
-  <div style="clear:both;">
-    <h2>Clock that uses included italian language</h2>
-    <div id="clock2">This div will be turned into a dynamic clock</div>
-    <button id="destroyclock2">DESTROY CLOCK 2</button>
-  </div>
   <hr style="clear:both;" />
   <div style="clear:both;">
     <h2>Clock that uses extended portoguese language</h2>
@@ -72,5 +83,4 @@
   <footer>
     <p>&copy; Copyright 2011 by <a href="mailto:priest@johnromanodorazio.com">John Romano D'Orazio</a> (screen name Lwangaman)</p>
   </footer>
-</div>
 </body>
