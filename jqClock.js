@@ -28,6 +28,8 @@
  *   >> will turn div into clock passing in server's current time as retrieved from hidden input
  *   
  */
+
+//THE FOLLOWING EXTENSION OF THE DATE PROTOTYPE WAS TAKEN FROM: https://stackoverflow.com/a/26778394/394921
 if(!Date.prototype.hasOwnProperty("stdTimezoneOffset")){
 	Date.prototype.stdTimezoneOffset = function() {
 		var fy=this.getFullYear();
@@ -54,6 +56,9 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 		return this.getTimezoneOffset() < this.stdTimezoneOffset(); 
 	};
 }
+//END DATE PROTOTYPE EXTENSION
+
+//BEGIN JQUERY CLOCK PLUGIN
 (function($, undefined) {
 
 	$.clock = { locale: {} };
