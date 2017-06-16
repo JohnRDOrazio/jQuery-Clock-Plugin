@@ -213,7 +213,7 @@ The tag was renamed 2.0.9b because I forgot to update the minified version the f
 
 Version 2.1.0 adds the short version of weekdays and months to the supported locales. Note that the currently supported locales do not guarantee linguistic correctness, the stored values for shortened months and weekdays are guesswork and are not based on any kind of standard usage.
 
-This version also introduces PHP style date and time formatting. This gives the end user more flexibility in choosing how the date and time should appear on the clock. This also means that some option parameters that existed in previous versions have been deprecated, such as the "format" parameter which let the user choose between 12 and 24 hour format, the "seconds" parameter which let the user choose whether to display seconds or not; at the same time more option paramters are added such as "dateFormat" and "timeFormat" which recognize a number of PHP style format characters.
+This version also introduces PHP style date and time formatting. This gives the end user more flexibility in choosing how the date and time should appear on the clock. This also means that some option parameters that existed in previous versions have been deprecated, such as the "format" parameter which let the user choose between 12 and 24 hour format, the "seconds" parameter which let the user choose whether to display seconds or not; at the same time more option paramters are added such as "dateFormat" and "timeFormat" (actually the parameter was defined as "hourFormat" in this version!) which recognize a number of PHP style format characters.
 
 Again the tag was renamed 2.1.0b because the javascript was not initially minified.
 
@@ -226,3 +226,4 @@ This bloats the plugin a bit, and may not be useful for all users; this would on
 
 There are 48 locales included: "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi".
 
+The "timeFormat" parameter is still actually "hourFormat"!
