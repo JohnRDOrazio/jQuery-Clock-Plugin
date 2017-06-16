@@ -49,7 +49,7 @@ if(!Date.prototype.hasOwnProperty("stdTimezoneOffset")){
 	};
 	Date.prototype.stdTimezoneOffset.cache={};
 }
-if(!Date.prototype.hasOwnProperty("isDST"){
+if(!Date.prototype.hasOwnProperty("isDST")){
 	Date.prototype.isDST = function() {
 		return this.getTimezoneOffset() < this.stdTimezoneOffset(); 
 	};
