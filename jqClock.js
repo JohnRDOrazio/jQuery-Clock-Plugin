@@ -33,7 +33,7 @@
 
 	$.clock = { locale: {} };
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.2",
+	  value: "2.1.3",
 	  writable: false
 	});
 
@@ -493,7 +493,7 @@
 							  timeStr += addleadingzero(s);
 							  break;
 							case "e":
-							  timeStr += options.timezone;
+							  timeStr += myoptions.timezone;
 							default:
 							  timeStr += chr;
 						}
