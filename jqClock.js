@@ -28,12 +28,37 @@
  *   >> will turn div into clock passing in server's current time as retrieved from hidden input
  *   
  */
+if(!Date.prototype.hasOwnProperty("stdTimezoneOffset")){
+	Date.prototype.stdTimezoneOffset = function() {
+		var fy=this.getFullYear();
+		if (!Date.prototype.stdTimezoneOffset.cache.hasOwnProperty(fy)) {
 
+			var maxOffset = new Date(fy, 0, 1).getTimezoneOffset();
+			var monthsTestOrder=[6,7,5,8,4,9,3,10,2,11,1];
+
+			for(var mi=0;mi<12;mi++) {
+				var offset=new Date(fy, monthsTestOrder[mi], 1).getTimezoneOffset();
+				if (offset!=maxOffset) { 
+					maxOffset=Math.max(maxOffset,offset);
+					break;
+				}
+			}
+			Date.prototype.stdTimezoneOffset.cache[fy]=maxOffset;
+		}
+		return Date.prototype.stdTimezoneOffset.cache[fy];
+	};
+	Date.prototype.stdTimezoneOffset.cache={};
+}
+if(!Date.prototype.hasOwnProperty("isDST"){
+	Date.prototype.isDST = function() {
+		return this.getTimezoneOffset() < this.stdTimezoneOffset(); 
+	};
+}
 (function($, undefined) {
 
 	$.clock = { locale: {} };
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.3",
+	  value: "2.1.4",
 	  writable: false
 	});
 
@@ -333,25 +358,26 @@
 
 		return this.each(function(){
 			$.extend(locale,$.clock.locale);
+
+			//this is useful only for client timestamps...
+			var sysDateObj = new Date();
+
 			options = options || {};
 			
 			/* User passable options: make sure we have default values if user doesn't pass them! */
-			options.timestamp = options.timestamp || "localsystime";
-			options.langSet = options.langSet || "en";
-			options.calendar = options.calendar || "true";
-			options.dateFormat = options.dateFormat || ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
-			options.timeFormat = options.timeFormat || ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
-			options.timezone = options.timezone || "localsystimezone"; //should only really be passed in when a server timestamp is passed
+			options.timestamp	= options.timestamp	|| "localsystime";
+			options.langSet		= options.langSet	|| "en";
+			options.calendar	= options.calendar	|| true;
+			options.dateFormat	= options.dateFormat	|| ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
+			options.timeFormat	= options.timeFormat	|| ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
+			options.timezone	= options.timezone	|| "localsystimezone"; //should only really be passed in when a server timestamp is passed
+			options.isDST		= options.isDST		|| sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
 			
-			/* Non user passable options */
-			
-			//this is useful only for client timestamps...
-			var sysDateObj = new Date();
+			/* Non user passable options */			
 			//getTimezoneOffset gives minutes
 			options.tzOffset = sysDateObj.getTimezoneOffset();
 			//divide by 60 to get hours from minutes
 			var tzOffset = options.tzOffset / 60;
-			
 			//If we are using the current client timestamp, our difference from local system time will be calculated as zero */
 			options.sysdiff = 0;
 			/* If instead we are using a custom timestamp, we need to calculate the difference from local system time
@@ -415,7 +441,7 @@
 					    calend="";
 					if (h > 11) { ap = "PM"; }
 
-					if(myoptions.calendar!="false") {
+					if(myoptions.calendar=="true" || myoptions.calendar === true) {
 
 						/* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
 						var dateStr = "";
@@ -494,6 +520,9 @@
 							  break;
 							case "e":
 							  timeStr += myoptions.timezone;
+							  break;
+							case "I":
+							  timeStr += (myoptions.isDST ? "DST" : "");
 							  break;
 							default:
 							  timeStr += chr;
