@@ -126,7 +126,7 @@ $time = time();
 Note however that **if a timezone is set in your PHP interpreter** (either using the *date.timezone = 'America/Los_Angeles'* directive in a php.ini or similar configuration file, or during runtime using *date_default_timezone_set('America/Los_Angeles')* or using *ini_set('date.timezone','America/Los_Angeles')*), then you would have to **compensate for that before feeding the timestamp** to your jQuery Clock. For example you could do this:
 ```PHP
 <?php
-//Get a server side unix timestamp compenating for timezone offset
+//Get a server side unix timestamp compensating for timezone offset
 $time = time() + date('Z');
 ?>
 <input id="servertime" type="hidden" val="<?php echo $time; ?>" />
@@ -135,7 +135,7 @@ You can then start your clock using that timestamp.
 ***In the latest version of the jQuery Clock plugin it is no longer necessary to compensate a server generated timestamp for the missing milliseconds by multiplying the value by 1000 before passing it into the plugin; this will be taken care of by the plugin itself, actually now it's important not to do so because the plugin will detect whether to compensate for local timezone offset or not depending on whether the timestamp is server generated or client generated.***
 ```JavaScript
 /* Please do not do this anymore! */
-//servertime = parseInt( $("input#servertime").val() ) * 1000;
+//s̶e̶r̶v̶e̶r̶t̶i̶m̶e̶ ̶=̶ ̶p̶a̶r̶s̶e̶I̶n̶t̶(̶ ̶$̶(̶"̶i̶n̶p̶u̶t̶#̶s̶e̶r̶v̶e̶r̶t̶i̶m̶e̶"̶)̶.̶v̶a̶l̶(̶)̶ ̶)̶ ̶*̶ ̶1̶0̶0̶0̶;̶
 /* Just do this: */
 servertime = parseInt( $("input#servertime").val() );
 $("#clock").clock({"timestamp":servertime});
