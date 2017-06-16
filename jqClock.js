@@ -337,7 +337,7 @@
 			options.langSet = options.langSet || "en";
 			options.calendar = options.calendar || "true";
 			options.dateFormat = options.dateFormat || ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
-			options.hourFormat = options.hourFormat || ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
+			options.timeFormat = options.timeFormat || ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
 			options.timezone = options.timezone || "localsystimezone"; //should only really be passed in when a server timestamp is passed
 			
 			/* Non user passable options */
@@ -458,8 +458,8 @@
 
 					/* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
 					var timeStr = "";
-					for(var n = 0; n <= myoptions.dateFormat.length; n++) {
-						var chr = myoptions.hourFormat.charAt(n);
+					for(var n = 0; n <= myoptions.timeFormat.length; n++) {
+						var chr = myoptions.timeFormat.charAt(n);
 						switch(chr){
 							case "a":
 							  timeStr += ap.toLowerCase();
