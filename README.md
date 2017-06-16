@@ -27,7 +27,7 @@ $("div#clock").clock();
 
 By default prints the date together with the time, but can be used for time only:
 ```JavaScript
-$("div#clock").clock({"calendar":"false"});
+$("div#clock").clock({"calendar":false});
 ```
 
 ## Format Date and Time using PHP style Format Characters
