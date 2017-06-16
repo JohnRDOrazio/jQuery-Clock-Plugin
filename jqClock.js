@@ -372,15 +372,18 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 			/* User passable options: make sure we have default values if user doesn't pass them! */
 			options.timestamp	= options.timestamp	|| "localsystime";
 			options.langSet		= options.langSet	|| "en";
-			options.calendar	= options.calendar	|| true;
+			options.calendar	= options.hasOwnProperty("calendar") ? options.calendar	: true;
 			options.dateFormat	= options.dateFormat	|| ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
 			options.timeFormat	= options.timeFormat	|| ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
 			options.timezone	= options.timezone	|| "localsystimezone"; //should only really be passed in when a server timestamp is passed
-			options.isDST		= options.isDST		|| sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
+			options.isDST		= options.hasOwnProperty("isDST") ? options.isDST : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
 			
-			//ensure we have a true boolean value
-			if(typeof(options.calendar) !== 'boolean'){
+			//ensure we have a true boolean values
+			if(typeof(options.calendar) === 'string'){
 				options.calendar = Boolean(options.calendar == 'false' ? false : true);
+			}
+			if(typeof(options.isDST) === 'string'){
+				options.isDST = Boolean(options.isDST == 'true' ? true : false);
 			}
 			
 			/* Non user passable options */			
