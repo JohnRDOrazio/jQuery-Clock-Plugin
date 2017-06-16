@@ -77,7 +77,7 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 
 **Example:**
 ```JavaScript
-$("div#clock").clock({"timeFormat":"h:i:s A e"});
+$("div#clock").clock({"timeFormat":"h:i:s A e I"});
 ```
 
 ## Language options
