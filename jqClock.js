@@ -6,13 +6,14 @@
  * 
  * Turns a jQuery dom element into a dynamic clock
  * Sets time in clock div and calls itself every second
- *
+ * Can take options as JSON object
+ * Possible options parameters:
  * @timestamp defaults to clients current time
- * @langSet defaults to "en"
- * @calendar defaults to "true"
+ * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
+ * @langSet defaults to "en", possible values are: "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
+ * @calendar defaults to "true", possible value are: "true", "false"
  * @dateFormat defaults to "l, F j, Y" when langSet=="en", else to "l, j F Y"
  * @timeFormat defaults to "h:i:s A" when langSet=="en", else to "H:i:s"
- * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
  * 
  *   $("#mydiv").clock(); >> will display in English and in 12 hour format
  *   $("#mydiv").clock({"langSet":"it"}); >> will display in Italian and in 24 hour format
