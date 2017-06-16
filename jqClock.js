@@ -8,22 +8,24 @@
  * Sets time in clock div and calls itself every second
  *
  * @timestamp defaults to clients current time
- *   $("#mydiv").clock();
- *   >> will turn div into clock using client computer's current time
- * @timestamp server-side example:
- *   Say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time
+ * @langSet defaults to "en"
+ * @calendar defaults to "true"
+ * @dateFormat defaults to "l, F j, Y" when langSet=="en", else to "l, j F Y"
+ * @timeFormat defaults to "h:i:s A" when langSet=="en", else to "H:i:s"
+ * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
+ * 
+ *   $("#mydiv").clock(); >> will display in English and in 12 hour format
+ *   $("#mydiv").clock({"langSet":"it"}); >> will display in Italian and in 24 hour format
+ *   $("#mydiv").clock({"langSet":"en","timeFormat":"H:i:s"}); >> will display in English but in 24 hour format
+ *   $("#mydiv").clock({"calendar":"false"}); >> will remove the date from the clock and display only the time
+ * 
+ *   Custom timestamp example, say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time:
+ * 
+ *   <input type="hidden" id="timestmp" value="<?php echo time(); ?>" />
  *   tmstmp = parseInt($("#timestmp").val());
  *   $("#mydiv").clock({"timestamp":tmstmp});
- *   >> will turn div into clock passing in server's current time as retrieved from hidden input, and after being converted to a javascript style timestamp
- *    
- * @format defaults to 12 hour format,
- *   or if langSet is indicated defaults to most appropriate format for that langSet
- *   $("#mydiv").clock(); >> will have 12 hour format
- *   $("#mydiv").clock({"langSet":"it"}); >> will have 24 hour format
- *   $("#mydiv").clock({"langSet":"en"}); >> will have 12 hour format 
- *   $("#mydiv").clock({"langSet":"en","format":"24"}); >> will have military style 24 hour format
- *   $("#mydiv").clock({"calendar":true}); >> will include the date with the time, and will update the date at midnight
- *         
+ *   >> will turn div into clock passing in server's current time as retrieved from hidden input
+ *   
  */
 
 (function($, undefined) {
