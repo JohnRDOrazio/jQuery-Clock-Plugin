@@ -82,12 +82,15 @@ $("div#clock").clock({"timeFormat":"h:i:s A e I"});
 
 ## Language options
 
-Includes 6 language translations for days of the week and months of the year: English, French, Spanish, Italian, German, Russian. 
+Includes 48 language translations for days of the week and months of the year.
+Supported locales are:
+"am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
+
 ```JavaScript
 $("div#clock").clock({"langSet":"de"});
 ```
 
-The language translations can be easily extended. To add Portuguese language:
+The language translations can be easily extended or overwritten. To overwrite the included Portuguese language:
 ```JavaScript
 $.clock.locale.pt = {
   "weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],
