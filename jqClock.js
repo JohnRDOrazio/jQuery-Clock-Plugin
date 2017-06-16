@@ -494,6 +494,7 @@
 							  break;
 							case "e":
 							  timeStr += myoptions.timezone;
+							  break;
 							default:
 							  timeStr += chr;
 						}
