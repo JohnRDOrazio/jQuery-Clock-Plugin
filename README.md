@@ -237,3 +237,11 @@ The "timeFormat" parameter is still actually "hourFormat"!
 
 Extends support for PHP Style Format Characters including the "e" format character which will display the timezone identifier. The timezone offset is calculated for client-side timestamps as "UTC", "UTC+1", "UTC-6"; whereas it will have to be passed in for server generated timestamps by using the "timezone" parameter and passing a string value such as "UTC", "UTC+1" (or "EST", "CET" or even "America\Los Angeles" though it may occupy quite a bit of space in the clock).
 With this release the "timeFormat" parameter is finally actually "timeFormat", and not "hourFormat"!
+
+## [v2.1.5](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5")
+
+Extends support for PHP Style Format Characters including the "I" (capital i) format character which will display whether the Date is in Daylight Saving Time. For example, "Europe/Paris" would normally be UTC+1 but when DST is active it is actually UTC+2. When displaying both "e" (timezone identifier) and "I" (DST state) for a Date in the "Europe/Paris" timezone, a string lik this would be displayed: "UTC+2 DST".
+
+This version also fixes the usage of actual boolean values for those options that use boolean values. Until now it was necessary to pass them in as strings ("true", "false"), now they can be passed in as true booleans (true, false).
+
+In order to have the DST detection functionality, the plugin conditionally extends the Date prototype with two more functions "stdTimezoneOffset" and "isDST" [as found in this stackoverflow answer](https://stackoverflow.com/a/26778394/394921 "https://stackoverflow.com/a/26778394/394921").
