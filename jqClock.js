@@ -63,7 +63,7 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 
 	$.clock = { locale: {} };
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.4.1",
+	  value: "2.1.4.2",
 	  writable: false
 	});
 
@@ -379,8 +379,8 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 			options.isDST		= options.isDST		|| sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
 			
 			//ensure we have a true boolean value
-			if(typeof(options.calendar) != 'boolean'){
-				options.calendar = (options.calendar == 'false' ? false : true);
+			if(typeof(options.calendar) !== 'boolean'){
+				options.calendar = Boolean(options.calendar == 'false' ? false : true);
 			}
 			
 			/* Non user passable options */			
@@ -451,6 +451,8 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 					    calend="";
 					if (h > 11) { ap = "PM"; }
 
+					console.log(typeof myoptions.calendar);
+					console.log(myoptions.calendar.toString());
 					if(myoptions.calendar === true) {
 
 						/* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
