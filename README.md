@@ -228,3 +228,8 @@ This bloats the plugin a bit, and may not be useful for all users; this would on
 There are 48 locales included: "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi".
 
 The "timeFormat" parameter is still actually "hourFormat"!
+
+## [v2.1.3](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.3 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.3")
+
+Extends support for PHP Style Format Characters including the "e" format character which will display the timezone identifier. The timezone offset is calculated for client-side timestamps as "UTC", "UTC+1", "UTC-6"; whereas it will have to be passed in for server generated timestamps by using the "timezone" parameter and passing a string value such as "UTC", "UTC+1" (or "EST", "CET" or even "America\Los Angeles" though it may occupy quite a bit of space in the clock).
+With this release the "timeFormat" parameter is finally actually "timeFormat", and not "hourFormat"!
