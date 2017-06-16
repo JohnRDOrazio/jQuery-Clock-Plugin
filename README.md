@@ -192,11 +192,11 @@ Supported option parameters (possible values in square brackets, default value i
 
 @calendar >> [**"true"**,"false"] *whether to show the date besides showing the time*
 
-@locale >> [**"en"**,"fr","de","es","it","ru"] *which locale to use to display the date and time.* ***Extendable***
+@langSet >> [**"en"**,"fr","de","es","it","ru"] *which locale to use to display the date and time.* ***Extendable***
 
 @format >> [**"12"**,"24"] *whether to show the time in 12 hour format or 24 hour format.* ***When the locale is set to english, defaults to "12", but when the locale is set to any other language, defaults to "24"***
 
-@timestamp >> javascript timestamp with milliseconds; server-generated timestamps which don't account for milliseconds must be multiplied by 1000 in order to be compatible
+@timestamp >> *javascript timestamp with milliseconds; server-generated timestamps which don't account for milliseconds must be multiplied by 1000 in order to be compatible. Defaults to current client time*
 
 
 ## [v2.0.9b](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.9b "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.9b")
