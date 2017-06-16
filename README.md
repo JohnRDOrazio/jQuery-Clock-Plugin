@@ -133,12 +133,14 @@ $time = time() + date('Z');
 ```
 You can then start your clock using that timestamp. 
 ***In the latest version of the jQuery Clock plugin it is no longer necessary to compensate a server generated timestamp for the missing milliseconds by multiplying the value by 1000 before passing it into the plugin; this will be taken care of by the plugin itself, actually now it's important not to do so because the plugin will detect whether to compensate for local timezone offset or not depending on whether the timestamp is server generated or client generated.***
-```JavaScript
+```diff
+<script type="text/javascript">
 /* Please do not do this anymore! */
-//s̶e̶r̶v̶e̶r̶t̶i̶m̶e̶ ̶=̶ ̶p̶a̶r̶s̶e̶I̶n̶t̶(̶ ̶$̶(̶"̶i̶n̶p̶u̶t̶#̶s̶e̶r̶v̶e̶r̶t̶i̶m̶e̶"̶)̶.̶v̶a̶l̶(̶)̶ ̶)̶ ̶*̶ ̶1̶0̶0̶0̶;̶
+- //var servertime = parseInt( $("input#servertime").val() ) * 1000;
 /* Just do this: */
-servertime = parseInt( $("input#servertime").val() );
++ var servertime = parseInt( $("input#servertime").val() );
 $("#clock").clock({"timestamp":servertime});
+</script>
 ```
 
 See an example of this in action here: **https://www.johnromanodorazio.com/jQueryClock.php**
