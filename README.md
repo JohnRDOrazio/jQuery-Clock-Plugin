@@ -72,10 +72,11 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *H* | 24-hour format of an hour with leading zeros             | *00* through *23* |
 | *i* | Minutes with leading zeros                               | *00* to *59*      |
 | *s* | Seconds with leading zeros                               | *00* to *59*      |
+| *e* | Timezone identifier                                      | *UTC*, *UTC+1*    |
 
 **Example:**
 ```JavaScript
-$("div#clock").clock({"timeFormat":"h:i:s A"});
+$("div#clock").clock({"timeFormat":"h:i:s A e"});
 ```
 
 ## Language options
