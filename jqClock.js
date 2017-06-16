@@ -18,7 +18,7 @@
  *   $("#mydiv").clock(); >> will display in English and in 12 hour format
  *   $("#mydiv").clock({"langSet":"it"}); >> will display in Italian and in 24 hour format
  *   $("#mydiv").clock({"langSet":"en","timeFormat":"H:i:s"}); >> will display in English but in 24 hour format
- *   $("#mydiv").clock({"calendar":"false"}); >> will remove the date from the clock and display only the time
+ *   $("#mydiv").clock({"calendar":false}); >> will remove the date from the clock and display only the time
  * 
  *   Custom timestamp example, say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time:
  * 
@@ -63,7 +63,7 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 
 	$.clock = { locale: {} };
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.4.3",
+	  value: "2.1.5",
 	  writable: false
 	});
 
@@ -454,8 +454,6 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 					    calend="";
 					if (h > 11) { ap = "PM"; }
 
-					console.log(typeof myoptions.calendar);
-					console.log(myoptions.calendar.toString());
 					if(myoptions.calendar === true) {
 
 						/* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
