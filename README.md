@@ -187,10 +187,15 @@ Can take a custom timestamp; if the timestamp is server generated it may have to
 This version of the plugin doesn't do anything to account for timezone offsets, which means that the clock's time may not reflect the server's timezone time.
 
 Supported option parameters (possible values in square brackets, default value in bold):
+
 @seconds >> [**"true"**,"false"] whether to show seconds on the time portion of the clock
+
 @calendar >> [**"true"**,"false"] whether to show the date besides showing the time
+
 @locale >> [**"en"**,"fr","de","es","it","ru"] which locale to use to display the date and time. ***Extendable***
+
 @format >> [***"12"***,"24"] whether to show the time in 12 hour format or 24 hour format. ***When the locale is set to english, defaults to "12", but when the locale is set to any other language, defaults to "24"***
+
 @timestamp >> javascript timestamp with milliseconds; server-generated timestamps which don't account for milliseconds must be multiplied by 1000 in order to be compatible
 ### Direct link: [v2.0.2](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.2 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.2")
 
