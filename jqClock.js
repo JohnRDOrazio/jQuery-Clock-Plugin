@@ -11,10 +11,11 @@
  * @timestamp defaults to clients current time
  * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
  * @langSet defaults to "en", possible values are: "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
- * @calendar defaults to "true", possible value are: "true", "false"
+ * @calendar defaults to "true", possible value are: boolean "true" or "false"
  * @dateFormat defaults to "l, F j, Y" when langSet=="en", else to "l, j F Y"
  * @timeFormat defaults to "h:i:s A" when langSet=="en", else to "H:i:s"
- * 
+ * @isDST possible values are boolean "true" or "false", if not passed in will calculate based on client time
+ *
  *   $("#mydiv").clock(); >> will display in English and in 12 hour format
  *   $("#mydiv").clock({"langSet":"it"}); >> will display in Italian and in 24 hour format
  *   $("#mydiv").clock({"langSet":"en","timeFormat":"H:i:s"}); >> will display in English but in 24 hour format
@@ -63,7 +64,7 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 
 	$.clock = { locale: {} };
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.5",
+	  value: "2.1.6",
 	  writable: false
 	});
 
@@ -465,22 +466,26 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 								  dateStr += addleadingzero(dt);
 								  break;
 								case "D":
-								  dateStr += locale[myoptions.langSet].shortWeekdays[dy];
+								  //dateStr += locale[myoptions.langSet].shortWeekdays[dy];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff);
 								  break;
 								case "j":
 								  dateStr += dt;
 								  break;
 								case "l":
-								  dateStr += locale[myoptions.langSet].weekdays[dy];
+								  //dateStr += locale[myoptions.langSet].weekdays[dy];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
 								  break;
 								case "F":
-								  dateStr += locale[myoptions.langSet].months[mo];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long'}).format(mytimestamp_sysdiff);
+								  //dateStr += locale[myoptions.langSet].months[mo];
 								  break;
 								case "m":
 								  dateStr += addleadingzero(mo);
 								  break;
 								case "M":
-								  dateStr += locale[myoptions.langSet].shortMonths[mo];
+								  //dateStr += locale[myoptions.langSet].shortMonths[mo];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff);
 								  break;
 								case "n":
 								  dateStr += mo;
