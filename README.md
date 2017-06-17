@@ -90,21 +90,6 @@ Supported locales are:
 $("div#clock").clock({"langSet":"de"});
 ```
 
-The language translations can be easily extended or overwritten. To overwrite the included Portuguese language:
-```JavaScript
-$.clock.locale.pt = {
-  "weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],
-  "shortWeekdays":["Dom","Seg","Ter","Quar","Quin","Sext"],
-  "months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"],
-  "shortMonths":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Oct","Nov","Dez"] 
-};
-```
-
-You can then set a clock to use this language set:
-```JavaScript
-$("div#clock").clock({"langSet":"pt"});
-```
-
 ## Custom client generated timestamp
 
 You can pass in a custom javascript timestamp:
