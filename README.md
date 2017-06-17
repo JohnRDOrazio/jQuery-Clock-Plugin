@@ -27,7 +27,7 @@ $("div#clock").clock();
 
 By default prints the date together with the time, but can be used for time only:
 ```JavaScript
-$("div#clock").clock({"calendar":"false"});
+$("div#clock").clock({"calendar":false});
 ```
 
 ## Format Date and Time using PHP style Format Characters
@@ -73,20 +73,24 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *i* | Minutes with leading zeros                               | *00* to *59*      |
 | *s* | Seconds with leading zeros                               | *00* to *59*      |
 | *e* | Timezone identifier                                      | *UTC*, *UTC+1*    |
+| *I* (capital i) | Whether the date is in daylight saving time  | *DST* if Daylight Savings Time, otherwise nothing  |
 
 **Example:**
 ```JavaScript
-$("div#clock").clock({"timeFormat":"h:i:s A e"});
+$("div#clock").clock({"timeFormat":"h:i:s A e I"});
 ```
 
 ## Language options
 
-Includes 6 language translations for days of the week and months of the year: English, French, Spanish, Italian, German, Russian. 
+Includes 48 language translations for days of the week and months of the year.
+Supported locales are:
+"am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
+
 ```JavaScript
 $("div#clock").clock({"langSet":"de"});
 ```
 
-The language translations can be easily extended. To add Portuguese language:
+The language translations can be easily extended or overwritten. To overwrite the included Portuguese language:
 ```JavaScript
 $.clock.locale.pt = {
   "weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],
@@ -233,3 +237,11 @@ The "timeFormat" parameter is still actually "hourFormat"!
 
 Extends support for PHP Style Format Characters including the "e" format character which will display the timezone identifier. The timezone offset is calculated for client-side timestamps as "UTC", "UTC+1", "UTC-6"; whereas it will have to be passed in for server generated timestamps by using the "timezone" parameter and passing a string value such as "UTC", "UTC+1" (or "EST", "CET" or even "America\Los Angeles" though it may occupy quite a bit of space in the clock).
 With this release the "timeFormat" parameter is finally actually "timeFormat", and not "hourFormat"!
+
+## [v2.1.5](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5")
+
+Extends support for PHP Style Format Characters including the "I" (capital i) format character which will display whether the Date is in Daylight Saving Time. For example, "Europe/Paris" would normally be UTC+1 but when DST is active it is actually UTC+2. When displaying both "e" (timezone identifier) and "I" (DST state) for a Date in the "Europe/Paris" timezone, a string lik this would be displayed: "UTC+2 DST".
+
+This version also fixes the usage of actual boolean values for those options that use boolean values. Until now it was necessary to pass them in as strings ("true", "false"), now they can be passed in as true booleans (true, false).
+
+In order to have the DST detection functionality, the plugin conditionally extends the Date prototype with two more functions "stdTimezoneOffset" and "isDST" [as found in this stackoverflow answer](https://stackoverflow.com/a/26778394/394921 "https://stackoverflow.com/a/26778394/394921").

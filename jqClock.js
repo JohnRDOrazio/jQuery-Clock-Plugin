@@ -11,14 +11,15 @@
  * @timestamp defaults to clients current time
  * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
  * @langSet defaults to "en", possible values are: "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
- * @calendar defaults to "true", possible value are: "true", "false"
+ * @calendar defaults to "true", possible value are: boolean "true" or "false"
  * @dateFormat defaults to "l, F j, Y" when langSet=="en", else to "l, j F Y"
  * @timeFormat defaults to "h:i:s A" when langSet=="en", else to "H:i:s"
- * 
+ * @isDST possible values are boolean "true" or "false", if not passed in will calculate based on client time
+ *
  *   $("#mydiv").clock(); >> will display in English and in 12 hour format
  *   $("#mydiv").clock({"langSet":"it"}); >> will display in Italian and in 24 hour format
  *   $("#mydiv").clock({"langSet":"en","timeFormat":"H:i:s"}); >> will display in English but in 24 hour format
- *   $("#mydiv").clock({"calendar":"false"}); >> will remove the date from the clock and display only the time
+ *   $("#mydiv").clock({"calendar":false}); >> will remove the date from the clock and display only the time
  * 
  *   Custom timestamp example, say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time:
  * 
@@ -28,6 +29,8 @@
  *   >> will turn div into clock passing in server's current time as retrieved from hidden input
  *   
  */
+
+//THE FOLLOWING EXTENSION OF THE DATE PROTOTYPE WAS TAKEN FROM: https://stackoverflow.com/a/26778394/394921
 if(!Date.prototype.hasOwnProperty("stdTimezoneOffset")){
 	Date.prototype.stdTimezoneOffset = function() {
 		var fy=this.getFullYear();
@@ -54,11 +57,14 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 		return this.getTimezoneOffset() < this.stdTimezoneOffset(); 
 	};
 }
+//END DATE PROTOTYPE EXTENSION
+
+//BEGIN JQUERY CLOCK PLUGIN
 (function($, undefined) {
 
 	$.clock = { locale: {} };
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.4",
+	  value: "2.1.6",
 	  writable: false
 	});
 
@@ -367,11 +373,19 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 			/* User passable options: make sure we have default values if user doesn't pass them! */
 			options.timestamp	= options.timestamp	|| "localsystime";
 			options.langSet		= options.langSet	|| "en";
-			options.calendar	= options.calendar	|| true;
+			options.calendar	= options.hasOwnProperty("calendar") ? options.calendar	: true;
 			options.dateFormat	= options.dateFormat	|| ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
 			options.timeFormat	= options.timeFormat	|| ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
 			options.timezone	= options.timezone	|| "localsystimezone"; //should only really be passed in when a server timestamp is passed
-			options.isDST		= options.isDST		|| sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
+			options.isDST		= options.hasOwnProperty("isDST") ? options.isDST : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
+			
+			//ensure we have a true boolean values
+			if(typeof(options.calendar) === 'string'){
+				options.calendar = Boolean(options.calendar == 'false' ? false : true);
+			}
+			if(typeof(options.isDST) === 'string'){
+				options.isDST = Boolean(options.isDST == 'true' ? true : false);
+			}
 			
 			/* Non user passable options */			
 			//getTimezoneOffset gives minutes
@@ -441,7 +455,7 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 					    calend="";
 					if (h > 11) { ap = "PM"; }
 
-					if(myoptions.calendar=="true" || myoptions.calendar === true) {
+					if(myoptions.calendar === true) {
 
 						/* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
 						var dateStr = "";
@@ -452,22 +466,26 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 								  dateStr += addleadingzero(dt);
 								  break;
 								case "D":
-								  dateStr += locale[myoptions.langSet].shortWeekdays[dy];
+								  //dateStr += locale[myoptions.langSet].shortWeekdays[dy];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff);
 								  break;
 								case "j":
 								  dateStr += dt;
 								  break;
 								case "l":
-								  dateStr += locale[myoptions.langSet].weekdays[dy];
+								  //dateStr += locale[myoptions.langSet].weekdays[dy];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
 								  break;
 								case "F":
-								  dateStr += locale[myoptions.langSet].months[mo];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long'}).format(mytimestamp_sysdiff);
+								  //dateStr += locale[myoptions.langSet].months[mo];
 								  break;
 								case "m":
 								  dateStr += addleadingzero(mo);
 								  break;
 								case "M":
-								  dateStr += locale[myoptions.langSet].shortMonths[mo];
+								  //dateStr += locale[myoptions.langSet].shortMonths[mo];
+								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff);
 								  break;
 								case "n":
 								  dateStr += mo;
