@@ -230,3 +230,7 @@ Extends support for PHP Style Format Characters including the "I" (capital i) fo
 This version also fixes the usage of actual boolean values for those options that use boolean values. Until now it was necessary to pass them in as strings ("true", "false"), now they can be passed in as true booleans (true, false).
 
 In order to have the DST detection functionality, the plugin conditionally extends the Date prototype with two more functions "stdTimezoneOffset" and "isDST" [as found in this stackoverflow answer](https://stackoverflow.com/a/26778394/394921 "https://stackoverflow.com/a/26778394/394921").
+
+## [v2.1.6](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6")
+
+Implements the new Intl.DateTimeFormat object which is now fairly universally supported in ECMA script implementations, completely removing the "locale" paramater from the plugin. It is no longer possible to extend the plugin with customized locales, because the plugin now depends entirely on the native functionality of the Intl.DateTimeFormat object.
