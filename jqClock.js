@@ -158,7 +158,7 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 					    s=mytimestamp_sysdiff.getSeconds(),
 					    dy=mytimestamp_sysdiff.getDay(),
 					    dt=mytimestamp_sysdiff.getDate(),
-					    mo=mytimestamp_sysdiff.getMonth(),
+					    mo=mytimestamp_sysdiff.getMonth()+1,
 					    y=mytimestamp_sysdiff.getFullYear(),
 					    ap="AM",
 					    calend="";
