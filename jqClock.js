@@ -64,7 +64,7 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 
 	$.clock = {};
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.6",
+	  value: "2.1.7",
 	  writable: false
 	});
 
