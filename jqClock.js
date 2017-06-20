@@ -59,6 +59,27 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 }
 //END DATE PROTOTYPE EXTENSION
 
+//Most browsers support String.prototype.padStart, unfortunately Internet Explorer does not... So this is to make sure it is available
+// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+if (!String.prototype.padStart) {
+    String.prototype.padStart = function padStart(targetLength,padString) {
+        targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+        padString = String(padString || ' ');
+        if (this.length > targetLength) {
+            return String(this);
+        }
+        else {
+            targetLength = targetLength-this.length;
+            if (targetLength > padString.length) {
+                padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+            }
+            return padString.slice(0,targetLength) + String(this);
+        }
+    };
+}
+//END STRING.PROTOTYPE.PADSTART
+
 //BEGIN JQUERY CLOCK PLUGIN
 (function($, undefined) {
 
@@ -135,11 +156,7 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 				}
 			}
 
-			var addleadingzero = function(i){
-				if (i<10){i="0" + i;}
-				return i;
-			},
-			newGuid = function() {
+			var newGuid = function() {
 				return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
 					function(c) {
 						var r = Math.random() * 16 | 0,
@@ -156,13 +173,17 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 					var h=mytimestamp_sysdiff.getHours(),
 					    m=mytimestamp_sysdiff.getMinutes(),
 					    s=mytimestamp_sysdiff.getSeconds(),
+					    ms=mytimestamp_sysdiff.getMilliseconds(),
 					    dy=mytimestamp_sysdiff.getDay(),
 					    dt=mytimestamp_sysdiff.getDate(),
-					    mo=mytimestamp_sysdiff.getMonth()+1,
+					    mo=mytimestamp_sysdiff.getMonth(),
 					    y=mytimestamp_sysdiff.getFullYear(),
 					    ap="AM",
 					    calend="";
 					if (h > 11) { ap = "PM"; }
+					var H12 = h;
+					if (H12 > 12) { H12 = H12 - 12; }
+					else if (H12 === 0) { H12 = 12; }
 
 					if(myoptions.calendar === true) {
 
@@ -171,34 +192,65 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 						for(var n = 0; n <= myoptions.dateFormat.length; n++) {
 							var chr = myoptions.dateFormat.charAt(n);
 							switch(chr){
-								case "d":
-								  dateStr += addleadingzero(dt);
+								//DAY
+								case "d": //Day of the Month, 2 digits with leading zeros
+								  dateStr += (''+dt).padStart(2,"0");
 								  break;
-								case "D":
+								case "D": //A textual representation of a day, three letters 
 								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff);
 								  break;
-								case "j":
+								case "j": //Day of the month without leading zeros
 								  dateStr += dt;
 								  break;
-								case "l":
+								case "l": //A full textual representation of the day of the week
 								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
 								  break;
-								case "F":
+								case "N": // ISO-8601 numeric representation of the day of the week (1-7)
+								  dateStr += (dy+1);
+								  break;
+								/*case "S": //English ordinal suffix for the day of the month, 2 characters
+								  dateStr += suffix... st, nd, rd, th...
+								  break;*/
+								case "w": //Numeric representation of the day of the week (0-6)
+								  dateStr += dy;
+								  break;
+								/*case "z": //The day of the year (starting from 0)
+								  dateStr += 0-365...
+								  break; */
+								
+								//WEEK
+								/*case "W": // ISO-8601 week number of year, weeks starting on Monday
+								  dateStr += weeknumber...//Example 42, 42nd week of the year
+								  break; */
+									
+								//MONTH
+								case "F": //A full textual representation of a month, such as January or March
 								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long'}).format(mytimestamp_sysdiff);
 								  break;
-								case "m":
-								  dateStr += addleadingzero(mo);
+								case "m": //Numeric representation of a month, with leading zeros
+								  dateStr += ((mo+1)+'').padStart(2,"0");
 								  break;
-								case "M":
+								case "M": //A short textual representation of a month, three letters
 								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff);
 								  break;
-								case "n":
-								  dateStr += mo;
+								case "n": //Numeric representation of a month, without leading zeros
+								  dateStr += (mo+1);
 								  break;
-								case "Y":
+								/*case "t": //Number of days in the given month
+								  dateStr += 
+								  break;*/
+								
+								//YEAR
+								/*case "L": // Whether it's a leap year
+								  dateStr += //1 if it is a leap year, 0 otherwise
+								  break;*/
+								/*case "o": //ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead
+								  dateStr += ...
+								  break;*/
+								case "Y": //A full numeric representation of a year, 4 digits
 								  dateStr += y;
 								  break;
-								case "y":
+								case "y": //A two digit representation of a year
 								  dateStr += y.toString().substr(2,2);
 								  break;
 								default:
@@ -213,40 +265,70 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 					for(var n = 0; n <= myoptions.timeFormat.length; n++) {
 						var chr = myoptions.timeFormat.charAt(n);
 						switch(chr){
-							case "a":
+							case "a": //Lowercase Ante meridiem and Post meridiem
 							  timeStr += ap.toLowerCase();
 							  break;
-							case "A":
+							case "A": //Uppercase Ante meridiem and Post meridiem
 							  timeStr += ap;
 							  break;
-							case "g":
-							  if (h > 12) { h = h - 12; }
-							  else if (h === 0) { h = 12; }
+							/*case "B": //Swatch Internet time
+							  timeStr += //000 through 999
+							  break;*/
+							case "g": //12-hour format of an hour without leading zeros
+							  timeStr += H12;
+							  break;
+							case "G": //24-hour format of an hour without leading zeros
 							  timeStr += h;
 							  break;
-							case "G":
-							  timeStr += h;
+							case "h": //12-hour format of an hour with leading zeros
+							  timeStr += (''+H12).padStart(2,"0");
 							  break;
-							case "h":
-							  if (h > 12) { h = h - 12; }
-							  else if (h === 0) { h = 12; }
-							  timeStr += addleadingzero(h);
+							case "H": //24-hour format of an hour with leading zeros
+							  timeStr += (''+h).padStart(2,"0");
 							  break;
-							case "H":
-							  timeStr += addleadingzero(h);
+							case "i": //Minutes with leading zeros
+							  timeStr += (''+m).padStart(2,"0");
 							  break;
-							case "i":
-							  timeStr += addleadingzero(m);
+							case "s": //Seconds, with leading zeros
+							  timeStr += (''+s).padStart(2,"0");
 							  break;
-							case "s":
-							  timeStr += addleadingzero(s);
+							/*case "u": //Microseconds
+							  timeStr += microseconds...
+							  break; */
+							case "v": //Milliseconds
+							  timeStr += ms.padStart(3,"0");
 							  break;
-							case "e":
+								
+							//TIMEZONE
+							case "e": //Timezone identifier 
 							  timeStr += myoptions.timezone;
 							  break;
-							case "I":
+							case "I": //Whether or not the date is in daylight saving time
 							  timeStr += (myoptions.isDST ? "DST" : "");
 							  break;
+							case "O": //Difference to Greenwich time (GMT) in hours
+							  timeStr += //Example +0200
+							  break;
+							/*case "P": //Difference to Greenwich time (GMT) with colon between hours and minutes
+							  timeStr += //Example +02:00
+							  break;*/
+							/*case "T": //Timezone abbreviation
+							  timeStr += timezone_abbrev...
+							  break;*/
+							/*case "Z": //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
+							  dateStr += timezone_offset_secs...
+							  break;*/
+							
+							//FULL DATE/TIME
+							/*case "c": // ISO 8601 date 
+							  timeStr += //Example 2004-02-12T15:19:21+00:00
+							  break;*/
+							/*case "r": //» RFC 2822 formatted date
+							  timeStr += //Example: Thu, 21 Dec 2000 16:01:07 +0200
+							  break;*/
+							/*case "U": //Seconds since the Unix Epoch
+							  timeStr += unix_epoch_secs...
+							  break;*/
 							default:
 							  timeStr += chr;
 						}
