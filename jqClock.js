@@ -306,9 +306,9 @@ if (!String.prototype.padStart) {
 							case "I": //Whether or not the date is in daylight saving time
 							  timeStr += (myoptions.isDST ? "DST" : "");
 							  break;
-							case "O": //Difference to Greenwich time (GMT) in hours
+							/*case "O": //Difference to Greenwich time (GMT) in hours
 							  timeStr += //Example +0200
-							  break;
+							  break;*/
 							/*case "P": //Difference to Greenwich time (GMT) with colon between hours and minutes
 							  timeStr += //Example +02:00
 							  break;*/
