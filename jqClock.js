@@ -369,7 +369,7 @@ if (!String.prototype.padStart) {
 							  timeStr += microseconds...
 							  break; */
 							case "v": //Milliseconds
-							  timeStr += ms.padStart(3,"0");
+							  timeStr += (''+ms).padStart(3,"0");
 							  break;
 								
 							//TIMEZONE
