@@ -45,6 +45,12 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *D* | A textual representation of a day, three letters         | *Mon* through *Sun* |
 | *j* | Day of the month without leading zeros                   | *1* to *31*         |
 | *l* (lowercase 'L') | A full textual representation of the day of the week | *Sunday* through *Saturday* |
+| *N* | ISO-8601 numeric representation of the day of the week   | *1* (for Monday) to *7* (for Sunday) |
+| *S* | English ordinal suffix for the day of the month, 2 characters | *st*, *nd*, *rd* or *th*. Works well with *j* |
+| *w* | Numeric representation of the day of the week (0-6)      | *0* (for Sunday) to *6* (for Saturday) |
+| *z* | The day of the year (starting from 0)                    | *0* to *365*        |
+| *Week* | ---                                                   | ---                 |
+| *W* | ISO-8601 week number of year, weeks starting on Monday   | Example: *42* (the 42nd week in the year) |
 | *Month*           | ---                                        | ---                 |
 | *F* | A full textual representation of a month, such as January or March | *January* through *December* |
 | *m* | Numeric representation of a month, with leading zeros    | *01* through *12*   |
