@@ -57,6 +57,8 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *M* | A short textual representation of a month, three letters | *Jan* through *Dec* |
 | *n* | Numeric representation of a month, without leading zeros | *1* through *12*    |
 | *Year*            | ---                                        | ---                 |
+| *L* | Whether it's a leap year                                 | *1* if it is a leap year, *0* otherwise |
+| *o* | ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead                             | Examples: *1999* or *2003* |
 | *Y* | A full numeric representation of a year, 4 digits        | Examples: *1999* or *2003* |
 | *y* | A two digit representation of a year                     | Examples: *99* or *03* |
 
