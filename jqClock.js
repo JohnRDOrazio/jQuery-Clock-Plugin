@@ -96,6 +96,11 @@ if(!Date.prototype.hasOwnProperty("getWOY"){
 		else { return Math.ceil((((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7) + 1) / 7); }
 	};
 }
+if(!Date.prototype.hasOwnProperty("swatchTime"){
+	Date.prototype.swatchTime = function(){
+		return ("00"+Math.floor((((this.getUTCHours()+1)%24*60+this.getUTCMinutes())*60+this.getUTCSeconds()+(this.getUTCMilliseconds()*0.001))/86.4)).slice(-3);		
+	}
+}
 //END DATE PROTOTYPE EXTENSION
 
 //Most browsers support String.prototype.padStart, unfortunately Internet Explorer does not... So this is to make sure it is available
@@ -241,6 +246,7 @@ if (!String.prototype.padStart) {
 					    woy=mytimestamp_sysdiff.getWOY(),
 					    iso8601Year=mytimestamp_sysdiff.getWOY(true),
 					    dim=mytimestamp_sysdiff.daysInMonth(),
+					    swt=mytimestamp_sysdiff.swatchTime(),
 					    ap="AM",
 					    calend="";
 					if (h > 11) { ap = "PM"; }
@@ -334,9 +340,9 @@ if (!String.prototype.padStart) {
 							case "A": //Uppercase Ante meridiem and Post meridiem
 							  timeStr += ap;
 							  break;
-							/*case "B": //Swatch Internet time
-							  timeStr += //000 through 999
-							  break;*/
+							case "B": //Swatch Internet time
+							  timeStr += swt;//000 through 999
+							  break;
 							case "g": //12-hour format of an hour without leading zeros
 							  timeStr += H12;
 							  break;
