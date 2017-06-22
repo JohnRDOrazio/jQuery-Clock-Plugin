@@ -397,7 +397,7 @@ if (!String.prototype.padStart) {
 							  timeStr += y+'-'+((mo+1)+'').padStart(2,"0")+'-'+(''+dt).padStart(2,"0")+'T'+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+":00";
 							  break;
 							case "r": //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
-							  timeStr +=  new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff) + ', ' + dt + ' ' + new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff) + y + ' '+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+' '+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+"00";
+							  timeStr +=  new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff) + ', ' + dt + ' ' + new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff) + ' ' + y + ' '+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+' '+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+"00";
 							  break;
 							case "U": //Seconds since the Unix Epoch
 							  timeStr += Math.floor(mytimestamp / 1000);
