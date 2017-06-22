@@ -278,13 +278,13 @@ if (!String.prototype.padStart) {
 								case "l": //A full textual representation of the day of the week
 								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
 								  break;
-								case "N": // ISO-8601 numeric representation of the day of the week (1-7)
-								  dateStr += (dy+1);
+								case "N": // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
+								  dateStr += (dy===0?7:dy);
 								  break;
 								case "S": //English ordinal suffix for the day of the month, 2 characters
 								  dateStr += ordSuffix(dt);
 								  break;
-								case "w": //Numeric representation of the day of the week (0-6)
+								case "w": //Numeric representation of the day of the week (0-6, 0=Sunday)
 								  dateStr += dy;
 								  break;
 								case "z": //The day of the year (starting from 0)
