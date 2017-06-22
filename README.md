@@ -82,6 +82,7 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *s* | Seconds with leading zeros                               | *00* to *59*      |
 | *e* | Timezone identifier                                      | *UTC*, *UTC+1*    |
 | *I* (capital i) | Whether the date is in daylight saving time  | *DST* if Daylight Savings Time, otherwise nothing  |
+| *U* | Seconds since the Unix Epoch                             |                   |
 
 **Example:**
 ```JavaScript
