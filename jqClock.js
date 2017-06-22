@@ -389,7 +389,7 @@ if (!String.prototype.padStart) {
 							  timeStr += timezone_abbrev...
 							  break;*/
 							case "Z": //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
-							  dateStr += (tzS<0 ? ''+Math.abs(tzS) : (tzS>0 ? ''+(tzS*-1) : "0" ) );
+							  timeStr += (tzS<0 ? ''+Math.abs(tzS) : (tzS>0 ? ''+(tzS*-1) : "0" ) );
 							  break;
 							
 							//FULL DATE/TIME
