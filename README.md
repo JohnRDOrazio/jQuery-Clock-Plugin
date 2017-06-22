@@ -81,11 +81,17 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *H* | 24-hour format of an hour with leading zeros             | *00* through *23* |
 | *i* | Minutes with leading zeros                               | *00* to *59*      |
 | *s* | Seconds with leading zeros                               | *00* to *59*      |
+| *v* | Milliseconds                                             | Example *654*     |
 | *Timezone*         | ---                                       | ---               |
 | *e* | Timezone identifier                                      | *UTC*, *UTC+1*    |
 | *I* (capital i) | Whether the date is in daylight saving time  | *DST* if Daylight Savings Time, otherwise nothing  |
+| *O* | Difference to Greenwich time (GMT) in hours              | Example: *+0200*  |
+| *P* | Difference to Greenwich time (GMT) with colon between hours and minutes | Example: *+02:00* |
+| *Z* | Timezone offset in seconds. Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive. | *-43200* through *50400* |
 | *Full Date/Time*   | ---                                       | ---               |
-| *U* | Seconds since the Unix Epoch                             |                   |
+| *c* | ISO 8601 date                                            | 2004-02-12T15:19:21+00:00 |
+| *r* | [» RFC 2822](http://www.faqs.org/rfcs/rfc2822) formatted date | Example: *Thu, 21 Dec 2000 16:01:07 +0200* |
+| *U* | Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT) |                 |
 
 **Example:**
 ```JavaScript
