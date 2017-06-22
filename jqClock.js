@@ -85,7 +85,7 @@ if(!Date.prototype.hasOwnProperty("daysInMonth")){
 		return [31, (this.isLeapYear() ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][this.getMonth()];
 	};
 }
-if(!Date.prototype.hasOwnProperty("getWOY"){
+if(!Date.prototype.hasOwnProperty("getWOY")){
 	//Get Week Number in the Year
    	//source: https://stackoverflow.com/a/6117889/394921
 	Date.prototype.getWOY = function(getY) {
@@ -96,7 +96,7 @@ if(!Date.prototype.hasOwnProperty("getWOY"){
 		else { return Math.ceil((((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7) + 1) / 7); }
 	};
 }
-if(!Date.prototype.hasOwnProperty("swatchTime"){
+if(!Date.prototype.hasOwnProperty("swatchTime")){
    	//Get Swatch Internet Time
    	//source: https://gist.github.com/rev22/8085260
 	Date.prototype.swatchTime = function(){
