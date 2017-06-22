@@ -247,13 +247,15 @@ if (!String.prototype.padStart) {
 					    iso8601Year=mytimestamp_sysdiff.getWOY(true),
 					    dim=mytimestamp_sysdiff.daysInMonth(),
 					    swt=mytimestamp_sysdiff.swatchTime(),
+					    tzH=parseInt(mytimestamp_sysdiff.getTimezoneOffset() / 60),
+					    tzS=parseInt(mytimestamp_sysdiff.getTimezoneOffset() * 60),
 					    ap="AM",
 					    calend="";
 					if (h > 11) { ap = "PM"; }
 					var H12 = h;
 					if (H12 > 12) { H12 = H12 - 12; }
 					else if (H12 === 0) { H12 = 12; }
-
+					
 					if(myoptions.calendar === true) {
 
 						/* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
@@ -375,28 +377,28 @@ if (!String.prototype.padStart) {
 							case "I": //Whether or not the date is in daylight saving time
 							  timeStr += (myoptions.isDST ? "DST" : "");
 							  break;
-							/*case "O": //Difference to Greenwich time (GMT) in hours
-							  timeStr += //Example +0200
-							  break;*/
-							/*case "P": //Difference to Greenwich time (GMT) with colon between hours and minutes
-							  timeStr += //Example +02:00
-							  break;*/
+							case "O": //Difference to Greenwich time (GMT) in hours
+							  timeStr += (tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+"00";
+							  break;
+							case "P": //Difference to Greenwich time (GMT) with colon between hours and minutes
+							  timeStr += (tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+":00";
+							  break;
 							/*case "T": //Timezone abbreviation
 							  timeStr += timezone_abbrev...
 							  break;*/
-							/*case "Z": //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
-							  dateStr += timezone_offset_secs...
-							  break;*/
+							case "Z": //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
+							  dateStr += (tzS<0 ? ''+Math.abs(tzS) : (tzS<0 ? ''+(tzS*-1) : "0" ) );
+							  break;
 							
 							//FULL DATE/TIME
-							/*case "c": // ISO 8601 date 
-							  timeStr += //Example 2004-02-12T15:19:21+00:00
-							  break;*/
-							/*case "r": //» RFC 2822 formatted date
-							  timeStr += //Example: Thu, 21 Dec 2000 16:01:07 +0200
-							  break;*/
+							case "c": // ISO 8601 date | Example 2004-02-12T15:19:21+00:00
+							  timeStr += y+'-'+((mo+1)+'').padStart(2,"0")+'-'+(''+dt).padStart(2,"0")+'T'+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+":00";
+							  break;
+							case "r": //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
+							  timeStr +=  new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff) + ', ' + dt + ' ' + new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff) + y + ' '+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+' '+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+"00";
+							  break;
 							case "U": //Seconds since the Unix Epoch
-							  timeStr += (mytimestamp / 1000);
+							  timeStr += Math.floor(mytimestamp / 1000);
 							  break;
 							default:
 							  timeStr += chr;
