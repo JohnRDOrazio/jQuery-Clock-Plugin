@@ -389,9 +389,9 @@ if (!String.prototype.padStart) {
 							/*case "r": //» RFC 2822 formatted date
 							  timeStr += //Example: Thu, 21 Dec 2000 16:01:07 +0200
 							  break;*/
-							/*case "U": //Seconds since the Unix Epoch
-							  timeStr += unix_epoch_secs...
-							  break;*/
+							case "U": //Seconds since the Unix Epoch
+							  timeStr += (mytimestamp / 1000);
+							  break;
 							default:
 							  timeStr += chr;
 						}
