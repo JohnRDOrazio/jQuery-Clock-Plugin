@@ -88,11 +88,12 @@ if(!Date.prototype.hasOwnProperty("daysInMonth")){
 if(!Date.prototype.hasOwnProperty("getWOY"){
 	//Get Week Number in the Year
    	//source: https://stackoverflow.com/a/6117889/394921
-	Date.prototype.getWOY = function() {
+	Date.prototype.getWOY = function(getY) {
 		var d = new Date(+this);
 		d.setHours(0, 0, 0, 0);
 		d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-		return Math.ceil((((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7) + 1) / 7);
+		if(getY){ return d.getFullYear(); }
+		else { return Math.ceil((((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7) + 1) / 7); }
 	};
 }
 //END DATE PROTOTYPE EXTENSION
@@ -238,6 +239,7 @@ if (!String.prototype.padStart) {
 					    ly=mytimestamp_sysdiff.isLeapYear(),
 					    doy=mytimestamp_sysdiff.getDOY(),
 					    woy=mytimestamp_sysdiff.getWOY(),
+					    iso8601Year=mytimestamp_sysdiff.getWOY(true),
 					    dim=mytimestamp_sysdiff.daysInMonth(),
 					    ap="AM",
 					    calend="";
@@ -305,9 +307,9 @@ if (!String.prototype.padStart) {
 								case "L": // Whether it's a leap year
 								  dateStr += (ly?1:0); //1 if it is a leap year, 0 otherwise
 								  break;
-								/*case "o": //ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead
-								  dateStr += ...
-								  break;*/
+								case "o": //ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead
+								  dateStr += iso8601Year;
+								  break;
 								case "Y": //A full numeric representation of a year, 4 digits
 								  dateStr += y;
 								  break;
