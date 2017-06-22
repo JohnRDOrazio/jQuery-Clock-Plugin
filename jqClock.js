@@ -57,6 +57,44 @@ if(!Date.prototype.hasOwnProperty("isDST")){
 		return this.getTimezoneOffset() < this.stdTimezoneOffset(); 
 	};
 }
+if(!Date.prototype.hasOwnProperty("isLeapYear")){
+	//source: https://stackoverflow.com/a/26426761/394921
+	Date.prototype.isLeapYear = function() {
+	    var year = this.getFullYear();
+	    if((year & 3) != 0) return false;
+	    return ((year % 100) != 0 || (year % 400) == 0);
+	};
+}
+if(!Date.prototype.hasOwnProperty("getDOY")){
+	// Get Day of Year
+	//source: https://stackoverflow.com/a/26426761/394921
+	//maybe can use the solution [here](https://stackoverflow.com/a/28919172/394921) also: Math.round((new Date().setHours(23) - new Date(new Date().getYear()+1900, 0, 1, 0, 0, 0))/1000/60/60/24);
+	Date.prototype.getDOY = function() {
+		var dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+		var mn = this.getMonth();
+		var dn = this.getDate();
+		var dayOfYear = dayCount[mn] + dn;
+		if(mn > 1 && this.isLeapYear()) dayOfYear++;
+		return dayOfYear;
+	};
+}
+if(!Date.prototype.hasOwnProperty("daysInMonth")){
+	//Get number of days in the current month
+	//source: https://stackoverflow.com/questions/1184334/get-number-days-in-a-specified-month-using-javascript#comment36681053_1464716
+	Date.prototype.daysInMonth = function(){
+		return [31, (this.isLeapYear() ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][this.getMonth()];
+	};
+}
+if(!Date.prototype.hasOwnProperty("getWOY"){
+	//Get Week Number in the Year
+   	//source: https://stackoverflow.com/a/6117889/394921
+	Date.prototype.getWOY = function() {
+		var d = new Date(+this);
+		d.setHours(0, 0, 0, 0);
+		d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+		return Math.ceil((((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7) + 1) / 7);
+	};
+}
 //END DATE PROTOTYPE EXTENSION
 
 //Most browsers support String.prototype.padStart, unfortunately Internet Explorer does not... So this is to make sure it is available
@@ -175,6 +213,14 @@ if (!String.prototype.padStart) {
 						return v.toString(16);
 					}).toUpperCase();
 			},
+			ordSuffix = function(ord) {
+				var ord_suffix = ''; //st, nd, rd, th
+				if(ord===1 || (ord % 10 === 1  && ord != 11) ){ ord_suffix = 'st'; }
+				else if( ord===2 || (ord % 10 === 2  && ord != 12) ){ ord_suffix = 'nd'; }
+				else if( ord===3 || (ord % 10 === 3  && ord != 13) ){ ord_suffix = 'rd'; }
+				else { ord_suffix = 'th'; }
+				return ord_suffix;
+			},
 			updateClock = function(el,myoptions) {      
 				var el_id = $(el).attr("id");
 				if(myoptions=="destroy"){ clearTimeout(jqClock[el_id]); }
@@ -189,6 +235,10 @@ if (!String.prototype.padStart) {
 					    dt=mytimestamp_sysdiff.getDate(),
 					    mo=mytimestamp_sysdiff.getMonth(),
 					    y=mytimestamp_sysdiff.getFullYear(),
+					    ly=mytimestamp_sysdiff.isLeapYear(),
+					    doy=mytimestamp_sysdiff.getDOY(),
+					    woy=mytimestamp_sysdiff.getWOY(),
+					    dim=mytimestamp_sysdiff.daysInMonth(),
 					    ap="AM",
 					    calend="";
 					if (h > 11) { ap = "PM"; }
@@ -219,20 +269,20 @@ if (!String.prototype.padStart) {
 								case "N": // ISO-8601 numeric representation of the day of the week (1-7)
 								  dateStr += (dy+1);
 								  break;
-								/*case "S": //English ordinal suffix for the day of the month, 2 characters
-								  dateStr += suffix... st, nd, rd, th...
-								  break;*/
+								case "S": //English ordinal suffix for the day of the month, 2 characters
+								  dateStr += ordSuffix(dt);
+								  break;
 								case "w": //Numeric representation of the day of the week (0-6)
 								  dateStr += dy;
 								  break;
-								/*case "z": //The day of the year (starting from 0)
-								  dateStr += 0-365...
-								  break; */
+								case "z": //The day of the year (starting from 0)
+								  dateStr += (doy-1);
+								  break;
 								
 								//WEEK
-								/*case "W": // ISO-8601 week number of year, weeks starting on Monday
-								  dateStr += weeknumber...//Example 42, 42nd week of the year
-								  break; */
+								case "W": // ISO-8601 week number of year, weeks starting on Monday
+								  dateStr += woy;
+								  break;
 									
 								//MONTH
 								case "F": //A full textual representation of a month, such as January or March
@@ -247,14 +297,14 @@ if (!String.prototype.padStart) {
 								case "n": //Numeric representation of a month, without leading zeros
 								  dateStr += (mo+1);
 								  break;
-								/*case "t": //Number of days in the given month
-								  dateStr += 
-								  break;*/
+								case "t": //Number of days in the given month
+								  dateStr += dim;
+								  break;
 								
 								//YEAR
-								/*case "L": // Whether it's a leap year
-								  dateStr += //1 if it is a leap year, 0 otherwise
-								  break;*/
+								case "L": // Whether it's a leap year
+								  dateStr += (ly?1:0); //1 if it is a leap year, 0 otherwise
+								  break;
 								/*case "o": //ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead
 								  dateStr += ...
 								  break;*/
