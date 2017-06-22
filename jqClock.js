@@ -97,6 +97,8 @@ if(!Date.prototype.hasOwnProperty("getWOY"){
 	};
 }
 if(!Date.prototype.hasOwnProperty("swatchTime"){
+   	//Get Swatch Internet Time
+   	//source: https://gist.github.com/rev22/8085260
 	Date.prototype.swatchTime = function(){
 		return ("00"+Math.floor((((this.getUTCHours()+1)%24*60+this.getUTCMinutes())*60+this.getUTCSeconds()+(this.getUTCMilliseconds()*0.001))/86.4)).slice(-3);		
 	}
