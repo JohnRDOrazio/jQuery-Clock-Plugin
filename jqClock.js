@@ -140,7 +140,7 @@ if (!String.prototype.padStart) {
 
 	$.clock = {};
 	Object.defineProperty($.clock,"version",{
-	  value: "2.1.7",
+	  value: "2.1.8",
 	  writable: false
 	});
 
