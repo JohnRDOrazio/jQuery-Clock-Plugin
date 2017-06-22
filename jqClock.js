@@ -249,8 +249,8 @@ if (!String.prototype.padStart) {
 					    iso8601Year=mytimestamp_sysdiff.getWOY(true),
 					    dim=mytimestamp_sysdiff.daysInMonth(),
 					    swt=mytimestamp_sysdiff.swatchTime(),
-					    tzH=parseInt(mytimestamp_sysdiff.getTimezoneOffset() / 60),
-					    tzS=parseInt(mytimestamp_sysdiff.getTimezoneOffset() * 60),
+					    tzH=parseInt(myoptions.tzOffset / 60),
+					    tzS=parseInt(myoptions.tzOffset * 60),
 					    ap="AM",
 					    calend="";
 					if (h > 11) { ap = "PM"; }
