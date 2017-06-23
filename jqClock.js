@@ -150,49 +150,50 @@ if (!String.prototype.padStart) {
 			},
 			{	"type":		"object",
 			 	"description":	"option set {}",
-			 	"values":
-				{
-					"name":		"timestamp",
-					"description":	"Either a javascript timestamp as produces by [JAVASCRIPT new Date().getTime()] or a php timestamp as produced by [PHP time()] ",
-					"type":		"unix timestamp",
-					"values":	["javascript timestamp", "php timestamp"]
-				},
-			 	{
-					"name":		"langSet",
-			 		"description":	"two letter locale to be used for the translation of Day names and Month names",
-			 		"type":		"String",
-			 		"values":	["am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"]
-				},
-				{
-					"name":		"calendar",
-					"description":	"Whether the date should be displayed together with the time",
-					"type":		"Boolean",
-					"values":	[true,false]
-				},
-				{
-					"name":		"dateFormat",
-					"description":	"PHP Style Format string for formatting a local date, see http://php.net/manual/en/function.date.php",
-					"type":		"String",
-					"values":	["d","D","j","l","N","S","w","z","W","F","m","M","n","t","L","o","Y","y"]
-				},
-				{
-					"name":		"timeFormat",
-					"description":	"PHP Style Format string for formatting a local date, see http://php.net/manual/en/function.date.php",
-					"type":		"String",
-					"values":	["a","A","B","g","G","h","H","i","s","v","e","I","O","P","Z","c","r","U"]
-				},
-				{
-					"name":		"isDST",
-					"description":	"When a client side timestamp is used, whether DST is active will be automatically determined. However this cannot be determined for a server-side timestamp which must be passed in as UTC, in that can case it can be set with this option",
-					"type":		"Boolean",
-					"values":	[true,false]
-				},
-				{
-					"name":		"rate",
-					"description":	"Defines the rate at which the clock will update, in milliseconds",
-					"type":		"Integer",
-					"values":	"1 - 9007199254740991 (recommended 10-60000)"
-				}
+			 	"values":	[
+						{
+							"name":		"timestamp",
+							"description":	"Either a javascript timestamp as produces by [JAVASCRIPT new Date().getTime()] or a php timestamp as produced by [PHP time()] ",
+							"type":		"unix timestamp",
+							"values":	["javascript timestamp", "php timestamp"]
+						},
+						{
+							"name":		"langSet",
+							"description":	"two letter locale to be used for the translation of Day names and Month names",
+							"type":		"String",
+							"values":	["am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"]
+						},
+						{
+							"name":		"calendar",
+							"description":	"Whether the date should be displayed together with the time",
+							"type":		"Boolean",
+							"values":	[true,false]
+						},
+						{
+							"name":		"dateFormat",
+							"description":	"PHP Style Format string for formatting a local date, see http://php.net/manual/en/function.date.php",
+							"type":		"String",
+							"values":	["d","D","j","l","N","S","w","z","W","F","m","M","n","t","L","o","Y","y"]
+						},
+						{
+							"name":		"timeFormat",
+							"description":	"PHP Style Format string for formatting a local date, see http://php.net/manual/en/function.date.php",
+							"type":		"String",
+							"values":	["a","A","B","g","G","h","H","i","s","v","e","I","O","P","Z","c","r","U"]
+						},
+						{
+							"name":		"isDST",
+							"description":	"When a client side timestamp is used, whether DST is active will be automatically determined. However this cannot be determined for a server-side timestamp which must be passed in as UTC, in that can case it can be set with this option",
+							"type":		"Boolean",
+							"values":	[true,false]
+						},
+						{
+							"name":		"rate",
+							"description":	"Defines the rate at which the clock will update, in milliseconds",
+							"type":		"Integer",
+							"values":	"1 - 9007199254740991 (recommended 10-60000)"
+						}
+						]
 			}
 		]
 	};
