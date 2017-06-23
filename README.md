@@ -193,7 +193,7 @@ The clock can be styled accordingly in one's own stylesheet. Some sample styling
 
 Newer releases don't necessarily mean better, it really depends on what you are expecting to get out of this plugin. So here is a quick overview of the releases so you can decide for yourself which version might best suit your needs.
 
-## [v2.0.2](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.2 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.2")
+## [v2.0.2](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.0.2 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.0.2")
 
 This captures the state of the first version of the plugin, which allows for dynamically adding one's own locale translations.
 
@@ -216,7 +216,7 @@ Supported option parameters (possible values in square brackets, default value i
 @timestamp >> *javascript timestamp with milliseconds; server-generated timestamps which don't account for milliseconds must be multiplied by 1000 in order to be compatible. Defaults to current client time*
 
 
-## [v2.0.9b](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.9b "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.0.9b")
+## [v2.0.9b](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.0.9b "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.0.9b")
 
 Version 2.0.9 fixes the problems which arise from the timezone offsets. In order to faithfully reflect the server's timestamp in UTC time, the plugin corrects the client timezone offset so that the jQuery Clock's time will reflect UTC time. 
 However if the server has set a timezone offset from UTC time, this will need to be accounted for server-side *before* passing the timestamp to the plugin.
@@ -226,7 +226,7 @@ Seeing that this process only needs to take place when a server-generated timest
 The tag was renamed 2.0.9b because I forgot to update the minified version the first time; 2.0.9b has an updated minified javascript file.
 
 
-## [v2.1.0b](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.0b "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.0b")
+## [v2.1.0b](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.0b "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.0b")
 
 Version 2.1.0 adds the short version of weekdays and months to the supported locales. Note that the currently supported locales do not guarantee linguistic correctness, the stored values for shortened months and weekdays are guesswork and are not based on any kind of standard usage.
 
@@ -235,7 +235,7 @@ This version also introduces PHP style date and time formatting. This gives the 
 Again the tag was renamed 2.1.0b because the javascript was not initially minified.
 
 
-## [v2.1.2](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.2 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.2")
+## [v2.1.2](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.2 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.2")
 
 This version extends the locales included in the plugin and implements more certain information for shortWeekdays and shortMonths having gathered the information from the ECMA Intl.DateTimeFormat Object.
 
@@ -245,12 +245,12 @@ There are 48 locales included: "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "
 
 The "timeFormat" parameter is still actually "hourFormat"!
 
-## [v2.1.3](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.3 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.3")
+## [v2.1.3](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.3 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.3")
 
 Extends support for PHP Style Format Characters including the "e" format character which will display the timezone identifier. The timezone offset is calculated for client-side timestamps as "UTC", "UTC+1", "UTC-6"; whereas it will have to be passed in for server generated timestamps by using the "timezone" parameter and passing a string value such as "UTC", "UTC+1" (or "EST", "CET" or even "America\Los Angeles" though it may occupy quite a bit of space in the clock).
 With this release the "timeFormat" parameter is finally actually "timeFormat", and not "hourFormat"!
 
-## [v2.1.5](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5")
+## [v2.1.5](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.5 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.5")
 
 Extends support for PHP Style Format Characters including the "I" (capital i) format character which will display whether the Date is in Daylight Saving Time. For example, "Europe/Paris" would normally be UTC+1 but when DST is active it is actually UTC+2. When displaying both "e" (timezone identifier) and "I" (DST state) for a Date in the "Europe/Paris" timezone, a string like this would be displayed: "UTC+2 DST".
 
@@ -258,10 +258,10 @@ This version also fixes the usage of actual boolean values for those options tha
 
 In order to have the DST detection functionality, the plugin conditionally extends the Date prototype with two more functions "stdTimezoneOffset" and "isDST" [as found in this stackoverflow answer](https://stackoverflow.com/a/26778394/394921 "https://stackoverflow.com/a/26778394/394921").
 
-## [v2.1.6](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6")
+## [v2.1.6](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.6 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.6")
 
 Implements the new Intl.DateTimeFormat object which is now fairly universally supported in ECMA script implementations, completely removing the "locale" parameter from the plugin. It is no longer possible to extend the plugin with customized locales, because the plugin now depends entirely on the native functionality of the Intl.DateTimeFormat object.
 
-## [v2.1.9](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.9 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.9")
+## [v2.1.9](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.9 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.9")
 
 Implements all PHP Style Format Characters except for "T" and "u". Adds a "**rate**" option which allows to customize the rate at which each clock is updated. Bugfix: the month number returned was incorrect in v2.1.6.
