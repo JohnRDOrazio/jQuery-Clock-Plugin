@@ -143,8 +143,14 @@ if (!String.prototype.padStart) {
 	$.clock = {
 		"version": "2.1.9",
 		"options": [
-			"destroy",
-			{"optionSet":
+			{
+				"type":		"string",
+				"value": 	"destroy",
+				"description":	"Passing in 'destroy' to an already initialized clock will remove the setTimeout for that clock from the global jqClock variable"
+			},
+			{	"type":		"object",
+			 	"description":	"option set {}",
+			 	"values":
 				{
 					"name":		"timestamp",
 					"description":	"Either a javascript timestamp as produces by [JAVASCRIPT new Date().getTime()] or a php timestamp as produced by [PHP time()] ",
