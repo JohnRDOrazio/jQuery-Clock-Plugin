@@ -109,6 +109,10 @@ The desired locale can be set using the "**langSet**" option:
 $("div#clock").clock({"langSet":"de"});
 ```
 
+## Update Speed
+
+Since v2.1.9 the "**rate**" option has been added so that the rate at which the clock is updated can be set on each clock. The value is in milliseconds. The rate defaults to 500, since at 1000 the clock tends to skew slightly and winds up skipping a second here and there. Instead with an update rate of 500ms the seconds in the clock remain a little more faithful to 1 second increments making for less skewing. When using the "v" Format Character in the "**timeFormat**" option to show milliseconds, bringing the rate down to 50 or 10 or even 1 millisecond will give a near millisecond faithful clock.
+
 ## Custom client generated timestamp
 
 You can pass in a custom javascript timestamp:
