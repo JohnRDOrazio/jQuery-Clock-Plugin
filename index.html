@@ -53,7 +53,7 @@
       $("#clock1").clock();
       $("#clock2").clock({"langSet":"it"});
       $("#clock3").clock({"dateFormat":"D, M jS, Y ( N - z | W | L )"});
-      $("#clock4").clock({"calendar":"false","timeFormat":"H:i:s e I (B)"});
+      $("#clock4").clock({"calendar":"false","timeFormat":"H:i:s e I (@B)","rate":10});
       
       var customtimestamp = new Date();
       customtimestamp = customtimestamp.getTime();
@@ -114,8 +114,8 @@
       </td>
       <td>
         <div>
-          <h2>Clock without calendar, using 24 hour format and displaying timezone, daylight savings time (if applicable) and swatch time</h2>
-          <pre><code>$("#clock4").clock({"calendar":"false","timeFormat":"H:i:s e I (B)"});</code></pre>
+          <h2>Clock without calendar, using 24 hour format and displaying milliseconds, timezone, daylight savings time (if applicable) and swatch time, updating every 10 ms</h2>
+          <pre><code>$("#clock4").clock({"calendar":"false","timeFormat":"H:i:s.v e I (@B)","rate":10});</code></pre>
           <div id="clock4">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock4">DESTROY CLOCK 4</button>
