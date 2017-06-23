@@ -165,7 +165,7 @@ if (!String.prototype.padStart) {
 			options.timeFormat	= options.timeFormat	|| ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
 			options.timezone	= options.timezone	|| "localsystimezone"; //should only really be passed in when a server timestamp is passed
 			options.isDST		= options.hasOwnProperty("isDST") ? options.isDST : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
-			options.rate		= options.rate		|| 1000;
+			options.rate		= options.rate		|| 500; //500ms makes for a more faithful clock than 1000ms, less skewing
 			
 			//ensure we have true boolean values
 			if(typeof(options.calendar) === 'string'){
