@@ -52,13 +52,13 @@
       $("#jqclock_version").text($.clock.version);
       $("#clock1").clock();
       $("#clock2").clock({"langSet":"it"});
-      $("#clock3").clock({"langSet":"pt"});
-      $("#clock4").clock({"calendar":"false","timeFormat":"H:i:s e"});
+      $("#clock3").clock({"dateFormat":"D, M jS, Y ( N - z | W | L )"});
+      $("#clock4").clock({"calendar":"false","timeFormat":"H:i:s e I (B)"});
       
-      customtimestamp = new Date();
+      var customtimestamp = new Date();
       customtimestamp = customtimestamp.getTime();
       customtimestamp = customtimestamp+1123200000+10800000+14000;
-      $("#clock5").clock({"timestamp":customtimestamp});
+      $("#clock5").clock({"timestamp":customtimestamp,"langSet":"ru"});
       
       $("#destroyclock1").click(function(){ $("#clock1").clock("destroy") });
       $("#destroyclock2").click(function(){ $("#clock2").clock("destroy") });
@@ -72,7 +72,7 @@
 
 <body>
   <header>
-   <h1>Example page for <i>John R. D'Orazio's</i> <b>jQuery Clock</b> plugin (version <span id="jqclock_version"></span>)</h1>
+   <h1>Example page for John R. D'Orazio's jQuery Clock plugin (version <span id="jqclock_version"></span>)</h1>
   </header>
 
   <table align="center">
@@ -81,6 +81,7 @@
       <td>
         <div>
           <h2>Clock that uses default options</h2>
+          <pre><code>$("#clock1").clock();</code></pre>
           <div id="clock1">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock1">DESTROY CLOCK 1</button>
@@ -90,6 +91,7 @@
       <td>
         <div>
           <h2>Clock that uses Italian language</h2>
+          <pre><code>$("#clock2").clock({"langSet":"it"});</code></pre>
           <div id="clock2">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock2">DESTROY CLOCK 2</button>
@@ -102,7 +104,8 @@
     <tr>
       <td>
         <div>
-          <h2>Clock that uses Portuguese language</h2>
+          <h2>Clock that formats the date in a custom manner: {short day}, {short month} {date}{ordinal suffix}, {year} ({day of the week} - {day of the year} | {week of the year} | {leap year} ) </h2>
+          <pre><code>$("#clock3").clock({"dateFormat":"D, M jS, Y ( N - z | W | L )"});</code></pre>
           <div id="clock3">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock3">DESTROY CLOCK 3</button>
@@ -111,7 +114,8 @@
       </td>
       <td>
         <div>
-          <h2>Clock in 24 hour format, without calendar</h2>
+          <h2>Clock without calendar, using 24 hour format and displaying timezone, daylight savings time (if applicable) and swatch time</h2>
+          <pre><code>$("#clock4").clock({"calendar":"false","timeFormat":"H:i:s e I (B)"});</code></pre>
           <div id="clock4">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock4">DESTROY CLOCK 4</button>
@@ -124,7 +128,11 @@
     <tr>
       <td>
         <div>
-          <h2>Clock with custom timestamp (13 days, 3 hours and 14 seconds ahead)</h2>
+          <h2>Clock with custom timestamp (13 days, 3 hours and 14 seconds ahead) and Russian language</h2>
+          <pre><code>      var customtimestamp = new Date();
+      customtimestamp = customtimestamp.getTime();
+      customtimestamp = customtimestamp+1123200000+10800000+14000;
+      $("#clock5").clock({"timestamp":customtimestamp,"langSet":"ru"});</code></pre>
           <div id="clock5">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock5">DESTROY CLOCK 5</button>
@@ -147,7 +155,7 @@
   </table>
  
 
-  <footer>
-    <p>&copy; Copyright 2011 by <a href="mailto:priest@johnromanodorazio.com" title="Send me an email">John Romano D'Orazio</a> (screen name Lwangaman)</p>
-  </footer>
+ <footer>
+  <p>&copy; Copyright 2011 by <a href="mailto:priest@johnromanodorazio.com" title="Send me an email">John Romano D'Orazio</a> (screen name Lwangaman)</p>
+ </footer>
 </body>
