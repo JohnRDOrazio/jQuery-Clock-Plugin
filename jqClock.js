@@ -140,12 +140,59 @@ if (!String.prototype.padStart) {
 //BEGIN JQUERY CLOCK PLUGIN
 (function($, undefined) {
 
-	$.clock = {};
-	Object.defineProperty($.clock,"version",{
-	  value: "2.1.9",
-	  writable: false
-	});
-
+	$.clock = {
+		"version": "2.1.9",
+		"options": [
+			"destroy",
+			{"optionSet":
+				{
+					"name":		"timestamp",
+					"description":	"Either a javascript timestamp as produces by [JAVASCRIPT new Date().getTime()] or a php timestamp as produced by [PHP time()] ",
+					"type":		"unix timestamp",
+					"values":	["javascript timestamp", "php timestamp"]
+				},
+			 	{
+					"name":		"langSet",
+			 		"description":	"two letter locale to be used for the translation of Day names and Month names",
+			 		"type":		"String",
+			 		"values":	["am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"]
+				},
+				{
+					"name":		"calendar",
+					"description":	"Whether the date should be displayed together with the time",
+					"type":		"Boolean",
+					"values":	[true,false]
+				},
+				{
+					"name":		"dateFormat",
+					"description":	"PHP Style Format string for formatting a local date, see http://php.net/manual/en/function.date.php",
+					"type":		"String",
+					"values":	["d","D","j","l","N","S","w","z","W","F","m","M","n","t","L","o","Y","y"]
+				},
+				{
+					"name":		"timeFormat",
+					"description":	"PHP Style Format string for formatting a local date, see http://php.net/manual/en/function.date.php",
+					"type":		"String",
+					"values":	["a","A","B","g","G","h","H","i","s","v","e","I","O","P","Z","c","r","U"]
+				},
+				{
+					"name":		"isDST",
+					"description":	"When a client side timestamp is used, whether DST is active will be automatically determined. However this cannot be determined for a server-side timestamp which must be passed in as UTC, in that can case it can be set with this option",
+					"type":		"Boolean",
+					"values":	[true,false]
+				},
+				{
+					"name":		"rate",
+					"description":	"Defines the rate at which the clock will update, in milliseconds",
+					"type":		"Integer",
+					"values":	"1 - 9007199254740991 (recommended 10-60000)"
+				}
+			}
+		]
+	};
+	Object.freeze($.clock);
+	
+	//jqClock is an array in the global windows scope which contains all references to setTimeouts for each initialized clock
 	jqClock = [];
 
 	$.fn.clock = function(options) {
@@ -158,6 +205,7 @@ if (!String.prototype.padStart) {
 			options = options || {};
 			
 			/* User passable options: make sure we have default values if user doesn't pass them! */
+			/* I prefer this method to jQuery.extend because we can dynamically set each option based on a preceding option's value */
 			options.timestamp	= options.timestamp	|| "localsystime";
 			options.langSet		= options.langSet	|| "en";
 			options.calendar	= options.hasOwnProperty("calendar") ? options.calendar	: true;
@@ -167,12 +215,33 @@ if (!String.prototype.padStart) {
 			options.isDST		= options.hasOwnProperty("isDST") ? options.isDST : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
 			options.rate		= options.rate		|| 500; //500ms makes for a more faithful clock than 1000ms, less skewing
 			
-			//ensure we have true boolean values
+			//ensure we have correct value types
+			if(typeof(options.langSet) !== 'string'){
+				options.langSet = (''+options.langSet);
+			}
 			if(typeof(options.calendar) === 'string'){
 				options.calendar = Boolean(options.calendar == 'false' ? false : true);
 			}
+			else if(typeof(options.calendar) !== 'boolean'){
+				options.calendar = Boolean(options.calendar); //do our best to get a boolean value
+			}
+			if(typeof(options.dateFormat) !== 'string'){
+				options.dateFormat = (''+options.dateFormat);
+			}
+			if(typeof(options.timeFormat) !== 'string'){
+				options.timeFormat = (''+options.dateFormat);
+			}
+			if(typeof(options.timezone) !== 'string'){
+				options.timezone = (''+options.timezone);
+			}
 			if(typeof(options.isDST) === 'string'){
 				options.isDST = Boolean(options.isDST == 'true' ? true : false);
+			}
+			else if(typeof(options.isDST) !== 'boolean'){
+				options.isDST = Boolean(options.isDST);
+			}
+			if(typeof(options.rate)  !== 'number'){
+				options.rate = parseInt(options.rate); //do our best to get an int value
 			}
 			
 			/* Non user passable options */			
@@ -213,7 +282,9 @@ if (!String.prototype.padStart) {
 					else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
 				}
 			}
-
+			/* End non user passable options */
+			
+			/* Define some helper functions */
 			var newGuid = function() {
 				return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
 					function(c) {
