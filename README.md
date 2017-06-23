@@ -4,7 +4,7 @@ Turns a given dom element into a dynamic clock that updates every second, main a
 
 ## Client Timestamp Live examples
 
-See a client side demo in action here at github: **https://lwangaman.github.io/jQuery-Clock-Plugin/**
+See a client side demo in action here at github: **https://johnrdorazio.github.io/jQuery-Clock-Plugin/**
 You can see a demo that you can edit and play around with yourself at **https://jsbin.com/maqegib/edit?html,css,js,console,output**.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
