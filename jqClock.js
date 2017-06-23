@@ -165,6 +165,7 @@ if (!String.prototype.padStart) {
 			options.timeFormat	= options.timeFormat	|| ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
 			options.timezone	= options.timezone	|| "localsystimezone"; //should only really be passed in when a server timestamp is passed
 			options.isDST		= options.hasOwnProperty("isDST") ? options.isDST : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
+			options.rate		= options.rate		|| 1000;
 			
 			//ensure we have true boolean values
 			if(typeof(options.calendar) === 'string'){
@@ -252,7 +253,8 @@ if (!String.prototype.padStart) {
 					    tzH=parseInt(myoptions.tzOffset / 60),
 					    tzS=parseInt(myoptions.tzOffset * 60),
 					    ap="AM",
-					    calend="";
+					    calendElem="",
+					    clockElem="";
 					if (h > 11) { ap = "PM"; }
 					var H12 = h;
 					if (H12 > 12) { H12 = H12 - 12; }
@@ -330,7 +332,7 @@ if (!String.prototype.padStart) {
 								  dateStr += chr;
 							}
 						}
-						calend = '<span class="clockdate">'+dateStr+'</span>';
+						calendElem = '<span class="clockdate">'+dateStr+'</span>';
 					}
 
 					/* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
@@ -406,9 +408,10 @@ if (!String.prototype.padStart) {
 							  timeStr += chr;
 						}
 					}
-
-					$(el).html(calend+"<span class='clocktime'>"+timeStr+"</span>");
-					jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, 1000);
+					clockElem = '<span class="clocktime">'+timeStr+'</span>';
+					
+					$(el).html(calendElem+clockElem);
+					jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, myoptions.rate);
 				}
 
 			}
