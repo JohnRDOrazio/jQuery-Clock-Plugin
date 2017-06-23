@@ -4,8 +4,8 @@ Turns a given dom element into a dynamic clock that updates every second, main a
 
 ## Client Timestamp Live examples
 
-See a client side demo in action here at github: **http://lwangaman.github.io/jQuery-Clock-Plugin/**
-You can see a demo that you can edit and play around with yourself at **http://jsbin.com/maqegib/edit?html,css,js,output**.
+See a client side demo in action here at github: **https://lwangaman.github.io/jQuery-Clock-Plugin/**
+You can see a demo that you can edit and play around with yourself at **https://jsbin.com/maqegib/edit?html,css,js,console,output**.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
 ## Server Timestamp Live examples
@@ -45,12 +45,20 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *D* | A textual representation of a day, three letters         | *Mon* through *Sun* |
 | *j* | Day of the month without leading zeros                   | *1* to *31*         |
 | *l* (lowercase 'L') | A full textual representation of the day of the week | *Sunday* through *Saturday* |
+| *N* | ISO-8601 numeric representation of the day of the week   | *1* (for Monday) to *7* (for Sunday) |
+| *S* | English ordinal suffix for the day of the month, 2 characters | *st*, *nd*, *rd* or *th*. Works well with *j* |
+| *w* | Numeric representation of the day of the week (0-6)      | *0* (for Sunday) to *6* (for Saturday) |
+| *z* | The day of the year (starting from 0)                    | *0* to *365*        |
+| *Week* | ---                                                   | ---                 |
+| *W* | ISO-8601 week number of year, weeks starting on Monday   | Example: *42* (the 42nd week in the year) |
 | *Month*           | ---                                        | ---                 |
 | *F* | A full textual representation of a month, such as January or March | *January* through *December* |
 | *m* | Numeric representation of a month, with leading zeros    | *01* through *12*   |
 | *M* | A short textual representation of a month, three letters | *Jan* through *Dec* |
 | *n* | Numeric representation of a month, without leading zeros | *1* through *12*    |
 | *Year*            | ---                                        | ---                 |
+| *L* | Whether it's a leap year                                 | *1* if it is a leap year, *0* otherwise |
+| *o* | ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead                             | Examples: *1999* or *2003* |
 | *Y* | A full numeric representation of a year, 4 digits        | Examples: *1999* or *2003* |
 | *y* | A two digit representation of a year                     | Examples: *99* or *03* |
 
@@ -66,14 +74,24 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *Time*            | ---                                        | ---               |
 | *a* | Lowercase Ante meridiem and Post meridiem                | *am* or *pm*      |
 | *A* | Uppercase Ante meridiem and Post meridiem                | *AM* or *PM*      |
+| *B* | Swatch Internet time                                     | *000* through *999*|
 | *g* | 12-hour format of an hour without leading zeros          | *1* through *12*  |
 | *G* | 24-hour format of an hour without leading zeros          | *0* through *23*  |
 | *h* | 12-hour format of an hour with leading zeros             | *01* through *12* |
 | *H* | 24-hour format of an hour with leading zeros             | *00* through *23* |
 | *i* | Minutes with leading zeros                               | *00* to *59*      |
 | *s* | Seconds with leading zeros                               | *00* to *59*      |
+| *v* | Milliseconds                                             | Example *654*     |
+| *Timezone*         | ---                                       | ---               |
 | *e* | Timezone identifier                                      | *UTC*, *UTC+1*    |
 | *I* (capital i) | Whether the date is in daylight saving time  | *DST* if Daylight Savings Time, otherwise nothing  |
+| *O* | Difference to Greenwich time (GMT) in hours              | Example: *+0200*  |
+| *P* | Difference to Greenwich time (GMT) with colon between hours and minutes | Example: *+02:00* |
+| *Z* | Timezone offset in Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive. | *-43200* through *50400* |
+| *Full Date/Time*   | ---                                       | ---               |
+| *c* | ISO 8601 date                                            | 2004-02-12T15:19:21+00:00 |
+| *r* | [» RFC 2822](http://www.faqs.org/rfcs/rfc2822) formatted date | Example: *Thu, 21 Dec 2000 16:01:07 +0200* |
+| *U* | Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT) |                 |
 
 **Example:**
 ```JavaScript
@@ -82,28 +100,18 @@ $("div#clock").clock({"timeFormat":"h:i:s A e I"});
 
 ## Language options
 
-Includes 48 language translations for days of the week and months of the year.
-Supported locales are:
+Uses the native ECMA script Intl.DateTimeFormat object for the translations of the days of the week and months of the year.
+Supported locales as of June 22 2017 are:
 "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
 
+The desired locale can be set using the "**langSet**" option:
 ```JavaScript
 $("div#clock").clock({"langSet":"de"});
 ```
 
-The language translations can be easily extended or overwritten. To overwrite the included Portuguese language:
-```JavaScript
-$.clock.locale.pt = {
-  "weekdays":["Domingo","Segunda-feira", "Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira", "Sábado"],
-  "shortWeekdays":["Dom","Seg","Ter","Quar","Quin","Sext"],
-  "months":["Janeiro","Fevereiro","Março","Abril", "Maio","Junho","Julho","Agosto","Setembro","October","Novembro", "Dezembro"],
-  "shortMonths":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Oct","Nov","Dez"] 
-};
-```
+## Update Speed
 
-You can then set a clock to use this language set:
-```JavaScript
-$("div#clock").clock({"langSet":"pt"});
-```
+Since v2.1.9 the "**rate**" option has been added so that the rate at which the clock is updated can be set on each clock. The value is in milliseconds. The rate defaults to 500, since at 1000 the clock tends to skew slightly and winds up skipping a second here and there. Instead with an update rate of 500ms the seconds in the clock remain a little more faithful to 1 second increments making for less skewing. When using the "v" Format Character in the "**timeFormat**" option to show milliseconds, bringing the rate down to 50 or 10 or even 1 millisecond will give a near millisecond faithful clock.
 
 ## Custom client generated timestamp
 
@@ -115,7 +123,7 @@ customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13
 $("#clock").clock({"timestamp":customtimestamp});
 ```
 
-See an example of this in action here: **http://jsbin.com/maqegib/edit?html,css,js,output**
+See an example of this in action here: **https://jsbin.com/maqegib/edit?html,css,js,console,output**
 
 ## Custom server generated timestamp
 
@@ -240,8 +248,16 @@ With this release the "timeFormat" parameter is finally actually "timeFormat", a
 
 ## [v2.1.5](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5")
 
-Extends support for PHP Style Format Characters including the "I" (capital i) format character which will display whether the Date is in Daylight Saving Time. For example, "Europe/Paris" would normally be UTC+1 but when DST is active it is actually UTC+2. When displaying both "e" (timezone identifier) and "I" (DST state) for a Date in the "Europe/Paris" timezone, a string lik this would be displayed: "UTC+2 DST".
+Extends support for PHP Style Format Characters including the "I" (capital i) format character which will display whether the Date is in Daylight Saving Time. For example, "Europe/Paris" would normally be UTC+1 but when DST is active it is actually UTC+2. When displaying both "e" (timezone identifier) and "I" (DST state) for a Date in the "Europe/Paris" timezone, a string like this would be displayed: "UTC+2 DST".
 
 This version also fixes the usage of actual boolean values for those options that use boolean values. Until now it was necessary to pass them in as strings ("true", "false"), now they can be passed in as true booleans (true, false).
 
 In order to have the DST detection functionality, the plugin conditionally extends the Date prototype with two more functions "stdTimezoneOffset" and "isDST" [as found in this stackoverflow answer](https://stackoverflow.com/a/26778394/394921 "https://stackoverflow.com/a/26778394/394921").
+
+## [v2.1.6](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6")
+
+Implements the new Intl.DateTimeFormat object which is now fairly universally supported in ECMA script implementations, completely removing the "locale" parameter from the plugin. It is no longer possible to extend the plugin with customized locales, because the plugin now depends entirely on the native functionality of the Intl.DateTimeFormat object.
+
+## [v2.1.9](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.9 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.9")
+
+Implements all PHP Style Format Characters except for "T" and "u". Adds a "**rate**" option which allows to customize the rate at which each clock is updated. Bugfix: the month number returned was incorrect in v2.1.6.
