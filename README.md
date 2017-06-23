@@ -248,7 +248,7 @@ With this release the "timeFormat" parameter is finally actually "timeFormat", a
 
 ## [v2.1.5](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.5")
 
-Extends support for PHP Style Format Characters including the "I" (capital i) format character which will display whether the Date is in Daylight Saving Time. For example, "Europe/Paris" would normally be UTC+1 but when DST is active it is actually UTC+2. When displaying both "e" (timezone identifier) and "I" (DST state) for a Date in the "Europe/Paris" timezone, a string lik this would be displayed: "UTC+2 DST".
+Extends support for PHP Style Format Characters including the "I" (capital i) format character which will display whether the Date is in Daylight Saving Time. For example, "Europe/Paris" would normally be UTC+1 but when DST is active it is actually UTC+2. When displaying both "e" (timezone identifier) and "I" (DST state) for a Date in the "Europe/Paris" timezone, a string like this would be displayed: "UTC+2 DST".
 
 This version also fixes the usage of actual boolean values for those options that use boolean values. Until now it was necessary to pass them in as strings ("true", "false"), now they can be passed in as true booleans (true, false).
 
@@ -256,4 +256,8 @@ In order to have the DST detection functionality, the plugin conditionally exten
 
 ## [v2.1.6](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.6")
 
-Implements the new Intl.DateTimeFormat object which is now fairly universally supported in ECMA script implementations, completely removing the "locale" paramater from the plugin. It is no longer possible to extend the plugin with customized locales, because the plugin now depends entirely on the native functionality of the Intl.DateTimeFormat object.
+Implements the new Intl.DateTimeFormat object which is now fairly universally supported in ECMA script implementations, completely removing the "locale" parameter from the plugin. It is no longer possible to extend the plugin with customized locales, because the plugin now depends entirely on the native functionality of the Intl.DateTimeFormat object.
+
+## [v2.1.9](https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.9 "https://github.com/Lwangaman/jQuery-Clock-Plugin/releases/tag/v2.1.9")
+
+Implements all PHP Style Format Characters except for "T" and "u". Adds a "**rate**" option which allows to customize the rate at which each clock is updated. Bugfix: the month number returned was incorrect in v2.1.6.
