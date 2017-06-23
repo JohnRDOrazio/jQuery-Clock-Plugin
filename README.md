@@ -4,8 +4,8 @@ Turns a given dom element into a dynamic clock that updates every second, main a
 
 ## Client Timestamp Live examples
 
-See a client side demo in action here at github: **http://lwangaman.github.io/jQuery-Clock-Plugin/**
-You can see a demo that you can edit and play around with yourself at **http://jsbin.com/maqegib/edit?html,css,js,console,output**.
+See a client side demo in action here at github: **https://lwangaman.github.io/jQuery-Clock-Plugin/**
+You can see a demo that you can edit and play around with yourself at **https://jsbin.com/maqegib/edit?html,css,js,console,output**.
 Unfortunately jsbin doesn't allow for server-side coding so it doesn't show the server timestamp example.
 
 ## Server Timestamp Live examples
@@ -123,7 +123,7 @@ customtimestamp = customtimestamp+1123200000+10800000+14000; // sets the time 13
 $("#clock").clock({"timestamp":customtimestamp});
 ```
 
-See an example of this in action here: **http://jsbin.com/maqegib/edit?html,css,js,console,output**
+See an example of this in action here: **https://jsbin.com/maqegib/edit?html,css,js,console,output**
 
 ## Custom server generated timestamp
 
