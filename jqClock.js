@@ -560,24 +560,20 @@ if (!String.prototype.padStart) {
 					}
 				}
 				/* End non user passable options */
-			}
-				 
-
-			var el_id = $(_this).attr("id");
-			if(typeof options === 'object'){
 				if ( !$(_this).hasClass("jqclock")){ $(_this).addClass("jqclock"); }
 				if ( !$(_this).is("[id]") ){ $(_this).attr("id", _newGuid()); }
 				$(_this).data("clockoptions",options);
 				//only allow one associated settimeout at a time! basically, only one plugin instance per dom element
-				if(_jqClock.hasOwnProperty(el_id) === false){ _updateClock($(_this)); }
+				if(_jqClock.hasOwnProperty($(_this).attr("id")) === false){ _updateClock($(_this)); }
 			}
 			else if(typeof options === 'string'){
+				var el_id = $(_this).attr("id");
 				switch(options){
 					case 'destroy':
 						if(_jqClock.hasOwnProperty(el_id)){ 
 							clearTimeout(_jqClock[el_id]); 
 						}
-						$(el).html("");
+						$(_this).html("");
 						if ( $(_this).hasClass("jqclock")){ $(_this).removeClass("jqclock"); }
 						$(_this).removeData("clockoptions");
 						break;
