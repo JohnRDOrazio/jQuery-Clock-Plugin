@@ -119,25 +119,23 @@ $("div#clock").clock({"dateFormat":"l, F jS %in the year% Y", "timeFormat":"H:i:
 ```
 -> will output "Saturday, June 6th in the year 2017" - "03:50:07 UTC+2 DST in Swatch Time = (@118)"
 
-If you would like to use a literal '%' character and you also are using a '%' wrap around a literal sequence, then you must escape the literal '%' with a double blackslash. The only limitation is that the desired literal '%' character cannot fall within the literal sequence wrapped in the '%' character. If there is only one '%' character in the whole string then it will be interpreted as a literal.
+If you would like to output a literal '%' character then you must escape it with a double blackslash. The only limitation is that the desired literal '%' character cannot fall within a literal sequence wrapped with the '%' character. If there is only one '%' character in the whole string then it will be interpreted as a literal.
 
 **Example:**
 ```JavaScript
+//A single '%' character in the whole string will be output as a literal
 $("div#clock").clock({"timeFormat":"H:i:s 50%(@B)"});
 ```
 -> will output "03:50:07 50%(@118)" 
 
 **Example:**
 ```diff
-//Please don't do this to get '50%'
+//Please don't do this to get '03:50:07 50% of the time (@118)'
 - $("div#clock").clock({"timeFormat":"H:i:s %50% of the time% (@B)"});
 //Nor this, it won't work
 - $("div#clock").clock({"timeFormat":"H:i:s %50\\% of the time% (@B)"});
 //Do this to get '03:50:07 50% of the time (@118)'
 + $("div#clock").clock({"timeFormat":"H:i:s 50\\% %of the time% (@B)"});
-//Or this to get '03:50:07 of the time 50% (@118)'
-+ $("div#clock").clock({"timeFormat":"H:i:s %of the time% 50\\% (@B)"});
-
 ```
 
 ## Language options
