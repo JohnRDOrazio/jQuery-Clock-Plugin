@@ -567,16 +567,16 @@ if (!String.prototype.padStart) {
 				if(_jqClock.hasOwnProperty($(_this).attr("id")) === false){ _updateClock($(_this)); }
 			}
 			else if(typeof options === 'string'){
-				var el_id = $(_this).attr("id");
+				var el_id = $(this).attr("id");
 				switch(options){
 					case 'destroy':
 						if(_jqClock.hasOwnProperty(el_id)){ 
 							clearTimeout(_jqClock[el_id]); 
 							delete _jqClock[el_id];
 						}
-						$(_this).html("");
-						if ( $(_this).hasClass("jqclock")){ $(_this).removeClass("jqclock"); }
-						$(_this).removeData("clockoptions");
+						$(this).html("");
+						if ( $(this).hasClass("jqclock")){ $(this).removeClass("jqclock"); }
+						$(this).removeData("clockoptions");
 						break;
 					case 'stop':
 						if(_jqClock.hasOwnProperty(el_id)){ 
@@ -585,8 +585,9 @@ if (!String.prototype.padStart) {
 						}
 						break;
 					case 'start':
-						var current_options = $(_this).data("clockoptions");
-						if(current_options !== undefined && _jqClock.hasOwnProperty(el_id) === false){ _jqClock[el_id] = setTimeout(function() { updateClock( $(_this) ); }, current_options.rate); }
+						var __this = this;
+						var current_options = $(this).data("clockoptions");
+						if(current_options !== undefined && _jqClock.hasOwnProperty(el_id) === false){ _jqClock[el_id] = setTimeout(function() { updateClock( $(__this) ); }, current_options.rate); }
 						break;
 				}
 			}
