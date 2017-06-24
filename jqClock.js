@@ -211,14 +211,17 @@ if (!String.prototype.padStart) {
 				if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
 				$(this).html("");
 				if ( $(this).hasClass("jqclock")){ $(this).removeClass("jqclock"); }
+				$(this).removeData("clockoptions");
 			});
 		}
 
 		$.fn.clock.stop = function(){
 			return _this.each(function(idx){
 				var el_id = $(this).attr("id");
-				if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
-				$(this).data("clockoptions",undefined);
+				if(_jqClock.hasOwnProperty(el_id)){ 
+					clearTimeout(_jqClock[el_id]); 
+					delete _jqClock[el_id];
+				}
 			});
 		}
 
@@ -226,10 +229,251 @@ if (!String.prototype.padStart) {
 			return _this.each(function(idx){
 				var el_id = $(this).attr("id");
 				var current_options = $(this).data("clockoptions");
-				if(current_options){ _jqClock[el_id] = setTimeout(function() { updateClock( $(this), current_options ); }, current_options.rate); }
+				if(current_options !== undefined && _jqClock.hasOwnProperty(el_id) === false){ 
+					var __this = this;
+					_jqClock[el_id] = setTimeout(function() { _updateClock( $(__this) ); }, current_options.rate); 
+				}
 			});
 		}
 		
+		/* Define some helper functions */
+		var _newGuid = function() {
+			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+				function(c) {
+					var r = Math.random() * 16 | 0,
+					    v = c == 'x' ? r : (r & 0x3 | 0x8);
+					return v.toString(16);
+				}).toUpperCase();
+		},
+		_ordSuffix = function(ord) {
+			var ord_suffix = ''; //st, nd, rd, th
+			if(ord===1 || (ord % 10 === 1  && ord != 11) ){ ord_suffix = 'st'; }
+			else if( ord===2 || (ord % 10 === 2  && ord != 12) ){ ord_suffix = 'nd'; }
+			else if( ord===3 || (ord % 10 === 3  && ord != 13) ){ ord_suffix = 'rd'; }
+			else { ord_suffix = 'th'; }
+			return ord_suffix;
+		},
+		_updateClock = function(el) {      
+			var myoptions = $(el).data("clockoptions");
+			var el_id = $(el).attr("id");
+
+			var mytimestamp = new Date().getTime() + myoptions.sysdiff;
+			var mytimestamp_sysdiff = new Date(mytimestamp);
+			var h=mytimestamp_sysdiff.getHours(),
+			    m=mytimestamp_sysdiff.getMinutes(),
+			    s=mytimestamp_sysdiff.getSeconds(),
+			    ms=mytimestamp_sysdiff.getMilliseconds(),
+			    dy=mytimestamp_sysdiff.getDay(),
+			    dt=mytimestamp_sysdiff.getDate(),
+			    mo=mytimestamp_sysdiff.getMonth(),
+			    y=mytimestamp_sysdiff.getFullYear(),
+			    ly=mytimestamp_sysdiff.isLeapYear(),
+			    doy=mytimestamp_sysdiff.getDOY(),
+			    woy=mytimestamp_sysdiff.getWOY(),
+			    iso8601Year=mytimestamp_sysdiff.getWOY(true),
+			    dim=mytimestamp_sysdiff.daysInMonth(),
+			    swt=mytimestamp_sysdiff.swatchTime(),
+			    tzH=parseInt(myoptions.tzOffset / 60),
+			    tzS=parseInt(myoptions.tzOffset * 60),
+			    ap="AM",
+			    calendElem="",
+			    clockElem="";
+			if (h > 11) { ap = "PM"; }
+			var H12 = h;
+			if (H12 > 12) { H12 = H12 - 12; }
+			else if (H12 === 0) { H12 = 12; }
+
+			if(myoptions.calendar === true) {
+
+				/* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
+				var dateStr = "";
+				for(var n = 0; n <= myoptions.dateFormat.length; n++) {
+					var chr = myoptions.dateFormat.charAt(n);
+					switch(chr){
+						//DAY
+						case "d": //Day of the Month, 2 digits with leading zeros
+						  dateStr += (''+dt).padStart(2,"0");
+						  break;
+						case "D": //A textual representation of a day, three letters 
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff);
+						  break;
+						case "j": //Day of the month without leading zeros
+						  dateStr += dt;
+						  break;
+						case "l": //A full textual representation of the day of the week
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
+						  break;
+						case "N": // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
+						  dateStr += (dy===0?7:dy);
+						  break;
+						case "S": //English ordinal suffix for the day of the month, 2 characters
+						  dateStr += _ordSuffix(dt);
+						  break;
+						case "w": //Numeric representation of the day of the week (0-6, 0=Sunday)
+						  dateStr += dy;
+						  break;
+						case "z": //The day of the year (starting from 0)
+						  dateStr += (doy-1);
+						  break;
+
+						//WEEK
+						case "W": // ISO-8601 week number of year, weeks starting on Monday
+						  dateStr += woy;
+						  break;
+
+						//MONTH
+						case "F": //A full textual representation of a month, such as January or March
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long'}).format(mytimestamp_sysdiff);
+						  break;
+						case "m": //Numeric representation of a month, with leading zeros
+						  dateStr += ((mo+1)+'').padStart(2,"0");
+						  break;
+						case "M": //A short textual representation of a month, three letters
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff);
+						  break;
+						case "n": //Numeric representation of a month, without leading zeros
+						  dateStr += (mo+1);
+						  break;
+						case "t": //Number of days in the given month
+						  dateStr += dim;
+						  break;
+
+						//YEAR
+						case "L": // Whether it's a leap year
+						  dateStr += (ly?1:0); //1 if it is a leap year, 0 otherwise
+						  break;
+						case "o": //ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead
+						  dateStr += iso8601Year;
+						  break;
+						case "Y": //A full numeric representation of a year, 4 digits
+						  dateStr += y;
+						  break;
+						case "y": //A two digit representation of a year
+						  dateStr += y.toString().substr(2,2);
+						  break;
+						case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
+						  dateStr += myoptions.dateFormat.charAt(++n);
+						  break;
+						case "%":
+						  var pos=n+1;
+						  var str=myoptions.dateFormat;
+						  while(pos<str.length){
+						    if(str.charAt(pos)=="%"){
+						      break;
+						    }
+						    pos++;
+						  }
+						  if(pos>n+1 && pos != str.length){
+						    dateStr += str.substring(n+1,pos);
+						    n+=(pos-n);
+						  }
+						  else{ dateStr += chr; }
+						  break;
+						default:
+						  dateStr += chr;
+					}
+				}
+				calendElem = '<span class="clockdate">'+dateStr+'</span>';
+			}
+
+			/* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
+			var timeStr = "";
+			for(var nn = 0; nn <= myoptions.timeFormat.length; nn++) {
+				var chrr = myoptions.timeFormat.charAt(nn);
+				switch(chrr){
+					case "a": //Lowercase Ante meridiem and Post meridiem
+					  timeStr += ap.toLowerCase();
+					  break;
+					case "A": //Uppercase Ante meridiem and Post meridiem
+					  timeStr += ap;
+					  break;
+					case "B": //Swatch Internet time
+					  timeStr += swt;//000 through 999
+					  break;
+					case "g": //12-hour format of an hour without leading zeros
+					  timeStr += H12;
+					  break;
+					case "G": //24-hour format of an hour without leading zeros
+					  timeStr += h;
+					  break;
+					case "h": //12-hour format of an hour with leading zeros
+					  timeStr += (''+H12).padStart(2,"0");
+					  break;
+					case "H": //24-hour format of an hour with leading zeros
+					  timeStr += (''+h).padStart(2,"0");
+					  break;
+					case "i": //Minutes with leading zeros
+					  timeStr += (''+m).padStart(2,"0");
+					  break;
+					case "s": //Seconds, with leading zeros
+					  timeStr += (''+s).padStart(2,"0");
+					  break;
+					/*case "u": //Microseconds
+					  timeStr += microseconds...
+					  break; */
+					case "v": //Milliseconds
+					  timeStr += (''+ms).padStart(3,"0");
+					  break;
+
+					//TIMEZONE
+					case "e": //Timezone identifier 
+					  timeStr += myoptions.timezone;
+					  break;
+					case "I": //Whether or not the date is in daylight saving time
+					  timeStr += (myoptions.isDST ? "DST" : "");
+					  break;
+					case "O": //Difference to Greenwich time (GMT) in hours
+					  timeStr += (tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzH>0 ? (''+(tzH * -1)).padStart(2,"0") : "+00" ) )+"00";
+					  break;
+					case "P": //Difference to Greenwich time (GMT) with colon between hours and minutes
+					  timeStr += (tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzH>0 ? (''+(tzH * -1)).padStart(2,"0") : "+00" ) )+":00";
+					  break;
+					/*case "T": //Timezone abbreviation
+					  timeStr += timezone_abbrev...
+					  break;*/
+					case "Z": //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
+					  timeStr += (tzS<0 ? ''+Math.abs(tzS) : (tzS>0 ? ''+(tzS*-1) : "0" ) );
+					  break;
+
+					//FULL DATE/TIME
+					case "c": // ISO 8601 date | Example 2004-02-12T15:19:21+00:00
+					  timeStr += y+'-'+((mo+1)+'').padStart(2,"0")+'-'+(''+dt).padStart(2,"0")+'T'+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+":00";
+					  break;
+					case "r": //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
+					  timeStr +=  new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff) + ', ' + dt + ' ' + new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff) + ' ' + y + ' '+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+' '+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+"00";
+					  break;
+					case "U": //Seconds since the Unix Epoch
+					  timeStr += Math.floor(mytimestamp / 1000);
+					  break;
+					case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
+					  timeStr += myoptions.timeFormat.charAt(++nn);
+					  break;
+					case "%":
+					  var poss=nn+1;
+					  var strr=myoptions.timeFormat;
+					  while(poss<strr.length){
+					    if(strr.charAt(poss)=="%"){
+					      break;
+					    }
+					    poss++;
+					  }
+					  if(poss>nn+1 && poss != strr.length){
+					    timeStr += strr.substring(nn+1,poss);
+					    nn+=(poss-nn);
+					  }
+					  else{ timeStr += chrr; }
+					  break;
+					default:
+					  timeStr += chrr;
+				}
+			}
+			clockElem = '<span class="clocktime">'+timeStr+'</span>';
+
+			$(el).html(calendElem+clockElem);					
+			_jqClock[el_id] = setTimeout(function() { _updateClock( $(el) ); }, myoptions.rate);
+
+		};
+
 		return this.each(function(idx){
 			if(typeof options === 'undefined' || typeof options === 'object'){
 				//this is useful only for client timestamps...
@@ -318,267 +562,37 @@ if (!String.prototype.padStart) {
 				/* End non user passable options */
 			}
 				 
-			/* Define some helper functions */
-			var newGuid = function() {
-				return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
-					function(c) {
-						var r = Math.random() * 16 | 0,
-						    v = c == 'x' ? r : (r & 0x3 | 0x8);
-						return v.toString(16);
-					}).toUpperCase();
-			},
-			ordSuffix = function(ord) {
-				var ord_suffix = ''; //st, nd, rd, th
-				if(ord===1 || (ord % 10 === 1  && ord != 11) ){ ord_suffix = 'st'; }
-				else if( ord===2 || (ord % 10 === 2  && ord != 12) ){ ord_suffix = 'nd'; }
-				else if( ord===3 || (ord % 10 === 3  && ord != 13) ){ ord_suffix = 'rd'; }
-				else { ord_suffix = 'th'; }
-				return ord_suffix;
-			},
-			updateClock = function(el,myoptions) {      
-				var el_id = $(el).attr("id");
-				if(typeof myoptions === 'string'){
-					switch(myoptions){
-						case 'destroy':
-							if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
-							$(el).html("");
-							if ( $(el).hasClass("jqclock")){ $(el).removeClass("jqclock"); }
-							$(el).data("clockoptions",undefined);
-							break;
-						case 'stop':
-							if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
-							break;
-						case 'start':
-							var current_options = $(el).data("clockoptions");
-							if(current_options){ _jqClock[el_id] = setTimeout(function() { updateClock( $(el), current_options ); }, current_options.rate); }
-							break;
-					}
-				}
-				else {
-					var mytimestamp = new Date().getTime() + myoptions.sysdiff;
-					var mytimestamp_sysdiff = new Date(mytimestamp);
-					var h=mytimestamp_sysdiff.getHours(),
-					    m=mytimestamp_sysdiff.getMinutes(),
-					    s=mytimestamp_sysdiff.getSeconds(),
-					    ms=mytimestamp_sysdiff.getMilliseconds(),
-					    dy=mytimestamp_sysdiff.getDay(),
-					    dt=mytimestamp_sysdiff.getDate(),
-					    mo=mytimestamp_sysdiff.getMonth(),
-					    y=mytimestamp_sysdiff.getFullYear(),
-					    ly=mytimestamp_sysdiff.isLeapYear(),
-					    doy=mytimestamp_sysdiff.getDOY(),
-					    woy=mytimestamp_sysdiff.getWOY(),
-					    iso8601Year=mytimestamp_sysdiff.getWOY(true),
-					    dim=mytimestamp_sysdiff.daysInMonth(),
-					    swt=mytimestamp_sysdiff.swatchTime(),
-					    tzH=parseInt(myoptions.tzOffset / 60),
-					    tzS=parseInt(myoptions.tzOffset * 60),
-					    ap="AM",
-					    calendElem="",
-					    clockElem="";
-					if (h > 11) { ap = "PM"; }
-					var H12 = h;
-					if (H12 > 12) { H12 = H12 - 12; }
-					else if (H12 === 0) { H12 = 12; }
-					
-					if(myoptions.calendar === true) {
 
-						/* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
-						var dateStr = "";
-						for(var n = 0; n <= myoptions.dateFormat.length; n++) {
-							var chr = myoptions.dateFormat.charAt(n);
-							switch(chr){
-								//DAY
-								case "d": //Day of the Month, 2 digits with leading zeros
-								  dateStr += (''+dt).padStart(2,"0");
-								  break;
-								case "D": //A textual representation of a day, three letters 
-								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff);
-								  break;
-								case "j": //Day of the month without leading zeros
-								  dateStr += dt;
-								  break;
-								case "l": //A full textual representation of the day of the week
-								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
-								  break;
-								case "N": // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
-								  dateStr += (dy===0?7:dy);
-								  break;
-								case "S": //English ordinal suffix for the day of the month, 2 characters
-								  dateStr += ordSuffix(dt);
-								  break;
-								case "w": //Numeric representation of the day of the week (0-6, 0=Sunday)
-								  dateStr += dy;
-								  break;
-								case "z": //The day of the year (starting from 0)
-								  dateStr += (doy-1);
-								  break;
-								
-								//WEEK
-								case "W": // ISO-8601 week number of year, weeks starting on Monday
-								  dateStr += woy;
-								  break;
-									
-								//MONTH
-								case "F": //A full textual representation of a month, such as January or March
-								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long'}).format(mytimestamp_sysdiff);
-								  break;
-								case "m": //Numeric representation of a month, with leading zeros
-								  dateStr += ((mo+1)+'').padStart(2,"0");
-								  break;
-								case "M": //A short textual representation of a month, three letters
-								  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff);
-								  break;
-								case "n": //Numeric representation of a month, without leading zeros
-								  dateStr += (mo+1);
-								  break;
-								case "t": //Number of days in the given month
-								  dateStr += dim;
-								  break;
-								
-								//YEAR
-								case "L": // Whether it's a leap year
-								  dateStr += (ly?1:0); //1 if it is a leap year, 0 otherwise
-								  break;
-								case "o": //ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead
-								  dateStr += iso8601Year;
-								  break;
-								case "Y": //A full numeric representation of a year, 4 digits
-								  dateStr += y;
-								  break;
-								case "y": //A two digit representation of a year
-								  dateStr += y.toString().substr(2,2);
-								  break;
-								case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
-								  dateStr += myoptions.dateFormat.charAt(++n);
-								  break;
-								case "%":
-								  var pos=n+1;
-								  var str=myoptions.dateFormat;
-								  while(pos<str.length){
-								    if(str.charAt(pos)=="%"){
-								      break;
-								    }
-								    pos++;
-								  }
-								  if(pos>n+1 && pos != str.length){
-								    dateStr += str.substring(n+1,pos);
-								    n+=(pos-n);
-								  }
-								  else{ dateStr += chr; }
-								  break;
-								default:
-								  dateStr += chr;
-							}
-						}
-						calendElem = '<span class="clockdate">'+dateStr+'</span>';
-					}
-
-					/* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
-					var timeStr = "";
-					for(var nn = 0; nn <= myoptions.timeFormat.length; nn++) {
-						var chrr = myoptions.timeFormat.charAt(nn);
-						switch(chrr){
-							case "a": //Lowercase Ante meridiem and Post meridiem
-							  timeStr += ap.toLowerCase();
-							  break;
-							case "A": //Uppercase Ante meridiem and Post meridiem
-							  timeStr += ap;
-							  break;
-							case "B": //Swatch Internet time
-							  timeStr += swt;//000 through 999
-							  break;
-							case "g": //12-hour format of an hour without leading zeros
-							  timeStr += H12;
-							  break;
-							case "G": //24-hour format of an hour without leading zeros
-							  timeStr += h;
-							  break;
-							case "h": //12-hour format of an hour with leading zeros
-							  timeStr += (''+H12).padStart(2,"0");
-							  break;
-							case "H": //24-hour format of an hour with leading zeros
-							  timeStr += (''+h).padStart(2,"0");
-							  break;
-							case "i": //Minutes with leading zeros
-							  timeStr += (''+m).padStart(2,"0");
-							  break;
-							case "s": //Seconds, with leading zeros
-							  timeStr += (''+s).padStart(2,"0");
-							  break;
-							/*case "u": //Microseconds
-							  timeStr += microseconds...
-							  break; */
-							case "v": //Milliseconds
-							  timeStr += (''+ms).padStart(3,"0");
-							  break;
-								
-							//TIMEZONE
-							case "e": //Timezone identifier 
-							  timeStr += myoptions.timezone;
-							  break;
-							case "I": //Whether or not the date is in daylight saving time
-							  timeStr += (myoptions.isDST ? "DST" : "");
-							  break;
-							case "O": //Difference to Greenwich time (GMT) in hours
-							  timeStr += (tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzH>0 ? (''+(tzH * -1)).padStart(2,"0") : "+00" ) )+"00";
-							  break;
-							case "P": //Difference to Greenwich time (GMT) with colon between hours and minutes
-							  timeStr += (tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzH>0 ? (''+(tzH * -1)).padStart(2,"0") : "+00" ) )+":00";
-							  break;
-							/*case "T": //Timezone abbreviation
-							  timeStr += timezone_abbrev...
-							  break;*/
-							case "Z": //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
-							  timeStr += (tzS<0 ? ''+Math.abs(tzS) : (tzS>0 ? ''+(tzS*-1) : "0" ) );
-							  break;
-							
-							//FULL DATE/TIME
-							case "c": // ISO 8601 date | Example 2004-02-12T15:19:21+00:00
-							  timeStr += y+'-'+((mo+1)+'').padStart(2,"0")+'-'+(''+dt).padStart(2,"0")+'T'+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+":00";
-							  break;
-							case "r": //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
-							  timeStr +=  new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff) + ', ' + dt + ' ' + new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff) + ' ' + y + ' '+(''+h).padStart(2,"0")+':'+(''+m).padStart(2,"0")+':'+(''+s).padStart(2,"0")+' '+(tzH<0 ? '+'+(''+Math.abs(tzH)).padStart(2,"0") : ( tzh>0 ? (''+(tzh * -1)).padStart(2,"0") : "+00" ) )+"00";
-							  break;
-							case "U": //Seconds since the Unix Epoch
-							  timeStr += Math.floor(mytimestamp / 1000);
-							  break;
-							case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
-							  timeStr += myoptions.timeFormat.charAt(++nn);
-							  break;
-							case "%":
-							  var poss=nn+1;
-							  var strr=myoptions.timeFormat;
-							  while(poss<strr.length){
-							    if(strr.charAt(poss)=="%"){
-							      break;
-							    }
-							    poss++;
-							  }
-							  if(poss>nn+1 && poss != strr.length){
-							    timeStr += strr.substring(nn+1,poss);
-							    nn+=(poss-nn);
-							  }
-							  else{ timeStr += chrr; }
-							  break;
-							default:
-							  timeStr += chrr;
-						}
-					}
-					clockElem = '<span class="clocktime">'+timeStr+'</span>';
-					
-					$(el).html(calendElem+clockElem);					
-					_jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, myoptions.rate);
-				}
-
-			}
-
+			var el_id = $(_this).attr("id");
 			if(typeof options === 'object'){
-				if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
-				if ( !$(this).is("[id]") ){ $(this).attr("id", newGuid()); }
-				$(this).data("clockoptions",options);
+				if ( !$(_this).hasClass("jqclock")){ $(_this).addClass("jqclock"); }
+				if ( !$(_this).is("[id]") ){ $(_this).attr("id", _newGuid()); }
+				$(_this).data("clockoptions",options);
+				//only allow one associated settimeout at a time! basically, only one plugin instance per dom element
+				if(_jqClock.hasOwnProperty(el_id) === false){ _updateClock($(_this)); }
 			}
-			updateClock($(this),options);
+			else if(typeof options === 'string'){
+				switch(options){
+					case 'destroy':
+						if(_jqClock.hasOwnProperty(el_id)){ 
+							clearTimeout(_jqClock[el_id]); 
+						}
+						$(el).html("");
+						if ( $(_this).hasClass("jqclock")){ $(_this).removeClass("jqclock"); }
+						$(_this).removeData("clockoptions");
+						break;
+					case 'stop':
+						if(_jqClock.hasOwnProperty(el_id)){ 
+							clearTimeout(_jqClock[el_id]); 
+							delete _jqClock[el_id];
+						}
+						break;
+					case 'start':
+						var current_options = $(_this).data("clockoptions");
+						if(current_options !== undefined && _jqClock.hasOwnProperty(el_id) === false){ _jqClock[el_id] = setTimeout(function() { updateClock( $(_this) ); }, current_options.rate); }
+						break;
+				}
+			}
 		});
 	}
 
