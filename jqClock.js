@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.2.1",
+		"version": "2.2.2",
 		"options": [
 			{
 				"type":		"string",
