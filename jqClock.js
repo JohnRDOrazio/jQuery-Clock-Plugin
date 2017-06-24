@@ -141,12 +141,22 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.2.40",
+		"version": "2.3.0",
 		"options": [
 			{
 				"type":		"string",
 				"value": 	"destroy",
-				"description":	"Passing in 'destroy' to an already initialized clock will remove the setTimeout for that clock from the global jqClock variable"
+				"description":	"Passing in 'destroy' to an already initialized clock will remove the setTimeout for that clock to stop it from ticking, and remove all html markup and data associated with the plugin instance on the dom elements"
+			},
+			{
+				"type":		"string",
+				"value": 	"stop",
+				"description":	"Passing in 'stop' to an already initialized clock will clear the setTimeout for that clock to stop it from ticking"
+			},
+			{
+				"type":		"string",
+				"value": 	"start",
+				"description":	"Passing in 'start' to an already initialized clock will restart the setTimeout for that clock to get it ticking again, as though it had never lost time"
 			},
 			{	"type":		"object",
 			 	"description":	"option set {}",
@@ -195,7 +205,12 @@ if (!String.prototype.padStart) {
 						}
 						]
 			}
-		]
+		],
+		"methods": {
+			"destroy":	"Chaining clock().destroy() has the same effect as passing the 'destroy' option as in clock('destroy')",
+			"stop":		"Chaining clock().stop() has the same effect as passing the 'stop' option as in clock('stop')",
+			"start":	"Chaining clock().start() has the same effect as passing the 'start' option as in clock('start')"
+		}
 	};
 	Object.freeze($.clock);
 	
