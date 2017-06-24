@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.2.2",
+		"version": "2.2.10",
 		"options": [
 			{
 				"type":		"string",
@@ -208,7 +208,10 @@ if (!String.prototype.padStart) {
 		$.fn.clock.destroy = function(){
 			return _this.each(function(idx){
 				var el_id = $(this).attr("id");
-				if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
+				if(_jqClock.hasOwnProperty(el_id)){ 
+					clearTimeout(_jqClock[el_id]); 
+					delete _jqClock[el_id];
+				}
 				$(this).html("");
 				if ( $(this).hasClass("jqclock")){ $(this).removeClass("jqclock"); }
 				$(this).removeData("clockoptions");
