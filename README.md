@@ -147,17 +147,26 @@ Supported locales as of June 22 2017 are:
 "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
 
 The desired locale can be set using the "**langSet**" option:
+
+**Example:**
 ```JavaScript
 $("div#clock").clock({"langSet":"de"});
 ```
 
 ## Update Speed
 
-Since v2.1.9 the "**rate**" option has been added so that the rate at which the clock is updated can be set on each clock. The value is in milliseconds. The rate defaults to 500, since at 1000 the clock tends to skew slightly and winds up skipping a second here and there. Instead with an update rate of 500ms the seconds in the clock remain a little more faithful to 1 second increments making for less skewing. When using the "v" Format Character in the "**timeFormat**" option to show milliseconds, bringing the rate down to 50 or 10 or even 1 millisecond will give a near millisecond faithful clock.
+Since v2.1.9 the "**rate**" option has been added so that the rate at which the clock is updated can be set on each clock. The value is in milliseconds. The rate defaults to 500, since at 1000 the clock tends to skew slightly and winds up skipping a second here and there. Instead with an update rate of 500ms the seconds in the clock remain a little more faithful to 1 second increments making for less skewing. When using the "v" Format Character in the "**timeFormat**" option to show milliseconds, bringing the rate down to 50 or 10 or even 1 millisecond (though the page may become processor intensive in this last case) will give a near millisecond faithful clock.
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"timeFormat":"h:i:s.v","rate":50});
+```
 
 ## Custom client generated timestamp
 
 You can pass in a custom javascript timestamp:
+
+**Example**
 ```JavaScript
 var customDateObj = new Date();
 var customtimestamp = customDateObj.getTime();
