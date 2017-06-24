@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.2.20",
+		"version": "2.2.30",
 		"options": [
 			{
 				"type":		"string",
@@ -563,11 +563,11 @@ if (!String.prototype.padStart) {
 					}
 				}
 				/* End non user passable options */
-				if ( !$(_this).hasClass("jqclock")){ $(_this).addClass("jqclock"); }
-				if ( !$(_this).is("[id]") ){ $(_this).attr("id", _newGuid()); }
-				$(_this).data("clockoptions",options);
+				if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
+				if ( !$(this).is("[id]") ){ $(this).attr("id", _newGuid()); }
+				$(this).data("clockoptions",options);
 				//only allow one associated settimeout at a time! basically, only one plugin instance per dom element
-				if(_jqClock.hasOwnProperty($(_this).attr("id")) === false){ _updateClock($(_this)); }
+				if(_jqClock.hasOwnProperty($(this).attr("id")) === false){ _updateClock($(this)); }
 			}
 			else if(typeof options === 'string'){
 				var el_id = $(this).attr("id");
