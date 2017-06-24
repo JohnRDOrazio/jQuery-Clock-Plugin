@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.2.30",
+		"version": "2.2.40",
 		"options": [
 			{
 				"type":		"string",
@@ -205,7 +205,11 @@ if (!String.prototype.padStart) {
 	$.fn.clock = function(options) {
 		var _this = this;
 
-		$.fn.clock.destroy = function(){
+		this.initialize = function(){
+			return this;
+		}
+		
+		this.destroy = function(){
 			return _this.each(function(idx){
 				var el_id = $(this).attr("id");
 				if(_jqClock.hasOwnProperty(el_id)){ 
@@ -218,7 +222,7 @@ if (!String.prototype.padStart) {
 			});
 		}
 
-		$.fn.clock.stop = function(){
+		this.stop = function(){
 			return _this.each(function(idx){
 				var el_id = $(this).attr("id");
 				if(_jqClock.hasOwnProperty(el_id)){ 
@@ -228,7 +232,7 @@ if (!String.prototype.padStart) {
 			});
 		}
 
-		$.fn.clock.start = function(){
+		this.start = function(){
 			return _this.each(function(idx){
 				var el_id = $(this).attr("id");
 				var current_options = $(this).data("clockoptions");
@@ -477,7 +481,7 @@ if (!String.prototype.padStart) {
 
 		};
 
-		return this.each(function(idx){
+		this.each(function(idx){
 			if(typeof options === 'undefined' || typeof options === 'object'){
 				//this is useful only for client timestamps...
 				var sysDateObj = new Date();
@@ -595,6 +599,8 @@ if (!String.prototype.padStart) {
 				}
 			}
 		});
+		
+		return this.initialize();
 	}
 
 	return this;
