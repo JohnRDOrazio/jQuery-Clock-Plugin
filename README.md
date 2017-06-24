@@ -313,3 +313,7 @@ Implements the new Intl.DateTimeFormat object which is now fairly universally su
 ## [v2.1.9](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.9 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.9")
 
 Implements all PHP Style Format Characters except for "T" and "u". Adds a "**rate**" option which allows to customize the rate at which each clock is updated. Bugfix: the month number returned was incorrect in v2.1.6.
+
+## [v2.2.0](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.2.0 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.2.0")
+
+Allows for escaped literals and for literal string sequences wrapped in '%' characters inside the **dateFormat** and **timeFormat** parameters.
