@@ -102,6 +102,44 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 $("div#clock").clock({"timeFormat":"h:i:s A e I"});
 ```
 
+## Literal sequences in dateFormat or timeFormat
+If you would like to output a Format Character as a literal, you can escape it with a double backslash. Double backslashing any character will ensure that it is interpreted literally, even if it's not a Format Character. 
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"timeFormat":"h:i:s \\A-\\Z"});
+```
+-> will output "03:50:07 A-Z"
+
+You may wrap any sequence of characters that you wish to be interpreted literally with the '%' character. 
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"dateFormat":"l, F jS %in the year% Y", "timeFormat":"H:i:s e I %in Swatch Time = %(@B)"});
+```
+-> will output "Saturday, June 6th in the year 2017" - "03:50:07 UTC+2 DST in Swatch Time = (@118)"
+
+If you would like to use a literal '%' character and you also are using a '%' wrap around a literal sequence, then you must escape the literal '%' with a double blackslash. The only limitation is that the desired literal '%' character cannot fall within the literal sequence wrapped in the '%' character. If there is only one '%' character in the whole string then it will be interpreted as a literal.
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"timeFormat":"H:i:s 50%(@B)"});
+```
+-> will output "03:50:07 50%(@118)" 
+
+**Example:**
+```diff
+//Please don't do this to get '50%'
+- $("div#clock").clock({"timeFormat":"H:i:s %50% of the time% (@B)"});
+//Nor this, it won't work
+- $("div#clock").clock({"timeFormat":"H:i:s %50\\% of the time% (@B)"});
+//Do this to get '03:50:07 50% of the time (@118)'
++ $("div#clock").clock({"timeFormat":"H:i:s 50\\% %of the time% (@B)"});
+//Or this to get '03:50:07 of the time 50% (@118)'
++ $("div#clock").clock({"timeFormat":"H:i:s %of the time% 50\\% (@B)"});
+
+```
+
 ## Language options
 
 Uses the native ECMA script Intl.DateTimeFormat object for the translations of the days of the week and months of the year.
