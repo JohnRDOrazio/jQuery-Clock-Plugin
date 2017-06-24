@@ -204,7 +204,7 @@ if (!String.prototype.padStart) {
 	
 	$.fn.clock = function(options) {
 		var _this = this;
-		
+
 		$.fn.clock.destroy = function(){
 			return _this.each(function(idx){
 				var el_id = $(this).attr("id");
@@ -572,6 +572,7 @@ if (!String.prototype.padStart) {
 					case 'destroy':
 						if(_jqClock.hasOwnProperty(el_id)){ 
 							clearTimeout(_jqClock[el_id]); 
+							delete _jqClock[el_id];
 						}
 						$(_this).html("");
 						if ( $(_this).hasClass("jqclock")){ $(_this).removeClass("jqclock"); }
