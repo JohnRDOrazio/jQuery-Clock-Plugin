@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.2.0",
+		"version": "2.2.1",
 		"options": [
 			{
 				"type":		"string",
@@ -255,7 +255,6 @@ if (!String.prototype.padStart) {
 		},
 		_updateClock = function(el) {      
 			var myoptions = $(el).data("clockoptions");
-			var el_id = $(el).attr("id");
 
 			var mytimestamp = new Date().getTime() + myoptions.sysdiff;
 			var mytimestamp_sysdiff = new Date(mytimestamp);
@@ -470,6 +469,7 @@ if (!String.prototype.padStart) {
 			clockElem = '<span class="clocktime">'+timeStr+'</span>';
 
 			$(el).html(calendElem+clockElem);					
+			var el_id = $(el).attr("id");
 			_jqClock[el_id] = setTimeout(function() { _updateClock( $(el) ); }, myoptions.rate);
 
 		};
