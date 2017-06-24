@@ -199,80 +199,115 @@ if (!String.prototype.padStart) {
 	};
 	Object.freeze($.clock);
 	
-	//jqClock is an array in the global windows scope which contains all references to setTimeouts for each initialized clock
-	jqClock = [];
-
+	//_jqClock contains references to each clock's settimeouts
+	var _jqClock = _jqClock || {};
+	
 	$.fn.clock = function(options) {
+		var _this = this;
+		
+		$.fn.clock.destroy = function(){
+			return _this.each(function(idx){
+				var el_id = $(this).attr("id");
+				if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
+				$(this).html("");
+				if ( $(this).hasClass("jqclock")){ $(this).removeClass("jqclock"); }
+			});
+		}
 
-		return this.each(function(){
+		$.fn.clock.stop = function(){
+			return _this.each(function(idx){
+				var el_id = $(this).attr("id");
+				if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
+				$(this).data("clockoptions",undefined);
+			});
+		}
 
-			//this is useful only for client timestamps...
-			var sysDateObj = new Date();
+		$.fn.clock.start = function(){
+			return _this.each(function(idx){
+				var el_id = $(this).attr("id");
+				var current_options = $(this).data("clockoptions");
+				if(current_options){ _jqClock[el_id] = setTimeout(function() { updateClock( $(this), current_options ); }, current_options.rate); }
+			});
+		}
+		
+		return this.each(function(idx){
+			if(typeof options === 'undefined' || typeof options === 'object'){
+				//this is useful only for client timestamps...
+				var sysDateObj = new Date();
 
-			options = options || {};
-			
-			/* User passable options: make sure we have default values if user doesn't pass them! */
-			/* I prefer this method to jQuery.extend because we can dynamically set each option based on a preceding option's value */
-			options.timestamp	= options.timestamp	|| "localsystime";
-			options.langSet		= options.langSet	|| "en";
-			options.calendar	= options.hasOwnProperty("calendar") ? options.calendar	: true;
-			options.dateFormat	= options.dateFormat	|| ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
-			options.timeFormat	= options.timeFormat	|| ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
-			options.timezone	= options.timezone	|| "localsystimezone"; //should only really be passed in when a server timestamp is passed
-			options.isDST		= options.hasOwnProperty("isDST") ? options.isDST : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
-			options.rate		= options.rate		|| 500; //500ms makes for a more faithful clock than 1000ms, less skewing
-			
-			//ensure we have correct value types
-			if(typeof(options.langSet) !== 'string'){
-				options.langSet = (''+options.langSet);
-			}
-			if(typeof(options.calendar) === 'string'){
-				options.calendar = Boolean(options.calendar == 'false' ? false : true);
-			}
-			else if(typeof(options.calendar) !== 'boolean'){
-				options.calendar = Boolean(options.calendar); //do our best to get a boolean value
-			}
-			if(typeof(options.dateFormat) !== 'string'){
-				options.dateFormat = (''+options.dateFormat);
-			}
-			if(typeof(options.timeFormat) !== 'string'){
-				options.timeFormat = (''+options.dateFormat);
-			}
-			if(typeof(options.timezone) !== 'string'){
-				options.timezone = (''+options.timezone);
-			}
-			if(typeof(options.isDST) === 'string'){
-				options.isDST = Boolean(options.isDST == 'true' ? true : false);
-			}
-			else if(typeof(options.isDST) !== 'boolean'){
-				options.isDST = Boolean(options.isDST);
-			}
-			if(typeof(options.rate)  !== 'number'){
-				options.rate = parseInt(options.rate); //do our best to get an int value
-			}
-			
-			/* Non user passable options */			
-			//getTimezoneOffset gives minutes
-			options.tzOffset = sysDateObj.getTimezoneOffset();
-			//divide by 60 to get hours from minutes
-			var tzOffset = options.tzOffset / 60;
-			//If we are using the current client timestamp, our difference from local system time will be calculated as zero */
-			options.sysdiff = 0;
-			/* If instead we are using a custom timestamp, we need to calculate the difference from local system time
-			 *   >> in the case that it is a server timestamp our difference from local system time will be calculated as:
-			 *      ((server time * 1000) - local system time) + local timezoneoffset
-			 *   >> in the case that it is a client timestamp our difference from local system time will be calculated as:
-			 *      (customtimestamp - local system time)
-			 */			
-			if( options.timestamp != "localsystime" ){      
-				var digitCountDiff = (sysDateObj.getTime()+'').length - (options.timestamp+'').length;
-				if(digitCountDiff > 2){
-					options.timestamp = options.timestamp * 1000;
-					options.sysdiff = (options.timestamp - sysDateObj.getTime()) + (options.tzOffset*60*1000);
-					//options.timezone has most probably been set in this case
+				options = options || {};
+
+				/* User passable options: make sure we have default values if user doesn't pass them! */
+				/* I prefer this method to jQuery.extend because we can dynamically set each option based on a preceding option's value */
+				options.timestamp	= options.timestamp	|| "localsystime";
+				options.langSet		= options.langSet	|| "en";
+				options.calendar	= options.hasOwnProperty("calendar") ? options.calendar	: true;
+				options.dateFormat	= options.dateFormat	|| ((options.langSet=="en") ? "l, F j, Y" : "l, j F Y");
+				options.timeFormat	= options.timeFormat	|| ((options.langSet=="en") ? "h:i:s A" : "H:i:s");
+				options.timezone	= options.timezone	|| "localsystimezone"; //should only really be passed in when a server timestamp is passed
+				options.isDST		= options.hasOwnProperty("isDST") ? options.isDST : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
+				options.rate		= options.rate		|| 500; //500ms makes for a more faithful clock than 1000ms, less skewing
+
+				//ensure we have correct value types
+				if(typeof(options.langSet) !== 'string'){
+					options.langSet = (''+options.langSet);
+				}
+				if(typeof(options.calendar) === 'string'){
+					options.calendar = Boolean(options.calendar == 'false' ? false : true);
+				}
+				else if(typeof(options.calendar) !== 'boolean'){
+					options.calendar = Boolean(options.calendar); //do our best to get a boolean value
+				}
+				if(typeof(options.dateFormat) !== 'string'){
+					options.dateFormat = (''+options.dateFormat);
+				}
+				if(typeof(options.timeFormat) !== 'string'){
+					options.timeFormat = (''+options.dateFormat);
+				}
+				if(typeof(options.timezone) !== 'string'){
+					options.timezone = (''+options.timezone);
+				}
+				if(typeof(options.isDST) === 'string'){
+					options.isDST = Boolean(options.isDST == 'true' ? true : false);
+				}
+				else if(typeof(options.isDST) !== 'boolean'){
+					options.isDST = Boolean(options.isDST);
+				}
+				if(typeof(options.rate)  !== 'number'){
+					options.rate = parseInt(options.rate); //do our best to get an int value
+				}
+
+				/* Non user passable options */			
+				//getTimezoneOffset gives minutes
+				options.tzOffset = sysDateObj.getTimezoneOffset();
+				//divide by 60 to get hours from minutes
+				var tzOffset = options.tzOffset / 60;
+				//If we are using the current client timestamp, our difference from local system time will be calculated as zero */
+				options.sysdiff = 0;
+				/* If instead we are using a custom timestamp, we need to calculate the difference from local system time
+				 *   >> in the case that it is a server timestamp our difference from local system time will be calculated as:
+				 *      ((server time * 1000) - local system time) + local timezoneoffset
+				 *   >> in the case that it is a client timestamp our difference from local system time will be calculated as:
+				 *      (customtimestamp - local system time)
+				 */			
+				if( options.timestamp != "localsystime" ){      
+					var digitCountDiff = (sysDateObj.getTime()+'').length - (options.timestamp+'').length;
+					if(digitCountDiff > 2){
+						options.timestamp = options.timestamp * 1000;
+						options.sysdiff = (options.timestamp - sysDateObj.getTime()) + (options.tzOffset*60*1000);
+						//options.timezone has most probably been set in this case
+					}
+					else{
+						options.sysdiff = options.timestamp - sysDateObj.getTime();
+						//options.timezone has most probably not been set, let's do some guesswork
+						if(options.timezone == "localsystimezone"){
+							options.timezone = 'UTC';
+							if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
+							else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
+						}
+					}
 				}
 				else{
-					options.sysdiff = options.timestamp - sysDateObj.getTime();
 					//options.timezone has most probably not been set, let's do some guesswork
 					if(options.timezone == "localsystimezone"){
 						options.timezone = 'UTC';
@@ -280,17 +315,9 @@ if (!String.prototype.padStart) {
 						else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
 					}
 				}
+				/* End non user passable options */
 			}
-			else{
-				//options.timezone has most probably not been set, let's do some guesswork
-				if(options.timezone == "localsystimezone"){
-					options.timezone = 'UTC';
-					if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
-					else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
-				}
-			}
-			/* End non user passable options */
-			
+				 
 			/* Define some helper functions */
 			var newGuid = function() {
 				return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
@@ -310,7 +337,23 @@ if (!String.prototype.padStart) {
 			},
 			updateClock = function(el,myoptions) {      
 				var el_id = $(el).attr("id");
-				if(myoptions=="destroy"){ clearTimeout(jqClock[el_id]); }
+				if(typeof myoptions === 'string'){
+					switch(myoptions){
+						case 'destroy':
+							if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
+							$(el).html("");
+							if ( $(el).hasClass("jqclock")){ $(el).removeClass("jqclock"); }
+							$(el).data("clockoptions",undefined);
+							break;
+						case 'stop':
+							if(_jqClock.hasOwnProperty(el_id)){ clearTimeout(_jqClock[el_id]); }
+							break;
+						case 'start':
+							var current_options = $(el).data("clockoptions");
+							if(current_options){ _jqClock[el_id] = setTimeout(function() { updateClock( $(el), current_options ); }, current_options.rate); }
+							break;
+					}
+				}
 				else {
 					var mytimestamp = new Date().getTime() + myoptions.sysdiff;
 					var mytimestamp_sysdiff = new Date(mytimestamp);
@@ -433,9 +476,9 @@ if (!String.prototype.padStart) {
 
 					/* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
 					var timeStr = "";
-					for(var n = 0; n <= myoptions.timeFormat.length; n++) {
-						var chr = myoptions.timeFormat.charAt(n);
-						switch(chr){
+					for(var nn = 0; nn <= myoptions.timeFormat.length; nn++) {
+						var chrr = myoptions.timeFormat.charAt(nn);
+						switch(chrr){
 							case "a": //Lowercase Ante meridiem and Post meridiem
 							  timeStr += ap.toLowerCase();
 							  break;
@@ -501,38 +544,40 @@ if (!String.prototype.padStart) {
 							  timeStr += Math.floor(mytimestamp / 1000);
 							  break;
 							case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
-							  timeStr += myoptions.timeFormat.charAt(++n);
+							  timeStr += myoptions.timeFormat.charAt(++nn);
 							  break;
 							case "%":
-							  var pos=n+1;
-							  var str=myoptions.timeFormat;
-							  while(pos<str.length){
-							    if(str.charAt(pos)=="%"){
+							  var poss=nn+1;
+							  var strr=myoptions.timeFormat;
+							  while(poss<strr.length){
+							    if(strr.charAt(poss)=="%"){
 							      break;
 							    }
-							    pos++;
+							    poss++;
 							  }
-							  if(pos>n+1 && pos != str.length){
-							    timeStr += str.substring(n+1,pos);
-							    n+=(pos-n);
+							  if(poss>nn+1 && poss != strr.length){
+							    timeStr += strr.substring(nn+1,poss);
+							    nn+=(poss-nn);
 							  }
-							  else{ timeStr += chr; }
+							  else{ timeStr += chrr; }
 							  break;
 							default:
-							  timeStr += chr;
+							  timeStr += chrr;
 						}
 					}
 					clockElem = '<span class="clocktime">'+timeStr+'</span>';
 					
-					$(el).html(calendElem+clockElem);
-					jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, myoptions.rate);
+					$(el).html(calendElem+clockElem);					
+					_jqClock[el_id] = setTimeout(function() { updateClock( $(el), myoptions ); }, myoptions.rate);
 				}
 
 			}
 
-			if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
-			if ( !$(this).is("[id]") ){ $(this).attr("id", newGuid()); }
-
+			if(typeof options === 'object'){
+				if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
+				if ( !$(this).is("[id]") ){ $(this).attr("id", newGuid()); }
+				$(this).data("clockoptions",options);
+			}
 			updateClock($(this),options);
 		});
 	}
