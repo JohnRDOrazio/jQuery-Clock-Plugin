@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.2.10",
+		"version": "2.2.20",
 		"options": [
 			{
 				"type":		"string",
@@ -590,7 +590,7 @@ if (!String.prototype.padStart) {
 					case 'start':
 						var __this = this;
 						var current_options = $(this).data("clockoptions");
-						if(current_options !== undefined && _jqClock.hasOwnProperty(el_id) === false){ _jqClock[el_id] = setTimeout(function() { updateClock( $(__this) ); }, current_options.rate); }
+						if(current_options !== undefined && _jqClock.hasOwnProperty(el_id) === false){ _jqClock[el_id] = setTimeout(function() { _updateClock( $(__this) ); }, current_options.rate); }
 						break;
 				}
 			}
