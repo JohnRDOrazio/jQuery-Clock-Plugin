@@ -52,7 +52,7 @@
     
       $("#jqclock_version").text($.clock.version);
       $("#clock1").clock();
-      $("#clock2").clock({"langSet":"it"});
+      $("#clock2").clock({"langSet":"it","timeFormat":"H %o'clock,% i %minutes,% s %seconds%"});
       $("#clock3").clock({"dateFormat":"D, M jS, Y ( N - z | W | L )"});
       $("#clock4").clock({"calendar":false,"timeFormat":"H:i:s.v e I (@B)","rate":50});
       
@@ -91,8 +91,8 @@
       </td>
       <td>
         <div>
-          <h2>Clock that uses Italian language</h2>
-          <pre><code>      $("#clock2").clock({"langSet":"it"});</code></pre>
+          <h2>Clock that uses Italian language for the calendar, and string literals in the time</h2>
+          <pre><code>      $("#clock2").clock({"langSet":"it","timeFormat":"H %o'clock,% i %minutes,% s %seconds%"});</code></pre>
           <div id="clock2">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock2">DESTROY CLOCK 2</button>
