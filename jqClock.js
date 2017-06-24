@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.1.9",
+		"version": "2.2.0,
 		"options": [
 			{
 				"type":		"string",
@@ -406,6 +406,9 @@ if (!String.prototype.padStart) {
 								case "y": //A two digit representation of a year
 								  dateStr += y.toString().substr(2,2);
 								  break;
+								case "\":
+								  dateStr += myoptions.dateFormat.charAt(n++);
+								  break;
 								default:
 								  dateStr += chr;
 							}
@@ -481,6 +484,9 @@ if (!String.prototype.padStart) {
 							  break;
 							case "U": //Seconds since the Unix Epoch
 							  timeStr += Math.floor(mytimestamp / 1000);
+							  break;
+							case "\":
+							  dateStr += myoptions.dateFormat.charAt(n++);
 							  break;
 							default:
 							  timeStr += chr;
