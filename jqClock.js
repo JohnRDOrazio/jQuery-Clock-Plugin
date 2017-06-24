@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.1.9",
+		"version": "2.2.0",
 		"options": [
 			{
 				"type":		"string",
@@ -406,6 +406,24 @@ if (!String.prototype.padStart) {
 								case "y": //A two digit representation of a year
 								  dateStr += y.toString().substr(2,2);
 								  break;
+								case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
+								  dateStr += myoptions.dateFormat.charAt(++n);
+								  break;
+								case "%":
+								  var pos=n+1;
+								  var str=myoptions.dateFormat;
+								  while(pos<str.length){
+								    if(str.charAt(pos)=="%"){
+								      break;
+								    }
+								    pos++;
+								  }
+								  if(pos>n+1 && pos != str.length){
+								    dateStr += str.substring(n+1,pos);
+								    n+=(pos-n);
+								  }
+								  else{ dateStr += chr; }
+								  break;
 								default:
 								  dateStr += chr;
 							}
@@ -481,6 +499,24 @@ if (!String.prototype.padStart) {
 							  break;
 							case "U": //Seconds since the Unix Epoch
 							  timeStr += Math.floor(mytimestamp / 1000);
+							  break;
+							case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
+							  timeStr += myoptions.timeFormat.charAt(++n);
+							  break;
+							case "%":
+							  var pos=n+1;
+							  var str=myoptions.timeFormat;
+							  while(pos<str.length){
+							    if(str.charAt(pos)=="%"){
+							      break;
+							    }
+							    pos++;
+							  }
+							  if(pos>n+1 && pos != str.length){
+							    timeStr += str.substring(n+1,pos);
+							    n+=(pos-n);
+							  }
+							  else{ timeStr += chr; }
 							  break;
 							default:
 							  timeStr += chr;

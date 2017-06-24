@@ -102,6 +102,44 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 $("div#clock").clock({"timeFormat":"h:i:s A e I"});
 ```
 
+## Literal sequences in dateFormat or timeFormat
+If you would like to output a Format Character as a literal, you can escape it with a double backslash. Double backslashing any character will ensure that it is interpreted literally, even if it's not a Format Character. 
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"timeFormat":"h:i:s \\A-\\Z"});
+```
+-> will output "03:50:07 A-Z"
+
+You may wrap any sequence of characters that you wish to be interpreted literally with the '%' character. 
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"dateFormat":"l, F jS %in the year% Y", "timeFormat":"H:i:s e I %in Swatch Time = %(@B)"});
+```
+-> will output "Saturday, June 6th in the year 2017" - "03:50:07 UTC+2 DST in Swatch Time = (@118)"
+
+If you would like to use a literal '%' character and you also are using a '%' wrap around a literal sequence, then you must escape the literal '%' with a double blackslash. The only limitation is that the desired literal '%' character cannot fall within the literal sequence wrapped in the '%' character. If there is only one '%' character in the whole string then it will be interpreted as a literal.
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"timeFormat":"H:i:s 50%(@B)"});
+```
+-> will output "03:50:07 50%(@118)" 
+
+**Example:**
+```diff
+//Please don't do this to get '50%'
+- $("div#clock").clock({"timeFormat":"H:i:s %50% of the time% (@B)"});
+//Nor this, it won't work
+- $("div#clock").clock({"timeFormat":"H:i:s %50\\% of the time% (@B)"});
+//Do this to get '03:50:07 50% of the time (@118)'
++ $("div#clock").clock({"timeFormat":"H:i:s 50\\% %of the time% (@B)"});
+//Or this to get '03:50:07 of the time 50% (@118)'
++ $("div#clock").clock({"timeFormat":"H:i:s %of the time% 50\\% (@B)"});
+
+```
+
 ## Language options
 
 Uses the native ECMA script Intl.DateTimeFormat object for the translations of the days of the week and months of the year.
@@ -109,17 +147,26 @@ Supported locales as of June 22 2017 are:
 "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
 
 The desired locale can be set using the "**langSet**" option:
+
+**Example:**
 ```JavaScript
 $("div#clock").clock({"langSet":"de"});
 ```
 
 ## Update Speed
 
-Since v2.1.9 the "**rate**" option has been added so that the rate at which the clock is updated can be set on each clock. The value is in milliseconds. The rate defaults to 500, since at 1000 the clock tends to skew slightly and winds up skipping a second here and there. Instead with an update rate of 500ms the seconds in the clock remain a little more faithful to 1 second increments making for less skewing. When using the "v" Format Character in the "**timeFormat**" option to show milliseconds, bringing the rate down to 50 or 10 or even 1 millisecond will give a near millisecond faithful clock.
+Since v2.1.9 the "**rate**" option has been added so that the rate at which the clock is updated can be set on each clock. The value is in milliseconds. The rate defaults to 500, since at 1000 the clock tends to skew slightly and winds up skipping a second here and there. Instead with an update rate of 500ms the seconds in the clock remain a little more faithful to 1 second increments making for less skewing. When using the "v" Format Character in the "**timeFormat**" option to show milliseconds, bringing the rate down to 50 or 10 or even 1 millisecond (though the page may become processor intensive in this last case) will give a near millisecond faithful clock.
+
+**Example:**
+```JavaScript
+$("div#clock").clock({"timeFormat":"h:i:s.v","rate":50});
+```
 
 ## Custom client generated timestamp
 
 You can pass in a custom javascript timestamp:
+
+**Example**
 ```JavaScript
 var customDateObj = new Date();
 var customtimestamp = customDateObj.getTime();
@@ -149,7 +196,8 @@ $time = time() + date('Z');
 <input id="servertime" type="hidden" val="<?php echo $time; ?>" />
 ```
 You can then start your clock using that timestamp. 
-***In the latest version of the jQuery Clock plugin it is no longer necessary to compensate a server generated timestamp for the missing milliseconds by multiplying the value by 1000 before passing it into the plugin; this will be taken care of by the plugin itself, actually now it's important not to do so because the plugin will detect whether to compensate for local timezone offset or not depending on whether the timestamp is server generated or client generated.***
+***Since version 2.0.9b it is no longer necessary to compensate a server generated timestamp for the missing milliseconds by multiplying the value by 1000 before passing it into the plugin. This will be taken care of by the plugin itself.***
+***Actually it's important not to do so because the plugin will detect whether to compensate for local timezone offset or not depending on whether the timestamp is server generated or client generated.***
 ```diff
 <script type="text/javascript">
 /* Please do not do this anymore! */
@@ -265,3 +313,7 @@ Implements the new Intl.DateTimeFormat object which is now fairly universally su
 ## [v2.1.9](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.9 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.1.9")
 
 Implements all PHP Style Format Characters except for "T" and "u". Adds a "**rate**" option which allows to customize the rate at which each clock is updated. Bugfix: the month number returned was incorrect in v2.1.6.
+
+## [v2.2.0](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.2.0 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.2.0")
+
+Allows for escaped literals and for literal string sequences wrapped in '%' characters inside the **dateFormat** and **timeFormat** parameters.
