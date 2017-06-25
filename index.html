@@ -77,12 +77,12 @@
           if($(this).text() == ('DESTROY CLOCK '+m)){
             $("#clock"+m).clock("destroy");
             $(this).text('RECREATE CLOCK '+m);
-            $(this).title('$("#clock'+m+'").clock('+(Object.keys(clock_options[m-1]).length === 0 ? '' : JSON.stringify(clock_options[m-1]) )+')');
+            $(this).attr("title",'$("#clock'+m+'").clock('+(Object.keys(clock_options[m-1]).length === 0 ? '' : JSON.stringify(clock_options[m-1]) )+')');
           }
           else if($(this).text() == ('RECREATE CLOCK '+m)){
             $("#clock"+m).clock(clock_options[m-1]);
             $(this).text('DESTROY CLOCK '+m);
-            $(this).title('$("#clock'+m+'").clock("destroy")');
+            $(this).attr("title",'$("#clock'+m+'").clock("destroy")');
           }
         });
        
@@ -93,12 +93,12 @@
           if($(this).text() == 'STOP CLOCK '+m){
             $("#clock"+m).clock("stop");
             $(this).text('START CLOCK '+m);
-            $(this).title('$("#clock'+m+'").clock("start")');
+            $(this).attr("title",'$("#clock'+m+'").clock("start")');
           }
           else if($(this).text() == 'START CLOCK '+m){
             $("#clock"+m).clock("start");
             $(this).text('STOP CLOCK '+m);
-            $(this).title('$("#clock'+m+'").clock("stop")');
+            $(this).attr("title",'$("#clock'+m+'").clock("stop")');
           }
         });
       
