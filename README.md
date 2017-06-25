@@ -223,7 +223,7 @@ $("div#clock").clock("destroy");
 ```JavaScript
 $("div#clock").clock("stop");
 ```
-* Includes a handler so that each clock can be (re-)started, just pass "start". This will insert the setTimeout which keeps the clock ticking. The clock will start up again without having lost time :simple_smile: !
+* Includes a handler so that each clock can be (re-)started, just pass "start". This will insert the setTimeout which keeps the clock ticking. The clock will start up again without having lost time :smiley: !
 ```JavaScript
 $("div#clock").clock("start");
 ```
