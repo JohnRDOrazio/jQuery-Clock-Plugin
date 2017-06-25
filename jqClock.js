@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.22",
+		"version": "2.3.25",
 		"options": [
 			{
 				"type":		"string",
@@ -280,15 +280,15 @@ if (!String.prototype.padStart) {
 
 			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
 			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff;
-			var mytimestamp_sysdiff = new Date(Date.UTC(mytimestamp));
-			var h=mytimestamp_sysdiff.getHours(),
-			    m=mytimestamp_sysdiff.getMinutes(),
-			    s=mytimestamp_sysdiff.getSeconds(),
-			    ms=mytimestamp_sysdiff.getMilliseconds(),
-			    dy=mytimestamp_sysdiff.getDay(),
-			    dt=mytimestamp_sysdiff.getDate(),
-			    mo=mytimestamp_sysdiff.getMonth(),
-			    y=mytimestamp_sysdiff.getFullYear(),
+			var mytimestamp_sysdiff = new Date(mytimestamp);
+			var h=mytimestamp_sysdiff.getUTCHours(),
+			    m=mytimestamp_sysdiff.getUTCMinutes(),
+			    s=mytimestamp_sysdiff.getUTCSeconds(),
+			    ms=mytimestamp_sysdiff.getUTCMilliseconds(),
+			    dy=mytimestamp_sysdiff.getUTCDay(),
+			    dt=mytimestamp_sysdiff.getUTCDate(),
+			    mo=mytimestamp_sysdiff.getUTCMonth(),
+			    y=mytimestamp_sysdiff.getUTCFullYear(),
 			    ly=mytimestamp_sysdiff.isLeapYear(),
 			    doy=mytimestamp_sysdiff.getDOY(),
 			    woy=mytimestamp_sysdiff.getWOY(),
