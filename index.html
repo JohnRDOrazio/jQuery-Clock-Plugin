@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
- <!-- version 1.1.4 of this page (so I know what I'm looking at) -->
+ <!-- version 1.1.5 of this page (so I know what I'm looking at) -->
  <title>jQuery Clock Plugin client side example</title>
   <meta charset="UTF-8">
 
@@ -19,7 +19,14 @@
       box-shadow: 1px 1px 3px Black;
     }
     table td > div { text-align: center; }
-    .clockdiv:not(.jqclock) { min-height: 120px; }
+    .clockdiv:not(.jqclock) { 
+      min-height: 120px; 
+      border: 1px groove White;
+      text-align: center;
+      font-weight: bold;
+      color: #8835F3;
+      font-size: 2em;
+    }
     /* let's add a box-shadow to the rules for .jqclock coming from jqClock.css */
     .jqclock { 
       box-shadow: 0px 0px 10px Black;
@@ -93,7 +100,7 @@
           var m = $(this).data("index");
           console.log($(this).text()+' == '+'DESTROY CLOCK '+m);
           if($(this).text() == ('DESTROY CLOCK '+m)){
-            $("#clock"+m).clock("destroy");
+            $("#clock"+m).clock("destroy").text('This div can be turned into a dynamic clock');
             $(this).text('RECREATE CLOCK '+m);
             $(this).attr("title",'$("#clock'+m+'").clock('+(Object.keys(clock_options[m-1]).length === 0 ? '' : JSON.stringify(clock_options[m-1]) )+')');
           }
