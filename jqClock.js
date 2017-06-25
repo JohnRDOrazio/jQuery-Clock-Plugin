@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.2",
+		"version": "2.3.22",
 		"options": [
 			{
 				"type":		"string",
@@ -280,7 +280,7 @@ if (!String.prototype.padStart) {
 
 			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
 			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff;
-			var mytimestamp_sysdiff = new Date.UTC(mytimestamp);
+			var mytimestamp_sysdiff = new Date(Date.UTC(mytimestamp));
 			var h=mytimestamp_sysdiff.getHours(),
 			    m=mytimestamp_sysdiff.getMinutes(),
 			    s=mytimestamp_sysdiff.getSeconds(),
