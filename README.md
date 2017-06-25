@@ -2,6 +2,7 @@ Turns a given dom element into a dynamic clock that updates every second, main a
 ```JavaScript
 $.clock.version; //will return the current version number, so you can be sure which version of the script you are using
 $.clock.options; //will return all possible options that can be passed to the jQuery clock plugin, with type description and accepted values
+$.clock.methods; //will return all possible methods that are exposed by the plugin
 ```
 
 # DEMOS
@@ -119,25 +120,23 @@ $("div#clock").clock({"dateFormat":"l, F jS %in the year% Y", "timeFormat":"H:i:
 ```
 -> will output "Saturday, June 6th in the year 2017" - "03:50:07 UTC+2 DST in Swatch Time = (@118)"
 
-If you would like to use a literal '%' character and you also are using a '%' wrap around a literal sequence, then you must escape the literal '%' with a double blackslash. The only limitation is that the desired literal '%' character cannot fall within the literal sequence wrapped in the '%' character. If there is only one '%' character in the whole string then it will be interpreted as a literal.
+If you would like to output a literal '%' character then you must escape it with a double blackslash. The only limitation is that the desired literal '%' character cannot fall within a literal sequence wrapped with the '%' character. If there is only one '%' character in the whole string then it will be interpreted as a literal.
 
 **Example:**
 ```JavaScript
+//A single '%' character in the whole string will be output as a literal
 $("div#clock").clock({"timeFormat":"H:i:s 50%(@B)"});
 ```
 -> will output "03:50:07 50%(@118)" 
 
 **Example:**
 ```diff
-//Please don't do this to get '50%'
+//Please don't do this to get '03:50:07 50% of the time (@118)'
 - $("div#clock").clock({"timeFormat":"H:i:s %50% of the time% (@B)"});
 //Nor this, it won't work
 - $("div#clock").clock({"timeFormat":"H:i:s %50\\% of the time% (@B)"});
 //Do this to get '03:50:07 50% of the time (@118)'
 + $("div#clock").clock({"timeFormat":"H:i:s 50\\% %of the time% (@B)"});
-//Or this to get '03:50:07 of the time 50% (@118)'
-+ $("div#clock").clock({"timeFormat":"H:i:s %of the time% 50\\% (@B)"});
-
 ```
 
 ## Language options
@@ -214,11 +213,41 @@ See an example of this in action here: **https://www.johnromanodorazio.com/jQuer
 
 It is also possible to use a timestamp from an NTP timeserver and start the clock with the ntp's timestamp, in order to have precise atomic time. An example of this can be found here: **https://www.johnromanodorazio.com/ntptest.php**. In the example the ntp timestamp is adjusted on the server to reflect the Europe/London timezone.
 
-## Destroy handler
+## Destroy, start and stop handlers
 
-Includes a handler so that each clock can be stopped, just pass "destroy".
+* Includes a handler so that each clock can be destroyed, just pass "destroy". This will effectively remove the html markup, data, and setTimeout which keeps the clock ticking.
 ```JavaScript
 $("div#clock").clock("destroy");
+```
+* Includes a handler so that each clock can be stopped, just pass "stop". This will remove only the setTimeout which keeps the clock ticking, not the html markup or the data, allowing the clock to start ticking again in a later moment.
+```JavaScript
+$("div#clock").clock("stop");
+```
+* Includes a handler so that each clock can be (re-)started, just pass "start". This will insert the setTimeout which keeps the clock ticking. The clock will start up again without having lost time :smiley: !
+```JavaScript
+$("div#clock").clock("start");
+```
+
+## Destroy, start and stop handlers
+
+The chainability of the plugin passes an instance of the plugin itself, such that it's public methods can be invoked by the variable that might reference the first instantiation. The plugin includes a destroy(), a start() and a stop() method that are equivalent to the handlers of the same name.
+```JavaScript
+var $clocks = $("div.clock").clock(); //turn all divs with a "clock" class into jQuery Clocks
+$clocks.stop(); //will stop all jQuery Clocks on divs with a "clock" class
+$clocks.start(); //will start all jQuery Clocks on divs with a "clock" class
+$clocks.first().stop(); //will stop the jQuery Clock on the first div with a "clock" class
+
+$("#bigben").clock().stop(); //will initialize a jQuery Clock on the div with id = "bigben" and stop it in it's tracks...
+$("#bigben").clock().start(); //will (re-)start the already initialized jQuery Clock on the div with id = "bigben"
+```
+
+## Modifying parameters on initialized jQuery Clocks
+
+All and any parameters can be modified on an already initialized clock. Any modifications will be noticeable on the next tick of the clock.
+```JavaScript
+var $clocks = $("div.clock").clock(); //turn all divs with a "clock" class into jQuery Clocks
+$clocks.first().clock({langSet:"vi"}); //change the locale of the jQuery Clock on the first div with a "clock" class and set it to Vietnamese
+$clocks.clock({timeFormat:"H:i:s.v",rate:50}); //change the timeFormat on the jQuery Clocks on all divs with a "clock" class so that they display milliseconds, and update the tick rate of the clocks to 50 milliseconds
 ```
 
 # Styling
@@ -317,3 +346,7 @@ Implements all PHP Style Format Characters except for "T" and "u". Adds a "**rat
 ## [v2.2.0](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.2.0 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.2.0")
 
 Allows for escaped literals and for literal string sequences wrapped in '%' characters inside the **dateFormat** and **timeFormat** parameters.
+
+## [v2.3.0](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.0 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.0")
+
+Returns an instance of the plugin itself along with the dom elements. Adds "start" and "stop" handlers. Adds "destroy()", "start()" and "stop()" methods which have the same effect as the handlers.
