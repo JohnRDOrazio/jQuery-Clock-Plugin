@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.0",
+		"version": "2.3.1",
 		"options": [
 			{
 				"type":		"string",
@@ -278,7 +278,8 @@ if (!String.prototype.padStart) {
 		_updateClock = function(el) {      
 			var myoptions = $(el).data("clockoptions");
 
-			var mytimestamp = new Date().getTime() + myoptions.sysdiff;
+			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
+			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff;
 			var mytimestamp_sysdiff = new Date(mytimestamp);
 			var h=mytimestamp_sysdiff.getHours(),
 			    m=mytimestamp_sysdiff.getMinutes(),
@@ -498,8 +499,13 @@ if (!String.prototype.padStart) {
 
 		this.each(function(idx){
 			if(typeof options === 'undefined' || typeof options === 'object'){
-				//this is useful only for client timestamps...
-				var sysDateObj = new Date();
+				
+				//this is useful only for client timestamps... 
+				//used immediately for the default value of options.isDST...
+				var highPrecisionTimestamp = performance.timing.navigationStart + performance.now();
+				var sysDateObj = new Date(highPrecisionTimestamp);
+				//TODO: if server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
+				//       no use using a client timestamps check for DST when a server timestamp is passed!
 
 				options = options || {};
 
@@ -543,19 +549,31 @@ if (!String.prototype.padStart) {
 					options.rate = parseInt(options.rate); //do our best to get an int value
 				}
 
-				/* Non user passable options */			
+				/*****************************|
+				|* Non user passable options *|
+				|*****************************/
 				//getTimezoneOffset gives minutes
 				options.tzOffset = sysDateObj.getTimezoneOffset();
+				
 				//divide by 60 to get hours from minutes
 				var tzOffset = options.tzOffset / 60;
-				//If we are using the current client timestamp, our difference from local system time will be calculated as zero */
+				
+				/* **********************************************
+				 * If we are using the current client timestamp, 
+				 * our difference from local system time will be calculated as zero 
+				 */
 				options.sysdiff = 0;
-				/* If instead we are using a custom timestamp, we need to calculate the difference from local system time
+				
+				/* **********************************************
+				 * If instead we are using a custom timestamp, 
+				 * we will need to calculate the difference from local system time
 				 *   >> in the case that it is a server timestamp our difference from local system time will be calculated as:
 				 *      ((server time * 1000) - local system time) + local timezoneoffset
 				 *   >> in the case that it is a client timestamp our difference from local system time will be calculated as:
 				 *      (customtimestamp - local system time)
 				 */			
+				
+				//IF A TIMESTAMP HAS BEEN PASSED IN
 				if( options.timestamp != "localsystime" ){      
 					var digitCountDiff = (sysDateObj.getTime()+'').length - (options.timestamp+'').length;
 					if(digitCountDiff > 2){
@@ -565,23 +583,32 @@ if (!String.prototype.padStart) {
 					}
 					else{
 						options.sysdiff = options.timestamp - sysDateObj.getTime();
+						/* ARE THE NEXT FEW LINES AT ALL USEFUL??? */
 						//options.timezone has most probably not been set, let's do some guesswork
 						if(options.timezone == "localsystimezone"){
 							options.timezone = 'UTC';
 							if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
 							else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
 						}
+						/* MIGHT WANT TO DOUBLE CHECK IF THE PRECEDING LOGIC IS AT ALL USEFUL... */
 					}
 				}
+				
+				//OTHERWISE IF NO TIMESTAMP HAS BEEN PASSED IN
 				else{
 					//options.timezone has most probably not been set, let's do some guesswork
 					if(options.timezone == "localsystimezone"){
 						options.timezone = 'UTC';
+						//INVERT VALUE FROM NEGATIVE TO POSITIVE
 						if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
+						//INVERT VALUE FROM POSITIVE TO NEGATIVE
 						else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
 					}
 				}
-				/* End non user passable options */
+				/*********************************|
+				|* END Non user passable options *|
+				|*********************************/
+				
 				if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
 				if ( !$(this).is("[id]") ){ $(this).attr("id", _newGuid()); }
 				$(this).data("clockoptions",options);
