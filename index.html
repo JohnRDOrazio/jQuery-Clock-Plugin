@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
- <!-- version 1.0.9 of this page (so I know what I'm looking at) -->
+ <!-- version 1.1.0 of this page (so I know what I'm looking at) -->
  <title>jQuery Clock Plugin client side example</title>
   <meta charset="UTF-8">
 
@@ -22,9 +22,10 @@
     /* let's add a box-shadow to the rules for .jqclock coming from jqClock.css */
     .jqclock { 
       box-shadow: 0px 0px 10px Black;
+      min-height: 60px;
     }
     .button-wrapper { text-align: center; }
-    .button-wrapper button {
+    .button-wrapper button:first {
       box-shadow: 2px 2px 5px black;
       color: #fff900;
       font-weight: bold;
@@ -36,9 +37,26 @@
       border: outset darkgray;
       cursor: pointer;
     }
-   .button-wrapper button:hover {
+    .button-wrapper button:last {
+      box-shadow: 2px 2px 5px black;
+      color: #ff3900;
+      font-weight: bold;
+      font-family: Arial;
+      padding: 5px 10px;
+      text-shadow: 0px 0px 6px #000000;
+      border-radius: 6px;
+      background-color: LightYellow;
+      border: outset White;
+      cursor: pointer;
+    }
+   .button-wrapper button:first:hover {
      background-color: slategray;
      color: #b7b300;
+     text-shadow: 0px 0px 8px #ff6464;
+   }
+   .button-wrapper button:last:hover {
+     background-color: Yellow;
+     color: #b70300;
      text-shadow: 0px 0px 8px #ff6464;
    }
   </style>
