@@ -19,10 +19,10 @@
       box-shadow: 1px 1px 3px Black;
     }
     table td > div { text-align: center; }
+    .clockdiv { min-height: 60px; }
     /* let's add a box-shadow to the rules for .jqclock coming from jqClock.css */
     .jqclock { 
       box-shadow: 0px 0px 10px Black;
-      min-height: 60px;
     }
     .button-wrapper { text-align: center; }
     .button-wrapper button:first-child {
@@ -138,7 +138,7 @@
         <div>
           <h2>Clock that uses default options</h2>
           <pre><code>      $("#clock1").clock();</code></pre>
-          <div id="clock1">This div will be turned into a dynamic clock</div>
+          <div id="clock1" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock1" title="$('#clock1').clock('destroy')">DESTROY CLOCK 1</button>
             <button id="stopclock1" title="$('#clock1').clock('stop')">STOP CLOCK 1</button>
@@ -149,7 +149,7 @@
         <div>
           <h2>Clock that uses Italian language for the calendar, and string literals in the time</h2>
           <pre><code>      $("#clock2").clock({"langSet":"it","timeFormat":"H %o'clock,% i %minutes,% s %seconds%"});</code></pre>
-          <div id="clock2">This div will be turned into a dynamic clock</div>
+          <div id="clock2" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock2" title="$('#clock2').clock('destroy')">DESTROY CLOCK 2</button>
             <button id="stopclock2" title="$('#clock2').clock('stop')">STOP CLOCK 2</button>
@@ -164,7 +164,7 @@
         <div>
           <h2>Clock that formats the date in a custom manner: {short day}, {short month} {date}{ordinal suffix}, {year} ({day of the week} - {day of the year} | {week of the year} | {leap year} ) </h2>
           <pre><code>      $("#clock3").clock({"dateFormat":"D, M jS, Y ( N - z | W | L )"});</code></pre>
-          <div id="clock3">This div will be turned into a dynamic clock</div>
+          <div id="clock3" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock3" title="$('#clock3').clock('destroy')">DESTROY CLOCK 3</button>
             <button id="stopclock3" title="$('#clock3').clock('stop')">STOP CLOCK 3</button>
@@ -175,7 +175,7 @@
         <div>
           <h2>Clock without calendar, using 24 hour format and displaying milliseconds, timezone, daylight savings time (if applicable) and swatch time, updating every 50 ms</h2>
           <pre><code>      $("#clock4").clock({"calendar":false,"timeFormat":"H:i:s.v e I (@B)","rate":50});</code></pre>
-          <div id="clock4">This div will be turned into a dynamic clock</div>
+          <div id="clock4" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock4" title="$('#clock4').clock('destroy')">DESTROY CLOCK 4</button>
             <button id="stopclock4" title="$('#clock4').clock('stop')">STOP CLOCK 4</button>
@@ -193,7 +193,7 @@
       customtimestamp = customtimestamp.getTime();
       customtimestamp = customtimestamp+1123200000+10800000+14000;
       $("#clock5").clock({"timestamp":customtimestamp,"langSet":"ru"});</code></pre>
-          <div id="clock5">This div will be turned into a dynamic clock</div>
+          <div id="clock5" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock5" title="$('#clock5').clock('destroy')">DESTROY CLOCK 5</button>
             <button id="stopclock5" title="$('#clock5').clock('stop')">STOP CLOCK 5</button>
