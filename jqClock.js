@@ -141,7 +141,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.1",
+		"version": "2.3.2",
 		"options": [
 			{
 				"type":		"string",
@@ -280,7 +280,7 @@ if (!String.prototype.padStart) {
 
 			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
 			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff;
-			var mytimestamp_sysdiff = new Date(mytimestamp);
+			var mytimestamp_sysdiff = new Date.UTC(mytimestamp);
 			var h=mytimestamp_sysdiff.getHours(),
 			    m=mytimestamp_sysdiff.getMinutes(),
 			    s=mytimestamp_sysdiff.getSeconds(),
@@ -575,12 +575,19 @@ if (!String.prototype.padStart) {
 				
 				//IF A TIMESTAMP HAS BEEN PASSED IN
 				if( options.timestamp != "localsystime" ){      
+					
+					//LET'S TRY TO FIGURE OUT WHETHER WE ARE DEALING WITH A JAVASCRIPT TIMESTAMP
+					//OR WITH A PHP TIMESTAMP
 					var digitCountDiff = (sysDateObj.getTime()+'').length - (options.timestamp+'').length;
+					
+					//IF THERE ARE MORE THAN TWO DIGITS DIFFERENCE FROM A JAVASCRIPT TIMESTAMP, 
+					//THEN IT'S A PHP TIMESTAMP
 					if(digitCountDiff > 2){
 						options.timestamp = options.timestamp * 1000;
 						options.sysdiff = (options.timestamp - sysDateObj.getTime()) + (options.tzOffset*60*1000);
 						//options.timezone has most probably been set in this case
 					}
+					//OTHERWISE IT'S SIMPLY A CUSTOM JAVASCRIPT TIMESTAMP
 					else{
 						options.sysdiff = options.timestamp - sysDateObj.getTime();
 						/* ARE THE NEXT FEW LINES AT ALL USEFUL??? */
