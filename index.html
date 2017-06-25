@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
- <!-- version 1.0.8 of this page (so I know what I'm looking at) -->
+ <!-- version 1.0.9 of this page (so I know what I'm looking at) -->
  <title>jQuery Clock Plugin client side example</title>
   <meta charset="UTF-8">
 
@@ -67,34 +67,38 @@
         var i = n+1;
         //initial creation of each clock
         $("#clock"+i).clock(clock_options[n]);
+        $("#destroyclock"+i).data("index",i);
+        $("#stopclock"+i).data("index",i);
        
         //set click handler for destroy buttons
         $("#destroyclock"+i).click(function(){ 
-          console.log($(this).text()+' == '+'DESTROY CLOCK '+i);
-          if($(this).text() == ('DESTROY CLOCK '+i)){
-            $("#clock"+i).clock("destroy");
-            $(this).text('RECREATE CLOCK '+i);
-            $(this).title('$("#clock'+i+'").clock('+(Object.keys(clock_options[n]).length === 0 ? '' : JSON.stringify(clock_options[n]) )+')');
+          var m = $(this).data("index");
+          console.log($(this).text()+' == '+'DESTROY CLOCK '+m);
+          if($(this).text() == ('DESTROY CLOCK '+m)){
+            $("#clock"+m).clock("destroy");
+            $(this).text('RECREATE CLOCK '+m);
+            $(this).title('$("#clock'+m+'").clock('+(Object.keys(clock_options[m-1]).length === 0 ? '' : JSON.stringify(clock_options[m-1]) )+')');
           }
-          else if($(this).text() == ('RECREATE CLOCK '+i)){
-            $("#clock"+i).clock(clock_options[n]);
-            $(this).text('DESTROY CLOCK '+i);
-            $(this).title('$("#clock'+i+'").clock("destroy")');
+          else if($(this).text() == ('RECREATE CLOCK '+m)){
+            $("#clock"+m).clock(clock_options[m-1]);
+            $(this).text('DESTROY CLOCK '+m);
+            $(this).title('$("#clock'+m+'").clock("destroy")');
           }
         });
        
         //set click handler for stop buttons
         $("#stopclock"+i).click(function(){ 
-          console.log($(this).text()+' == '+'STOP CLOCK '+i);
-          if($(this).text() == 'STOP CLOCK '+i){
-            $("#clock"+i).clock("stop");
-            $(this).text('START CLOCK '+i);
-            $(this).title('$("#clock'+i+'").clock("start")');
+          var m = $(this).data("index");
+          console.log($(this).text()+' == '+'STOP CLOCK '+m);
+          if($(this).text() == 'STOP CLOCK '+m){
+            $("#clock"+m).clock("stop");
+            $(this).text('START CLOCK '+m);
+            $(this).title('$("#clock'+m+'").clock("start")');
           }
-          else if($(this).text() == 'START CLOCK '+i){
-            $("#clock"+i).clock("start");
-            $(this).text('STOP CLOCK '+i);
-            $(this).title('$("#clock'+i+'").clock("stop")');
+          else if($(this).text() == 'START CLOCK '+m){
+            $("#clock"+m).clock("start");
+            $(this).text('STOP CLOCK '+m);
+            $(this).title('$("#clock'+m+'").clock("stop")');
           }
         });
       
