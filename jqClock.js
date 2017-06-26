@@ -109,22 +109,26 @@ if(!Date.prototype.hasOwnProperty("swatchTime")){
 // https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
 if (!String.prototype.padStart) {
-    String.prototype.padStart = function padStart(targetLength,padString) {
-        targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-        padString = String(padString || ' ');
-        if (this.length > targetLength) {
-            return String(this);
-        }
-        else {
-            targetLength = targetLength-this.length;
-            if (targetLength > padString.length) {
-                padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
-            }
-            return padString.slice(0,targetLength) + String(this);
-        }
-    };
+	String.prototype.padStart = function padStart(targetLength,padString) {
+		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+		padString = String(padString || ' ');
+		if (this.length > targetLength) {
+			return String(this);
+		}
+		else {
+			targetLength = targetLength-this.length;
+			if (targetLength > padString.length) {
+				padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+			}
+			return padString.slice(0,targetLength) + String(this);
+		}
+	};
 }
 //END STRING.PROTOTYPE.PADSTART
+
+if (!Number.prototype.map) {
+	Number.prototype.map=function(a,b,c,d){return c+(d-c)*((this-a)/(b-a));};
+}
 
 /* Might be able to use performance.now: 
  * https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
@@ -141,7 +145,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.25",
+		"version": "2.3.26",
 		"options": [
 			{
 				"type":		"string",
@@ -594,8 +598,14 @@ if (!String.prototype.padStart) {
 						//options.timezone has most probably not been set, let's do some guesswork
 						if(options.timezone == "localsystimezone"){
 							options.timezone = 'UTC';
-							if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
-							else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
+							var rmn = tzOffset % 1;
+							tzOffset = tzOffset - rmn;
+							var suffix = '';
+							if(Math.abs(rmn) !== 0){
+								suffix = ''+Math.abs(rmn).map(0,1,0,60);
+							}
+							if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset))+(suffix!==''?':'+suffix:''); }
+							else if(tzOffset > 0){ options.timezone += (tzOffset * -1)+(suffix!==''?':'+suffix:''); }
 						}
 						/* MIGHT WANT TO DOUBLE CHECK IF THE PRECEDING LOGIC IS AT ALL USEFUL... */
 					}
@@ -606,10 +616,14 @@ if (!String.prototype.padStart) {
 					//options.timezone has most probably not been set, let's do some guesswork
 					if(options.timezone == "localsystimezone"){
 						options.timezone = 'UTC';
-						//INVERT VALUE FROM NEGATIVE TO POSITIVE
-						if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
-						//INVERT VALUE FROM POSITIVE TO NEGATIVE
-						else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
+						var rmn1 = tzOffset % 1;
+						tzOffset = tzOffset - rmn1;
+						var suffix1 = '';
+						if(Math.abs(rmn1) !== 0){
+							suffix1 = ''+Math.abs(rmn1).map(0,1,0,60);
+						}
+						if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset))+(suffix1!==''?':'+suffix1:''); }
+						else if(tzOffset > 0){ options.timezone += (tzOffset * -1)+(suffix1!==''?':'+suffix1:''); }
 					}
 				}
 				/*********************************|
