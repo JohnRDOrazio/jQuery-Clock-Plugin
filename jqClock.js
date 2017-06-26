@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.26",
+		"version": "2.3.27",
 		"options": [
 			{
 				"type":		"string",
@@ -285,6 +285,9 @@ if (!Number.prototype.map) {
 			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
 			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff;
 			var mytimestamp_sysdiff = new Date(mytimestamp);
+			var rmn = myoptions.tzOffset % 60;
+			var hrs = ((myoptions.tzOffset - rmn) / 60) * -1;
+			var mns = rmn * -1;
 			var h=mytimestamp_sysdiff.getUTCHours(),
 			    m=mytimestamp_sysdiff.getUTCMinutes(),
 			    s=mytimestamp_sysdiff.getUTCSeconds(),
@@ -304,6 +307,14 @@ if (!Number.prototype.map) {
 			    ap="AM",
 			    calendElem="",
 			    clockElem="";
+			if(m+mns > 60){
+				h = h+hrs+1;
+				m = (m+mns-60);
+			}
+			else{
+				h = h+hrs;
+				m = m+mns;
+			}
 			if (h > 11) { ap = "PM"; }
 			var H12 = h;
 			if (H12 > 12) { H12 = H12 - 12; }
