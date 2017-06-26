@@ -109,22 +109,26 @@ if(!Date.prototype.hasOwnProperty("swatchTime")){
 // https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
 if (!String.prototype.padStart) {
-    String.prototype.padStart = function padStart(targetLength,padString) {
-        targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-        padString = String(padString || ' ');
-        if (this.length > targetLength) {
-            return String(this);
-        }
-        else {
-            targetLength = targetLength-this.length;
-            if (targetLength > padString.length) {
-                padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
-            }
-            return padString.slice(0,targetLength) + String(this);
-        }
-    };
+	String.prototype.padStart = function padStart(targetLength,padString) {
+		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+		padString = String(padString || ' ');
+		if (this.length > targetLength) {
+			return String(this);
+		}
+		else {
+			targetLength = targetLength-this.length;
+			if (targetLength > padString.length) {
+				padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+			}
+			return padString.slice(0,targetLength) + String(this);
+		}
+	};
 }
 //END STRING.PROTOTYPE.PADSTART
+
+if (!Number.prototype.map) {
+	Number.prototype.map=function(a,b,c,d){return c+(d-c)*((this-a)/(b-a));};
+}
 
 /* Might be able to use performance.now: 
  * https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
@@ -141,7 +145,7 @@ if (!String.prototype.padStart) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.0",
+		"version": "2.3.4",
 		"options": [
 			{
 				"type":		"string",
@@ -278,12 +282,21 @@ if (!String.prototype.padStart) {
 		_updateClock = function(el) {      
 			var myoptions = $(el).data("clockoptions");
 
-			var mytimestamp = new Date().getTime() + myoptions.sysdiff;
+			//since system time and timezones affect the Date object, let's make sure it's not going to affect our clock:
+			var currentTzOffset = new Date().getTimezoneOffset();
+			var correction = (currentTzOffset === myoptions.tzOffset) ? 0 : (currentTzOffset - myoptions.tzOffset)*60*1000;
+			
+			var pfnow = performance.now();
+			//get our new timestamp with all the timezone offsets and corrections !!!
+			//corrected and re-corrected !!!
+			var mytimestamp = performance.timing.navigationStart + pfnow + myoptions.sysdiff + correction;
+			
 			var mytimestamp_sysdiff = new Date(mytimestamp);
 			var h=mytimestamp_sysdiff.getHours(),
 			    m=mytimestamp_sysdiff.getMinutes(),
 			    s=mytimestamp_sysdiff.getSeconds(),
 			    ms=mytimestamp_sysdiff.getMilliseconds(),
+			    us=(''+(pfnow % 1)).substring(2,5),
 			    dy=mytimestamp_sysdiff.getDay(),
 			    dt=mytimestamp_sysdiff.getDate(),
 			    mo=mytimestamp_sysdiff.getMonth(),
@@ -429,9 +442,9 @@ if (!String.prototype.padStart) {
 					case "s": //Seconds, with leading zeros
 					  timeStr += (''+s).padStart(2,"0");
 					  break;
-					/*case "u": //Microseconds
-					  timeStr += microseconds...
-					  break; */
+					case "u": //Microseconds
+					  timeStr += (''+ms).padStart(3,"0") + us;
+					  break;
 					case "v": //Milliseconds
 					  timeStr += (''+ms).padStart(3,"0");
 					  break;
@@ -498,8 +511,13 @@ if (!String.prototype.padStart) {
 
 		this.each(function(idx){
 			if(typeof options === 'undefined' || typeof options === 'object'){
-				//this is useful only for client timestamps...
-				var sysDateObj = new Date();
+				
+				//this is useful only for client timestamps... 
+				//used immediately for the default value of options.isDST...
+				var highPrecisionTimestamp = performance.timing.navigationStart + performance.now();
+				var sysDateObj = new Date(highPrecisionTimestamp);
+				//TODO: if server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
+				//       no use using a client timestamps check for DST when a server timestamp is passed!
 
 				options = options || {};
 
@@ -543,45 +561,83 @@ if (!String.prototype.padStart) {
 					options.rate = parseInt(options.rate); //do our best to get an int value
 				}
 
-				/* Non user passable options */			
+				/*****************************|
+				|* Non user passable options *|
+				|*****************************/
 				//getTimezoneOffset gives minutes
 				options.tzOffset = sysDateObj.getTimezoneOffset();
+				
 				//divide by 60 to get hours from minutes
 				var tzOffset = options.tzOffset / 60;
-				//If we are using the current client timestamp, our difference from local system time will be calculated as zero */
+				
+				/* **********************************************
+				 * If we are using the current client timestamp, 
+				 * our difference from local system time will be calculated as zero 
+				 */
 				options.sysdiff = 0;
-				/* If instead we are using a custom timestamp, we need to calculate the difference from local system time
+				
+				/* **********************************************
+				 * If instead we are using a custom timestamp, 
+				 * we will need to calculate the difference from local system time
 				 *   >> in the case that it is a server timestamp our difference from local system time will be calculated as:
 				 *      ((server time * 1000) - local system time) + local timezoneoffset
 				 *   >> in the case that it is a client timestamp our difference from local system time will be calculated as:
 				 *      (customtimestamp - local system time)
 				 */			
+				
+				//IF A TIMESTAMP HAS BEEN PASSED IN
 				if( options.timestamp != "localsystime" ){      
+					
+					//LET'S TRY TO FIGURE OUT WHETHER WE ARE DEALING WITH A JAVASCRIPT TIMESTAMP
+					//OR WITH A PHP TIMESTAMP
 					var digitCountDiff = (sysDateObj.getTime()+'').length - (options.timestamp+'').length;
+					
+					//IF THERE ARE MORE THAN TWO DIGITS DIFFERENCE FROM A JAVASCRIPT TIMESTAMP, 
+					//THEN IT'S A PHP TIMESTAMP
 					if(digitCountDiff > 2){
 						options.timestamp = options.timestamp * 1000;
 						options.sysdiff = (options.timestamp - sysDateObj.getTime()) + (options.tzOffset*60*1000);
 						//options.timezone has most probably been set in this case
 					}
+					//OTHERWISE IT'S SIMPLY A CUSTOM JAVASCRIPT TIMESTAMP
 					else{
 						options.sysdiff = options.timestamp - sysDateObj.getTime();
+						/* ARE THE NEXT FEW LINES AT ALL USEFUL??? */
 						//options.timezone has most probably not been set, let's do some guesswork
 						if(options.timezone == "localsystimezone"){
 							options.timezone = 'UTC';
-							if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
-							else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
+							var rmn = tzOffset % 1;
+							tzOffset = tzOffset - rmn;
+							var suffix = '';
+							if(Math.abs(rmn) !== 0){
+								suffix = ''+Math.abs(rmn).map(0,1,0,60);
+							}
+							if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset))+(suffix!==''?':'+suffix:''); }
+							else if(tzOffset > 0){ options.timezone += (tzOffset * -1)+(suffix!==''?':'+suffix:''); }
 						}
+						/* MIGHT WANT TO DOUBLE CHECK IF THE PRECEDING LOGIC IS AT ALL USEFUL... */
 					}
 				}
+				
+				//OTHERWISE IF NO TIMESTAMP HAS BEEN PASSED IN
 				else{
 					//options.timezone has most probably not been set, let's do some guesswork
 					if(options.timezone == "localsystimezone"){
 						options.timezone = 'UTC';
-						if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset)); }
-						else if(tzOffset > 0){ options.timezone += (tzOffset * -1); }
+						var rmn1 = tzOffset % 1;
+						tzOffset = tzOffset - rmn1;
+						var suffix1 = '';
+						if(Math.abs(rmn1) !== 0){
+							suffix1 = ''+Math.abs(rmn1).map(0,1,0,60);
+						}
+						if(tzOffset < 0){ options.timezone += ('+' + Math.abs(tzOffset))+(suffix1!==''?':'+suffix1:''); }
+						else if(tzOffset > 0){ options.timezone += (tzOffset * -1)+(suffix1!==''?':'+suffix1:''); }
 					}
 				}
-				/* End non user passable options */
+				/*********************************|
+				|* END Non user passable options *|
+				|*********************************/
+				
 				if ( !$(this).hasClass("jqclock")){ $(this).addClass("jqclock"); }
 				if ( !$(this).is("[id]") ){ $(this).attr("id", _newGuid()); }
 				$(this).data("clockoptions",options);
