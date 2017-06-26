@@ -351,3 +351,8 @@ Allows for escaped literals and for literal string sequences wrapped in '%' char
 ## [v2.3.0](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.0 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.0")
 
 Returns an instance of the plugin itself along with the dom elements. Adds "start" and "stop" handlers. Adds "destroy()", "start()" and "stop()" methods which have the same effect as the handlers.
+
+## [v2.3.4](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.4 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.4")
+
+* Becomes relatively independent from the system clock, using Performance.navigation.start + Performance.now() as the fixed reference rather than using System time as the fixed reference. Also corrects for any timezone deviations on the system clock in order to maintain the timezone set on the clock when it was instantiated. So go ahead and play with your system clock and calendar all you want now, it won't affect this jQuery Clock!
+* Implements PHP style "u" Format Character for microseconds, which we can now do since we are using Performance.now() which has a 5 microsecond resolution! Not sure if anyone would ever use it or if it can be in any way useful, but hey we do it because we can :wink:
