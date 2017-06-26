@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.35",
+		"version": "2.3.4",
 		"options": [
 			{
 				"type":		"string",
@@ -284,23 +284,19 @@ if (!Number.prototype.map) {
 
 			//since system time and timezones affect the Date object, let's make sure it's not going to affect our clock:
 			var currentTzOffset = new Date().getTimezoneOffset();
-			var correction = 0;
-			if(currentTzOffset != myoptions.tzOffset){
-				correction = (currentTzOffset*60*1000) - (myoptions.tzOffset*60*1000);
-			}
-			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
-			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff + correction;
+			var correction = (currentTzOffset === myoptions.tzOffset) ? 0 : (currentTzOffset - myoptions.tzOffset)*60*1000;
+			
+			var pfnow = performance.now();
+			//get our new timestamp with all the timezone offsets and corrections !!!
+			//corrected and re-corrected !!!
+			var mytimestamp = performance.timing.navigationStart + pfnow + myoptions.sysdiff + correction;
 			
 			var mytimestamp_sysdiff = new Date(mytimestamp);
-			/*
-			var rmn = myoptions.tzOffset % 60;
-			var hrs = ((myoptions.tzOffset - rmn) / 60) * -1;
-			var mns = rmn * -1;
-			*/
 			var h=mytimestamp_sysdiff.getHours(),
 			    m=mytimestamp_sysdiff.getMinutes(),
 			    s=mytimestamp_sysdiff.getSeconds(),
 			    ms=mytimestamp_sysdiff.getMilliseconds(),
+			    us=(''+(pfnow % 1)).substring(2,5),
 			    dy=mytimestamp_sysdiff.getDay(),
 			    dt=mytimestamp_sysdiff.getDate(),
 			    mo=mytimestamp_sysdiff.getMonth(),
@@ -316,28 +312,6 @@ if (!Number.prototype.map) {
 			    ap="AM",
 			    calendElem="",
 			    clockElem="";
-			/*
-			//we had to get UTC values from the Date object to avoid system changes affecting the clock
-			//but now we have to correct the values with the original timezoneoffset
-			if(m+mns > 60){
-				h = h+hrs+1;
-				m = (m+mns-60);
-			}
-			else{
-				h = h+hrs;
-				m = m+mns;
-			}
-			if(h > 23){
-				h -= 12;
-				dt++;
-				dy++;
-			}
-			else if(h < 0){
-				h += 12;
-				dt--;
-				dt--;
-			}
-			*/
 			if (h > 11) { ap = "PM"; }
 			var H12 = h;
 			if (H12 > 12) { H12 = H12 - 12; }
@@ -468,9 +442,9 @@ if (!Number.prototype.map) {
 					case "s": //Seconds, with leading zeros
 					  timeStr += (''+s).padStart(2,"0");
 					  break;
-					/*case "u": //Microseconds
-					  timeStr += microseconds...
-					  break; */
+					case "u": //Microseconds
+					  timeStr += us;
+					  break;
 					case "v": //Milliseconds
 					  timeStr += (''+ms).padStart(3,"0");
 					  break;
