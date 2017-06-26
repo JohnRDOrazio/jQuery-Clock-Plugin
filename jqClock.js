@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.31",
+		"version": "2.3.32",
 		"options": [
 			{
 				"type":		"string",
@@ -282,20 +282,29 @@ if (!Number.prototype.map) {
 		_updateClock = function(el) {      
 			var myoptions = $(el).data("clockoptions");
 
+			//since system time and timezones affect the Date object, let's make sure it's not going to affect our clock:
+			var currentTzOffset = new Date().getTimezoneOffset();
+			var correction = 0;
+			if(currentTzOffset != myoptions.tzOffset){
+				correction = (myoptions.tzOffset + currentTzOffset)*60*1000;
+			}
 			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
-			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff;
+			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff + correction;
+			
 			var mytimestamp_sysdiff = new Date(mytimestamp);
+			/*
 			var rmn = myoptions.tzOffset % 60;
 			var hrs = ((myoptions.tzOffset - rmn) / 60) * -1;
 			var mns = rmn * -1;
-			var h=mytimestamp_sysdiff.getUTCHours(),
-			    m=mytimestamp_sysdiff.getUTCMinutes(),
-			    s=mytimestamp_sysdiff.getUTCSeconds(),
-			    ms=mytimestamp_sysdiff.getUTCMilliseconds(),
-			    dy=mytimestamp_sysdiff.getUTCDay(),
-			    dt=mytimestamp_sysdiff.getUTCDate(),
-			    mo=mytimestamp_sysdiff.getUTCMonth(),
-			    y=mytimestamp_sysdiff.getUTCFullYear(),
+			*/
+			var h=mytimestamp_sysdiff.getHours(),
+			    m=mytimestamp_sysdiff.getMinutes(),
+			    s=mytimestamp_sysdiff.getSeconds(),
+			    ms=mytimestamp_sysdiff.getMilliseconds(),
+			    dy=mytimestamp_sysdiff.getDay(),
+			    dt=mytimestamp_sysdiff.getDate(),
+			    mo=mytimestamp_sysdiff.getMonth(),
+			    y=mytimestamp_sysdiff.getFullYear(),
 			    ly=mytimestamp_sysdiff.isLeapYear(),
 			    doy=mytimestamp_sysdiff.getDOY(),
 			    woy=mytimestamp_sysdiff.getWOY(),
@@ -307,6 +316,9 @@ if (!Number.prototype.map) {
 			    ap="AM",
 			    calendElem="",
 			    clockElem="";
+			/*
+			//we had to get UTC values from the Date object to avoid system changes affecting the clock
+			//but now we have to correct the values with the original timezoneoffset
 			if(m+mns > 60){
 				h = h+hrs+1;
 				m = (m+mns-60);
@@ -325,6 +337,7 @@ if (!Number.prototype.map) {
 				dt--;
 				dt--;
 			}
+			*/
 			if (h > 11) { ap = "PM"; }
 			var H12 = h;
 			if (H12 > 12) { H12 = H12 - 12; }
@@ -342,13 +355,13 @@ if (!Number.prototype.map) {
 						  dateStr += (''+dt).padStart(2,"0");
 						  break;
 						case "D": //A textual representation of a day, three letters 
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff);
 						  break;
 						case "j": //Day of the month without leading zeros
 						  dateStr += dt;
 						  break;
 						case "l": //A full textual representation of the day of the week
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
 						  break;
 						case "N": // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
 						  dateStr += (dy===0?7:dy);
@@ -370,13 +383,13 @@ if (!Number.prototype.map) {
 
 						//MONTH
 						case "F": //A full textual representation of a month, such as January or March
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long'}).format(mytimestamp_sysdiff);
 						  break;
 						case "m": //Numeric representation of a month, with leading zeros
 						  dateStr += ((mo+1)+'').padStart(2,"0");
 						  break;
 						case "M": //A short textual representation of a month, three letters
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff);
 						  break;
 						case "n": //Numeric representation of a month, without leading zeros
 						  dateStr += (mo+1);
