@@ -316,7 +316,14 @@ if (!Number.prototype.map) {
 				m = m+mns;
 			}
 			if(h > 23){
-				h = h-12;
+				h -= 12;
+				dt++;
+				dy++;
+			}
+			else if(h < 0){
+				h += 12;
+				dt--;
+				dt--;
 			}
 			if (h > 11) { ap = "PM"; }
 			var H12 = h;
