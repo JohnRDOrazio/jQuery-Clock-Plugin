@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.33",
+		"version": "2.3.34",
 		"options": [
 			{
 				"type":		"string",
