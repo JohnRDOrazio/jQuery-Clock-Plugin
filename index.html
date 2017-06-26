@@ -74,10 +74,15 @@
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script type="text/javascript" src="jqClock.min.js"></script>
   <script type="text/javascript">
-   
+    var SECOND = 1000;
+    var MINUTE = 60 * SECOND;
+    var HOUR   = 60 * MINUTE;
+    var DAY    = 24 * HOUR;
+    var WEEK   = 7 * DAY;
+    
     var customtimestamp = new Date();
     customtimestamp = customtimestamp.getTime();
-    customtimestamp = customtimestamp+1123200000+10800000+14000;
+    customtimestamp = customtimestamp+(2*WEEK)+(2*HOUR)+(10*MINUTE)+(10*SECOND);
 
     var clock_options = [
      {}, //clock1
@@ -199,7 +204,7 @@
     <tr>
       <td>
         <div>
-          <h2>Clock with custom timestamp (13 days, 3 hours and 14 seconds ahead) and Russian language</h2>
+          <h2>Clock with custom timestamp (2 weeks, 2 hours, 10 minutes and 10 seconds ahead) and Russian language</h2>
           <pre><code>      var customtimestamp = new Date();
       customtimestamp = customtimestamp.getTime();
       customtimestamp = customtimestamp+1123200000+10800000+14000;
