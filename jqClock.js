@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.27",
+		"version": "2.3.29",
 		"options": [
 			{
 				"type":		"string",
@@ -314,6 +314,10 @@ if (!Number.prototype.map) {
 			else{
 				h = h+hrs;
 				m = m+mns;
+			}
+			if(h > 23){
+				h = h-12;
+				dy--; //for some reason getUTCDay is not staying put...
 			}
 			if (h > 11) { ap = "PM"; }
 			var H12 = h;
