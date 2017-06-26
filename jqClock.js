@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.29",
+		"version": "2.3.30",
 		"options": [
 			{
 				"type":		"string",
@@ -317,7 +317,6 @@ if (!Number.prototype.map) {
 			}
 			if(h > 23){
 				h = h-12;
-				dy--; //for some reason getUTCDay is not staying put...
 			}
 			if (h > 11) { ap = "PM"; }
 			var H12 = h;
@@ -336,13 +335,13 @@ if (!Number.prototype.map) {
 						  dateStr += (''+dt).padStart(2,"0");
 						  break;
 						case "D": //A textual representation of a day, three letters 
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'short', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
 						  break;
 						case "j": //Day of the month without leading zeros
 						  dateStr += dt;
 						  break;
 						case "l": //A full textual representation of the day of the week
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {weekday: 'long', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
 						  break;
 						case "N": // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
 						  dateStr += (dy===0?7:dy);
@@ -364,13 +363,13 @@ if (!Number.prototype.map) {
 
 						//MONTH
 						case "F": //A full textual representation of a month, such as January or March
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'long', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
 						  break;
 						case "m": //Numeric representation of a month, with leading zeros
 						  dateStr += ((mo+1)+'').padStart(2,"0");
 						  break;
 						case "M": //A short textual representation of a month, three letters
-						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short'}).format(mytimestamp_sysdiff);
+						  dateStr += new Intl.DateTimeFormat(myoptions.langSet, {month: 'short', timeZone: 'UTC'}).format(mytimestamp_sysdiff);
 						  break;
 						case "n": //Numeric representation of a month, without leading zeros
 						  dateStr += (mo+1);
