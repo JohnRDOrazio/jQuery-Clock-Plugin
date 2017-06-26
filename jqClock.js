@@ -289,7 +289,7 @@ if (!Number.prototype.map) {
 				correction = (currentTzOffset*60*1000);
 			}
 			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
-			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff + correction;
+			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff - correction;
 			
 			var mytimestamp_sysdiff = new Date(mytimestamp);
 			/*
