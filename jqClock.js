@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
 (function($, undefined) {
 
 	$.clock = {
-		"version": "2.3.34",
+		"version": "2.3.35",
 		"options": [
 			{
 				"type":		"string",
@@ -286,10 +286,10 @@ if (!Number.prototype.map) {
 			var currentTzOffset = new Date().getTimezoneOffset();
 			var correction = 0;
 			if(currentTzOffset != myoptions.tzOffset){
-				correction = (currentTzOffset*60*1000);
+				correction = (currentTzOffset*60*1000) - (myoptions.tzOffset*60*1000);
 			}
 			//var mytimestamp = new Date().getTime() + myoptions.sysdiff;
-			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff - correction;
+			var mytimestamp = performance.timing.navigationStart + performance.now() + myoptions.sysdiff + correction;
 			
 			var mytimestamp_sysdiff = new Date(mytimestamp);
 			/*
