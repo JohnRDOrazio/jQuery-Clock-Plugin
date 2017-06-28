@@ -1,4 +1,5 @@
-Turns a given dom element into a dynamic clock that updates every second, main advantage compared to other similar plugins is that this one can also take an initial timestamp instead of client system time. Can be easily styled with three simple css rules.
+Turns a given dom element into a jQuery Clock that can take an initial timestamp (even server generated, or NTP generated) instead of client system time, supports internationalization (48 locales) and PHP Style Format Characters, and is relatively independent from system clock. Supports microsecond time. Can be easily styled with three simple css rules.
+Version, options and methods supported can be obtained dynamically through the following three properties of the **$.clock** object:
 ```JavaScript
 $.clock.version; //will return the current version number, so you can be sure which version of the script you are using
 $.clock.options; //will return all possible options that can be passed to the jQuery clock plugin, with type description and accepted values
