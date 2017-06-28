@@ -230,7 +230,7 @@ $("div#clock").clock("stop");
 $("div#clock").clock("start");
 ```
 
-## Destroy, start and stop handlers
+## Destroy, start and stop methods
 
 The chainability of the plugin passes an instance of the plugin itself, such that it's public methods can be invoked by the variable that might reference the first instantiation. The plugin includes a destroy(), a start() and a stop() method that are equivalent to the handlers of the same name.
 ```JavaScript
