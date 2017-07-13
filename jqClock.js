@@ -126,9 +126,12 @@ if (!String.prototype.padStart) {
 }
 //END STRING.PROTOTYPE.PADSTART
 
+//Let's implement a Number.map function
+//source:https://stackoverflow.com/questions/10756313/javascript-jquery-map-a-range-of-numbers-to-another-range-of-numbers#comment40722057_23202637
 if (!Number.prototype.map) {
 	Number.prototype.map=function(a,b,c,d){return c+(d-c)*((this-a)/(b-a));};
 }
+//END NUMBER.PROTOTYPE.MAP
 
 /* Might be able to use performance.now: 
  * https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
