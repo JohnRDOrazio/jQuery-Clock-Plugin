@@ -443,7 +443,7 @@ if (!Number.prototype.map) {
 					  timeStr += (''+s).padStart(2,"0");
 					  break;
 					case "u": //Microseconds
-					  timeStr += (''+ms).padStart(3,"0") + us;
+					  timeStr += (''+ms).padStart(3,"0") + (''+us).padStart(3,"0");
 					  break;
 					case "v": //Milliseconds
 					  timeStr += (''+ms).padStart(3,"0");
