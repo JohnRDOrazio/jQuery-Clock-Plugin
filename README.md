@@ -143,9 +143,8 @@ $("div#clock").clock({"timeFormat":"H:i:s 50%(@B)"});
 
 ## Language options
 
-Uses the native ECMA script Intl.DateTimeFormat object for the translations of the days of the week and months of the year.
-Supported locales as of June 22 2017 are:
-"am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
+Uses the native ECMA script [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat") object for the translations of the days of the week and months of the year.
+Supported locales with the date they were added to the [specification](https://tc39.es/ecma402/#sec-intl-locale-constructor "https://tc39.es/ecma402/#sec-intl-locale-constructor") (based on the [Unicode BCP 47 specification](https://www.iana.org/assignments/language-subtag-registry "https://www.iana.org/assignments/language-subtag-registry")).
 
 The desired locale can be set using the "**langSet**" option:
 
