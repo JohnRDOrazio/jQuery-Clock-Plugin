@@ -145,7 +145,7 @@ if (!Number.prototype.map) {
  */
 
 //BEGIN JQUERY CLOCK PLUGIN
-(function($, undefined) {
+(function($) {
 
 	$.clock = {
 		"version": "2.3.5",
