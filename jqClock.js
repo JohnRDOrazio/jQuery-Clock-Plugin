@@ -232,7 +232,7 @@ if (!Number.prototype.map) {
 		}
 		
 		this.destroy = function(){
-			return _this.each(function(idx){
+			return _this.each(() => {
 				var el_id = $(this).attr("id");
 				if(_jqClock.hasOwnProperty(el_id)){ 
 					clearTimeout(_jqClock[el_id]); 
@@ -245,7 +245,7 @@ if (!Number.prototype.map) {
 		}
 
 		this.stop = function(){
-			return _this.each(function(idx){
+			return _this.each(() => {
 				var el_id = $(this).attr("id");
 				if(_jqClock.hasOwnProperty(el_id)){ 
 					clearTimeout(_jqClock[el_id]); 
@@ -255,7 +255,7 @@ if (!Number.prototype.map) {
 		}
 
 		this.start = function(){
-			return _this.each(function(idx){
+			return _this.each(() => {
 				var el_id = $(this).attr("id");
 				var current_options = $(this).data("clockoptions");
 				if(current_options !== undefined && _jqClock.hasOwnProperty(el_id) === false){ 
@@ -512,7 +512,7 @@ if (!Number.prototype.map) {
 
 		};
 
-		this.each(function(idx){
+		this.each(() => {
 			if(typeof options === 'undefined' || typeof options === 'object'){
 				
 				//this is useful only for client timestamps... 
