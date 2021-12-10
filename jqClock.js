@@ -576,23 +576,9 @@ if (!Number.prototype.map) {
                             case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
                                 dateStr += myoptions.dateFormat.charAt(++n);
                                 break;
-                            case "%": {
-                                let pos = n + 1;
-                                let str = myoptions.dateFormat;
-                                while (pos < str.length) {
-                                    if (str.charAt(pos) == "%") {
-                                        break;
-                                    }
-                                    pos++;
-                                }
-                                if (pos > n + 1 && pos != str.length) {
-                                    dateStr += str.substring(n + 1, pos);
-                                    n += pos - n;
-                                } else {
-                                    dateStr += chr;
-                                }
+                            case "%":
+                                dateStr = processLiterals( myoptions, n, true, dateStr );
                                 break;
-                            }
                             default:
                                 dateStr += chr;
                         }
@@ -734,23 +720,9 @@ if (!Number.prototype.map) {
                         case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
                             timeStr += myoptions.timeFormat.charAt(++nn);
                             break;
-                        case "%": {
-                            let poss = nn + 1;
-                            let strr = myoptions.timeFormat;
-                            while (poss < strr.length) {
-                                if (strr.charAt(poss) == "%") {
-                                    break;
-                                }
-                                poss++;
-                            }
-                            if (poss > nn + 1 && poss != strr.length) {
-                                timeStr += strr.substring(nn + 1, poss);
-                                nn += poss - nn;
-                            } else {
-                                timeStr += chrr;
-                            }
+                        case "%":
+                            timeStr = processLiterals( myoptions, nn, false, timeStr );
                             break;
-                        }
                         default:
                             timeStr += chrr;
                     }
@@ -789,6 +761,23 @@ if (!Number.prototype.map) {
                     options.rate = parseInt(options.rate); //do our best to get an int value
                 }
                 return options;
+            },
+            processLiterals = ( myoptions, n, forDateStr, currStr ) => {
+                let pos = n + 1;
+                let str = forDateStr ? myoptions.dateFormat : myoptions.timeFormat;
+                while (pos < str.length) {
+                    if (str.charAt(pos) == "%") {
+                        break;
+                    }
+                    pos++;
+                }
+                if (pos > n + 1 && pos != str.length) {
+                    currStr += str.substring(n + 1, pos);
+                    n += pos - n;
+                } else {
+                    currStr += chr;
+                }
+                return currStr;
             };
 
         this.each(() => {
