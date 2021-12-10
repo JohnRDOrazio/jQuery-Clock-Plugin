@@ -178,7 +178,7 @@ if (!Number.prototype.map) {
 //BEGIN JQUERY CLOCK PLUGIN
 (function ($) {
     $.clock = {
-        version: "2.3.5",
+        version: "2.3.6",
         options: [
             {
                 type: "string",
@@ -576,7 +576,7 @@ if (!Number.prototype.map) {
                             case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
                                 dateStr += myoptions.dateFormat.charAt(++n);
                                 break;
-                            case "%":
+                            case "%": {
                                 let pos = n + 1;
                                 let str = myoptions.dateFormat;
                                 while (pos < str.length) {
@@ -592,6 +592,7 @@ if (!Number.prototype.map) {
                                     dateStr += chr;
                                 }
                                 break;
+                            }
                             default:
                                 dateStr += chr;
                         }
@@ -733,7 +734,7 @@ if (!Number.prototype.map) {
                         case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
                             timeStr += myoptions.timeFormat.charAt(++nn);
                             break;
-                        case "%":
+                        case "%": {
                             let poss = nn + 1;
                             let strr = myoptions.timeFormat;
                             while (poss < strr.length) {
@@ -749,6 +750,7 @@ if (!Number.prototype.map) {
                                 timeStr += chrr;
                             }
                             break;
+                        }
                         default:
                             timeStr += chrr;
                     }
