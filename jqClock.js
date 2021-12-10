@@ -401,6 +401,72 @@ if (!Number.prototype.map) {
             });
         };
 
+        const dateFormatCharacters = {
+            //DAY
+            //Day of the Month, 2 digits with leading zeros
+            "d": ( clk, myoptions ) => ("" + clk.dt).padStart(2, "0"),
+            //A textual representation of a day, three letters
+            "D": ( clk, myoptions ) => new Intl.DateTimeFormat(
+                myoptions.langSet,
+                {
+                    weekday: "short",
+                }
+            ).format(clk.mytimestamp_sysdiff),
+            //Day of the month without leading zeros
+            "j": ( clk, myoptions ) => clk.dt,
+            //A full textual representation of the day of the week
+            "l": ( clk, myoptions ) => new Intl.DateTimeFormat(
+                myoptions.langSet,
+                {
+                    weekday: "long",
+                }
+            ).format(clk.mytimestamp_sysdiff),
+            // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
+            "N": ( clk, myoptions ) => clk.dy === 0 ? 7 : clk.dy,
+            //English ordinal suffix for the day of the month, 2 characters
+            "S": ( clk, myoptions ) => _ordSuffix(clk.dt),
+            //Numeric representation of the day of the week (0-6, 0=Sunday)
+            "w": ( clk, myoptions ) => clk.dy,
+            //The day of the year (starting from 0)
+            "z": ( clk, myoptions ) => clk.doy - 1,
+
+            //WEEK
+            // ISO-8601 week number of year, weeks starting on Monday
+            "W": ( clk, myoptions ) => clk.woy,
+
+            //MONTH
+            //A full textual representation of a month, such as January or March
+            "F": ( clk, myoptions ) => new Intl.DateTimeFormat(
+                myoptions.langSet,
+                {
+                    month: "long",
+                }
+            ).format(clk.mytimestamp_sysdiff),
+            //Numeric representation of a month, with leading zeros
+            "m": ( clk, myoptions ) => (clk.mo + 1 + "").padStart(2, "0"),
+            //A short textual representation of a month, three letters
+            "M": ( clk, myoptions ) => new Intl.DateTimeFormat(
+                myoptions.langSet,
+                {
+                    month: "short",
+                }
+            ).format(clk.mytimestamp_sysdiff),
+            //Numeric representation of a month, without leading zeros
+            "n": ( clk, myoptions ) => clk.mo + 1,
+            //Number of days in the given month
+            "t": ( clk, myoptions ) => clk.dim,
+            // Whether it's a leap year
+            "L": ( clk, myoptions ) => clk.ly ? 1 : 0,
+            //ISO-8601 week-numbering year. This has the same value as Y,
+            //except that if the ISO week number (W) belongs to the previous or next year,
+            //that year is used instead
+            "o": ( clk, myoptions ) => clk.iso8601Year,
+            //A full numeric representation of a year, 4 digits
+            "Y": ( clk, myoptions ) => clk.y,
+            //A two digit representation of a year
+            "y": ( clk, myoptions ) => clk.y.toString().substr(2, 2)
+        }
+
         /* Define some helper functions */
         let _newGuid = () => {
                 return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
@@ -492,96 +558,19 @@ if (!Number.prototype.map) {
                     let chr;
                     for (var n = 0; n <= myoptions.dateFormat.length; n++) {
                         chr = myoptions.dateFormat.charAt(n);
-                        switch (chr) {
-                            //DAY
-                            case "d": //Day of the Month, 2 digits with leading zeros
-                                dateStr += ("" + clk.dt).padStart(2, "0");
-                                break;
-                            case "D": //A textual representation of a day, three letters
-                                dateStr += new Intl.DateTimeFormat(
-                                    myoptions.langSet,
-                                    {
-                                        weekday: "short",
-                                    }
-                                ).format(clk.mytimestamp_sysdiff);
-                                break;
-                            case "j": //Day of the month without leading zeros
-                                dateStr += clk.dt;
-                                break;
-                            case "l": //A full textual representation of the day of the week
-                                dateStr += new Intl.DateTimeFormat(
-                                    myoptions.langSet,
-                                    {
-                                        weekday: "long",
-                                    }
-                                ).format(clk.mytimestamp_sysdiff);
-                                break;
-                            case "N": // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
-                                dateStr += clk.dy === 0 ? 7 : clk.dy;
-                                break;
-                            case "S": //English ordinal suffix for the day of the month, 2 characters
-                                dateStr += _ordSuffix(clk.dt);
-                                break;
-                            case "w": //Numeric representation of the day of the week (0-6, 0=Sunday)
-                                dateStr += clk.dy;
-                                break;
-                            case "z": //The day of the year (starting from 0)
-                                dateStr += clk.doy - 1;
-                                break;
-
-                            //WEEK
-                            case "W": // ISO-8601 week number of year, weeks starting on Monday
-                                dateStr += clk.woy;
-                                break;
-
-                            //MONTH
-                            case "F": //A full textual representation of a month, such as January or March
-                                dateStr += new Intl.DateTimeFormat(
-                                    myoptions.langSet,
-                                    {
-                                        month: "long",
-                                    }
-                                ).format(clk.mytimestamp_sysdiff);
-                                break;
-                            case "m": //Numeric representation of a month, with leading zeros
-                                dateStr += (clk.mo + 1 + "").padStart(2, "0");
-                                break;
-                            case "M": //A short textual representation of a month, three letters
-                                dateStr += new Intl.DateTimeFormat(
-                                    myoptions.langSet,
-                                    {
-                                        month: "short",
-                                    }
-                                ).format(clk.mytimestamp_sysdiff);
-                                break;
-                            case "n": //Numeric representation of a month, without leading zeros
-                                dateStr += clk.mo + 1;
-                                break;
-                            case "t": //Number of days in the given month
-                                dateStr += clk.dim;
-                                break;
-
-                            //YEAR
-                            case "L": // Whether it's a leap year
-                                dateStr += clk.ly ? 1 : 0; //1 if it is a leap year, 0 otherwise
-                                break;
-                            case "o": //ISO-8601 week-numbering year. This has the same value as Y, except that if the ISO week number (W) belongs to the previous or next year, that year is used instead
-                                dateStr += clk.iso8601Year;
-                                break;
-                            case "Y": //A full numeric representation of a year, 4 digits
-                                dateStr += clk.y;
-                                break;
-                            case "y": //A two digit representation of a year
-                                dateStr += clk.y.toString().substr(2, 2);
-                                break;
-                            case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
-                                dateStr += myoptions.dateFormat.charAt(++n);
-                                break;
-                            case "%":
-                                [ dateStr, n ] = processLiterals( myoptions, n, true, dateStr, chr );
-                                break;
-                            default:
-                                dateStr += chr;
+                        if( chr in dateFormatCharacters ) {
+                            dateStr += dateFormatCharacters[chr]( clk, myoptions );
+                        } else{
+                            switch (chr) {
+                                case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
+                                    dateStr += myoptions.dateFormat.charAt(++n);
+                                    break;
+                                case "%":
+                                    [ dateStr, n ] = processLiterals( myoptions, n, true, dateStr, chr );
+                                    break;
+                                default:
+                                    dateStr += chr;
+                            }
                         }
                     }
                     return '<span class="clockdate">' + dateStr + "</span>";
