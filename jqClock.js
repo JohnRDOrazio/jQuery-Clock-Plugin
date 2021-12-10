@@ -171,7 +171,7 @@ if (!Number.prototype.map) {
  * Instead, they represent times as floating-point numbers with up to microsecond precision.
  * Also unlike Date.now(), the values returned by Performance.now() always increase at a constant rate,
  * independent of the system clock (which might be adjusted manually or skewed by software like NTP).
- * Otherwise, performance.timing.navigationStart + performance.now() will be approximately equal to Date.now(). <<<<<<<<
+ * Otherwise, performance.timeOrigin + performance.now() will be approximately equal to Date.now(). <<<<<<<<
  * See also https://developers.google.com/web/updates/2012/08/When-milliseconds-are-not-enough-performance-now
  */
 
@@ -438,7 +438,7 @@ if (!Number.prototype.map) {
                 //get our new timestamp with all the timezone offsets and corrections !!!
                 //corrected and re-corrected !!!
                 clk.mytimestamp =
-                    performance.timing.navigationStart +
+                    performance.timeOrigin +
                     clk.pfnow +
                     myoptions.sysdiff +
                     clk.correction;
@@ -785,7 +785,7 @@ if (!Number.prototype.map) {
                 //this is useful only for client timestamps...
                 //used immediately for the default value of options.isDST...
                 let highPrecisionTimestamp =
-                    performance.timing.navigationStart + performance.now();
+                    performance.timeOrigin + performance.now();
                 let sysDateObj = new Date(highPrecisionTimestamp);
                 //TODO: if server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
                 //       no use using a client timestamps check for DST when a server timestamp is passed!
