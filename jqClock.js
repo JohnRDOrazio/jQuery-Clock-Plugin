@@ -567,7 +567,39 @@ if (!Number.prototype.map) {
                     "00",
             //Seconds since the Unix Epoch
             "U": ( clk ) => Math.floor(clk.mytimestamp / 1000)
-
+        },
+        pluginMethods = {
+            "destroy": ( params ) => {
+                const { el_id, selfRef } = params;
+                if (_jqClock.hasOwnProperty(el_id)) {
+                    clearTimeout(_jqClock[el_id]);
+                    delete _jqClock[el_id];
+                }
+                $(selfRef).html("");
+                if ($(selfRef).hasClass("jqclock")) {
+                    $(selfRef).removeClass("jqclock");
+                }
+                $(selfRef).removeData("clockoptions");
+            },
+            "stop": ( params ) => {
+                const { el_id } = params;
+                if (_jqClock.hasOwnProperty(el_id)) {
+                    clearTimeout(_jqClock[el_id]);
+                    delete _jqClock[el_id];
+                }
+            },
+            "start": ( params ) => {
+                const { el_id, selfRef } = params;
+                let current_options = $(selfRef).data("clockoptions");
+                if (
+                    current_options !== undefined &&
+                    _jqClock.hasOwnProperty(el_id) === false
+                ) {
+                    _jqClock[el_id] = setTimeout(function () {
+                        _updateClock($(selfRef));
+                    }, current_options.rate);
+                }
+            }
         };
 
         /* Define some helper functions */
@@ -752,6 +784,40 @@ if (!Number.prototype.map) {
                     currStr += currentChr;
                 }
                 return [ currStr, n ];
+            },
+            seemsToBePHPTimestamp = ( options, sysDateObj ) => {
+                let digitCountDiff =
+                (sysDateObj.getTime() + "").length -
+                (options.timestamp + "").length;
+                return digitCountDiff > 2;
+            },
+            normalizePHPTimestamp = ( options, sysDateObj ) => {
+                options.timestamp = options.timestamp * 1000;
+                options.sysdiff =
+                    options.timestamp -
+                    sysDateObj.getTime() +
+                    options.tzOffset * 60 * 1000;
+                //options.timezone has most probably been set in this case
+            },
+            initTimezone = ( options, tzOffset ) => {
+                options.timezone = "UTC";
+                let rmn = tzOffset % 1;
+                tzOffset = tzOffset - rmn;
+                let suffix = "";
+                if (Math.abs(rmn) !== 0) {
+                    suffix = "" + Math.abs(rmn).map(0, 1, 0, 60);
+                }
+                if (tzOffset < 0) {
+                    options.timezone +=
+                        "+" +
+                        Math.abs(tzOffset) +
+                        (suffix !== "" ? ":" + suffix : "");
+                } else if (tzOffset > 0) {
+                    options.timezone +=
+                        tzOffset * -1 +
+                        (suffix !== "" ? ":" + suffix : "");
+                }
+                return options;
             };
 
         this.each(() => {
@@ -794,7 +860,7 @@ if (!Number.prototype.map) {
                 options.tzOffset = sysDateObj.getTimezoneOffset();
 
                 //divide by 60 to get hours from minutes
-                var tzOffset = options.tzOffset / 60;
+                let tzOffset = options.tzOffset / 60;
 
                 /* **********************************************
                  * If we are using the current client timestamp,
@@ -813,46 +879,15 @@ if (!Number.prototype.map) {
 
                 //IF A TIMESTAMP HAS BEEN PASSED IN
                 if (options.timestamp != "localsystime") {
-                    //LET'S TRY TO FIGURE OUT WHETHER WE ARE DEALING WITH A JAVASCRIPT TIMESTAMP
-                    //OR WITH A PHP TIMESTAMP
-                    var digitCountDiff =
-                        (sysDateObj.getTime() + "").length -
-                        (options.timestamp + "").length;
-
-                    //IF THERE ARE MORE THAN TWO DIGITS DIFFERENCE FROM A JAVASCRIPT TIMESTAMP,
-                    //THEN IT'S A PHP TIMESTAMP
-                    if (digitCountDiff > 2) {
-                        options.timestamp = options.timestamp * 1000;
-                        options.sysdiff =
-                            options.timestamp -
-                            sysDateObj.getTime() +
-                            options.tzOffset * 60 * 1000;
-                        //options.timezone has most probably been set in this case
+                    if ( seemsToBePHPTimestamp( options, sysDateObj ) ) {
+                        options = normalizePHPTimestamp( options );
                     }
-                    //OTHERWISE IT'S SIMPLY A CUSTOM JAVASCRIPT TIMESTAMP
                     else {
-                        options.sysdiff =
-                            options.timestamp - sysDateObj.getTime();
+                        options.sysdiff = options.timestamp - sysDateObj.getTime();
                         /* ARE THE NEXT FEW LINES AT ALL USEFUL??? */
                         //options.timezone has most probably not been set, let's do some guesswork
                         if (options.timezone == "localsystimezone") {
-                            options.timezone = "UTC";
-                            var rmn = tzOffset % 1;
-                            tzOffset = tzOffset - rmn;
-                            var suffix = "";
-                            if (Math.abs(rmn) !== 0) {
-                                suffix = "" + Math.abs(rmn).map(0, 1, 0, 60);
-                            }
-                            if (tzOffset < 0) {
-                                options.timezone +=
-                                    "+" +
-                                    Math.abs(tzOffset) +
-                                    (suffix !== "" ? ":" + suffix : "");
-                            } else if (tzOffset > 0) {
-                                options.timezone +=
-                                    tzOffset * -1 +
-                                    (suffix !== "" ? ":" + suffix : "");
-                            }
+                            options = initTimezone( options, tzOffset );
                         }
                         /* MIGHT WANT TO DOUBLE CHECK IF THE PRECEDING LOGIC IS AT ALL USEFUL... */
                     }
@@ -862,25 +897,10 @@ if (!Number.prototype.map) {
                 else {
                     //options.timezone has most probably not been set, let's do some guesswork
                     if (options.timezone == "localsystimezone") {
-                        options.timezone = "UTC";
-                        var rmn1 = tzOffset % 1;
-                        tzOffset = tzOffset - rmn1;
-                        var suffix1 = "";
-                        if (Math.abs(rmn1) !== 0) {
-                            suffix1 = "" + Math.abs(rmn1).map(0, 1, 0, 60);
-                        }
-                        if (tzOffset < 0) {
-                            options.timezone +=
-                                "+" +
-                                Math.abs(tzOffset) +
-                                (suffix1 !== "" ? ":" + suffix1 : "");
-                        } else if (tzOffset > 0) {
-                            options.timezone +=
-                                tzOffset * -1 +
-                                (suffix1 !== "" ? ":" + suffix1 : "");
-                        }
+                        options = initTimezone( options, tzOffset );
                     }
                 }
+
                 /*********************************|
                 |* END Non user passable options *|
                 |*********************************/
@@ -897,37 +917,12 @@ if (!Number.prototype.map) {
                     _updateClock($(this));
                 }
             } else if (typeof options === "string") {
-                var el_id = $(this).attr("id");
-                switch (options) {
-                    case "destroy":
-                        if (_jqClock.hasOwnProperty(el_id)) {
-                            clearTimeout(_jqClock[el_id]);
-                            delete _jqClock[el_id];
-                        }
-                        $(this).html("");
-                        if ($(this).hasClass("jqclock")) {
-                            $(this).removeClass("jqclock");
-                        }
-                        $(this).removeData("clockoptions");
-                        break;
-                    case "stop":
-                        if (_jqClock.hasOwnProperty(el_id)) {
-                            clearTimeout(_jqClock[el_id]);
-                            delete _jqClock[el_id];
-                        }
-                        break;
-                    case "start":
-                        var __this = this;
-                        var current_options = $(this).data("clockoptions");
-                        if (
-                            current_options !== undefined &&
-                            _jqClock.hasOwnProperty(el_id) === false
-                        ) {
-                            _jqClock[el_id] = setTimeout(function () {
-                                _updateClock($(__this));
-                            }, current_options.rate);
-                        }
-                        break;
+                let el_id = $(this).attr("id");
+                let selfRef = this;
+                if( options in pluginMethods ) {
+                    pluginMethods[options]( { el_id: el_id, selfRef: selfRef } );
+                } else {
+                    console.error( "You are calling an undefined method on a jqClock instance" );
                 }
             }
         });
