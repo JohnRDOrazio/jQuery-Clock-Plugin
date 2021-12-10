@@ -735,6 +735,27 @@ if (!Number.prototype.map) {
                 }
                 return '<span class="clocktime">' + timeStr + '</span>';
             },
+            ensureDefaultOptions = ( options, sysDateObj ) => {
+                options = options || {};
+                /* I prefer this method to jQuery.extend because we can dynamically set each option based on a preceding option's value */
+                options.timestamp = options.timestamp || "localsystime";
+                options.langSet = options.langSet || "en";
+                options.calendar = options.hasOwnProperty("calendar")
+                    ? options.calendar
+                    : true;
+                options.dateFormat =
+                    options.dateFormat ||
+                    (options.langSet == "en" ? "l, F j, Y" : "l, j F Y");
+                options.timeFormat =
+                    options.timeFormat ||
+                    (options.langSet == "en" ? "h:i:s A" : "H:i:s");
+                options.timezone = options.timezone || "localsystimezone"; //should only really be passed in when a server timestamp is passed
+                options.isDST = options.hasOwnProperty("isDST")
+                    ? options.isDST
+                    : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
+                options.rate = options.rate || 500; //500ms makes for a more faithful clock than 1000ms, less skewing
+                return options;
+            },
             normalizeOptions = (options) => {
                 //ensure we have correct value types
                 if (typeof options.langSet !== "string") {
@@ -798,6 +819,7 @@ if (!Number.prototype.map) {
                     sysDateObj.getTime() +
                     options.tzOffset * 60 * 1000;
                 //options.timezone has most probably been set in this case
+                return options;
             },
             initTimezone = ( options, tzOffset ) => {
                 options.timezone = "UTC";
@@ -818,6 +840,19 @@ if (!Number.prototype.map) {
                         (suffix !== "" ? ":" + suffix : "");
                 }
                 return options;
+            },
+            initInstance = ( selfRef, options ) => {
+                if (!$(selfRef).hasClass("jqclock")) {
+                    $(selfRef).addClass("jqclock");
+                }
+                if (!$(selfRef).is("[id]")) {
+                    $(selfRef).attr("id", _newGuid());
+                }
+                $(selfRef).data("clockoptions", options);
+                //only allow one associated settimeout at a time! basically, only one plugin instance per dom element
+                if (_jqClock.hasOwnProperty($(selfRef).attr("id")) === false) {
+                    _updateClock($(selfRef));
+                }
             };
 
         this.each(() => {
@@ -830,27 +865,7 @@ if (!Number.prototype.map) {
                 //TODO: if server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
                 //       no use using a client timestamps check for DST when a server timestamp is passed!
 
-                options = options || {};
-
-                /* User passable options: make sure we have default values if user doesn't pass them! */
-                /* I prefer this method to jQuery.extend because we can dynamically set each option based on a preceding option's value */
-                options.timestamp = options.timestamp || "localsystime";
-                options.langSet = options.langSet || "en";
-                options.calendar = options.hasOwnProperty("calendar")
-                    ? options.calendar
-                    : true;
-                options.dateFormat =
-                    options.dateFormat ||
-                    (options.langSet == "en" ? "l, F j, Y" : "l, j F Y");
-                options.timeFormat =
-                    options.timeFormat ||
-                    (options.langSet == "en" ? "h:i:s A" : "H:i:s");
-                options.timezone = options.timezone || "localsystimezone"; //should only really be passed in when a server timestamp is passed
-                options.isDST = options.hasOwnProperty("isDST")
-                    ? options.isDST
-                    : sysDateObj.isDST(); //should only really be passed in when a server timestamp is passed
-                options.rate = options.rate || 500; //500ms makes for a more faithful clock than 1000ms, less skewing
-
+                options = ensureDefaultOptions( options, sysDateObj );
                 options = normalizeOptions( options );
 
                 /*****************************|
@@ -905,17 +920,7 @@ if (!Number.prototype.map) {
                 |* END Non user passable options *|
                 |*********************************/
 
-                if (!$(this).hasClass("jqclock")) {
-                    $(this).addClass("jqclock");
-                }
-                if (!$(this).is("[id]")) {
-                    $(this).attr("id", _newGuid());
-                }
-                $(this).data("clockoptions", options);
-                //only allow one associated settimeout at a time! basically, only one plugin instance per dom element
-                if (_jqClock.hasOwnProperty($(this).attr("id")) === false) {
-                    _updateClock($(this));
-                }
+                initInstance( this, options );
             } else if (typeof options === "string") {
                 let el_id = $(this).attr("id");
                 let selfRef = this;
