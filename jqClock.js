@@ -404,67 +404,67 @@ if (!Number.prototype.map) {
         const dateFormatCharacters = {
             //DAY
             //Day of the Month, 2 digits with leading zeros
-            "d": ( clk, myoptions ) => ("" + clk.dt).padStart(2, "0"),
+            "d": ( clk ) => ("" + clk.dt).padStart(2, "0"),
             //A textual representation of a day, three letters
-            "D": ( clk, myoptions ) => new Intl.DateTimeFormat(
-                myoptions.langSet,
+            "D": ( clk ) => new Intl.DateTimeFormat(
+                clk.myoptions.langSet,
                 {
                     weekday: "short",
                 }
             ).format(clk.mytimestamp_sysdiff),
             //Day of the month without leading zeros
-            "j": ( clk, myoptions ) => clk.dt,
+            "j": ( clk ) => clk.dt,
             //A full textual representation of the day of the week
-            "l": ( clk, myoptions ) => new Intl.DateTimeFormat(
-                myoptions.langSet,
+            "l": ( clk ) => new Intl.DateTimeFormat(
+                clk.myoptions.langSet,
                 {
                     weekday: "long",
                 }
             ).format(clk.mytimestamp_sysdiff),
             // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
-            "N": ( clk, myoptions ) => clk.dy === 0 ? 7 : clk.dy,
+            "N": ( clk ) => clk.dy === 0 ? 7 : clk.dy,
             //English ordinal suffix for the day of the month, 2 characters
-            "S": ( clk, myoptions ) => _ordSuffix(clk.dt),
+            "S": ( clk ) => _ordSuffix(clk.dt),
             //Numeric representation of the day of the week (0-6, 0=Sunday)
-            "w": ( clk, myoptions ) => clk.dy,
+            "w": ( clk ) => clk.dy,
             //The day of the year (starting from 0)
-            "z": ( clk, myoptions ) => clk.doy - 1,
+            "z": ( clk ) => clk.doy - 1,
 
             //WEEK
             // ISO-8601 week number of year, weeks starting on Monday
-            "W": ( clk, myoptions ) => clk.woy,
+            "W": ( clk ) => clk.woy,
 
             //MONTH
             //A full textual representation of a month, such as January or March
-            "F": ( clk, myoptions ) => new Intl.DateTimeFormat(
-                myoptions.langSet,
+            "F": ( clk ) => new Intl.DateTimeFormat(
+                clk.myoptions.langSet,
                 {
                     month: "long",
                 }
             ).format(clk.mytimestamp_sysdiff),
             //Numeric representation of a month, with leading zeros
-            "m": ( clk, myoptions ) => (clk.mo + 1 + "").padStart(2, "0"),
+            "m": ( clk ) => (clk.mo + 1 + "").padStart(2, "0"),
             //A short textual representation of a month, three letters
-            "M": ( clk, myoptions ) => new Intl.DateTimeFormat(
-                myoptions.langSet,
+            "M": ( clk ) => new Intl.DateTimeFormat(
+                clk.myoptions.langSet,
                 {
                     month: "short",
                 }
             ).format(clk.mytimestamp_sysdiff),
             //Numeric representation of a month, without leading zeros
-            "n": ( clk, myoptions ) => clk.mo + 1,
+            "n": ( clk ) => clk.mo + 1,
             //Number of days in the given month
-            "t": ( clk, myoptions ) => clk.dim,
+            "t": ( clk ) => clk.dim,
             // Whether it's a leap year
-            "L": ( clk, myoptions ) => clk.ly ? 1 : 0,
+            "L": ( clk ) => clk.ly ? 1 : 0,
             //ISO-8601 week-numbering year. This has the same value as Y,
             //except that if the ISO week number (W) belongs to the previous or next year,
             //that year is used instead
-            "o": ( clk, myoptions ) => clk.iso8601Year,
+            "o": ( clk ) => clk.iso8601Year,
             //A full numeric representation of a year, 4 digits
-            "Y": ( clk, myoptions ) => clk.y,
+            "Y": ( clk ) => clk.y,
             //A two digit representation of a year
-            "y": ( clk, myoptions ) => clk.y.toString().substr(2, 2)
+            "y": ( clk ) => clk.y.toString().substr(2, 2)
         }
 
         /* Define some helper functions */
@@ -491,14 +491,14 @@ if (!Number.prototype.map) {
                 return ord_suffix;
             },
             _updateClock = (el) => {
-                let myoptions = $(el).data("clockoptions");
                 let clk = {};
+                clk.myoptions = $(el).data("clockoptions");
                 //since system time and timezones affect the Date object, let's make sure it's not going to affect our clock:
                 clk.currentTzOffset = new Date().getTimezoneOffset();
                 clk.correction =
-                    clk.currentTzOffset === myoptions.tzOffset
+                    clk.currentTzOffset === clk.myoptions.tzOffset
                         ? 0
-                        : (clk.currentTzOffset - myoptions.tzOffset) * 60 * 1000;
+                        : (clk.currentTzOffset - clk.myoptions.tzOffset) * 60 * 1000;
 
                 clk.pfnow = performance.now();
                 //get our new timestamp with all the timezone offsets and corrections !!!
@@ -506,7 +506,7 @@ if (!Number.prototype.map) {
                 clk.mytimestamp =
                     performance.timeOrigin +
                     clk.pfnow +
-                    myoptions.sysdiff +
+                    clk.myoptions.sysdiff +
                     clk.correction;
 
                 clk.mytimestamp_sysdiff = new Date(clk.mytimestamp);
@@ -525,8 +525,8 @@ if (!Number.prototype.map) {
                 clk.iso8601Year = clk.mytimestamp_sysdiff.getWOY(true);
                 clk.dim = clk.mytimestamp_sysdiff.daysInMonth();
                 clk.swt = clk.mytimestamp_sysdiff.swatchTime();
-                clk.tzH = parseInt(myoptions.tzOffset / 60);
-                clk.tzS = parseInt(myoptions.tzOffset * 60);
+                clk.tzH = parseInt(clk.myoptions.tzOffset / 60);
+                clk.tzS = parseInt(clk.myoptions.tzOffset * 60);
                 clk.ap = "AM";
                 clk.calendElem = "";
                 clk.clockElem = "";
@@ -540,26 +540,27 @@ if (!Number.prototype.map) {
                     clk.H12 = 12;
                 }
 
-                if (myoptions.calendar === true) {
-                    clk.calendElem = formatDateString( myoptions, clk );
+                if (clk.myoptions.calendar === true) {
+                    clk.calendElem = formatDateString( clk );
                 }
 
-                clk.clockElem = formatTimeString( myoptions, clk );
+                clk.clockElem = formatTimeString( clk );
 
                 $(el).html(clk.calendElem + clk.clockElem);
                 let el_id = $(el).attr("id");
                 _jqClock[el_id] = setTimeout(() => {
                     _updateClock( $(el) );
-                }, myoptions.rate);
+                }, clk.myoptions.rate);
             },
-            formatDateString = ( myoptions, clk ) => {
+            formatDateString = ( clk ) => {
                     /* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
                     let dateStr = "";
                     let chr;
+                    const { myoptions } = clk;
                     for (var n = 0; n <= myoptions.dateFormat.length; n++) {
                         chr = myoptions.dateFormat.charAt(n);
                         if( chr in dateFormatCharacters ) {
-                            dateStr += dateFormatCharacters[chr]( clk, myoptions );
+                            dateStr += dateFormatCharacters[chr]( clk );
                         } else{
                             switch (chr) {
                                 case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
@@ -575,10 +576,11 @@ if (!Number.prototype.map) {
                     }
                     return '<span class="clockdate">' + dateStr + "</span>";
             },
-            formatTimeString = ( myoptions, clk ) => {
+            formatTimeString = ( clk ) => {
                 /* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
                 let timeStr = "";
                 let chr;
+                const { myoptions } = clk;
                 for (var n = 0; n <= myoptions.timeFormat.length; n++) {
                     chr = myoptions.timeFormat.charAt(n);
                     switch (chr) {
