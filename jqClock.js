@@ -577,7 +577,7 @@ if (!Number.prototype.map) {
                                 dateStr += myoptions.dateFormat.charAt(++n);
                                 break;
                             case "%":
-                                dateStr = processLiterals( myoptions, n, true, dateStr );
+                                dateStr = processLiterals( myoptions, n, true, dateStr, chr );
                                 break;
                             default:
                                 dateStr += chr;
@@ -721,7 +721,7 @@ if (!Number.prototype.map) {
                             timeStr += myoptions.timeFormat.charAt(++nn);
                             break;
                         case "%":
-                            timeStr = processLiterals( myoptions, nn, false, timeStr );
+                            timeStr = processLiterals( myoptions, nn, false, timeStr, chrr );
                             break;
                         default:
                             timeStr += chrr;
@@ -762,7 +762,7 @@ if (!Number.prototype.map) {
                 }
                 return options;
             },
-            processLiterals = ( myoptions, n, forDateStr, currStr ) => {
+            processLiterals = ( myoptions, n, forDateStr, currStr, currentChr ) => {
                 let pos = n + 1;
                 let str = forDateStr ? myoptions.dateFormat : myoptions.timeFormat;
                 while (pos < str.length) {
@@ -775,7 +775,7 @@ if (!Number.prototype.map) {
                     currStr += str.substring(n + 1, pos);
                     n += pos - n;
                 } else {
-                    currStr += chr;
+                    currStr += currentChr;
                 }
                 return currStr;
             };
