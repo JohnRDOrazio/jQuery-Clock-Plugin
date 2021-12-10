@@ -465,7 +465,110 @@ if (!Number.prototype.map) {
             "Y": ( clk ) => clk.y,
             //A two digit representation of a year
             "y": ( clk ) => clk.y.toString().substr(2, 2)
-        }
+        },
+        timeFormatCharacters = {
+            //Lowercase Ante meridiem and Post meridiem
+            "a": ( clk ) => clk.ap.toLowerCase(),
+            //Uppercase Ante meridiem and Post meridiem
+            "A": ( clk ) => clk.ap,
+            //Swatch Internet time (000 through 999)
+            "B": ( clk ) => clk.swt,
+            //12-hour format of an hour without leading zeros
+            "g": ( clk ) => clk.H12,
+            //24-hour format of an hour without leading zeros
+            "G": ( clk ) => clk.h,
+            //12-hour format of an hour with leading zeros
+            "h": ( clk ) => ("" + clk.H12).padStart(2, "0"),
+            //24-hour format of an hour with leading zeros
+            "H": ( clk ) => ("" + clk.h).padStart(2, "0"),
+            //Minutes with leading zeros
+            "i": ( clk ) => ("" + clk.m).padStart(2, "0"),
+            //Seconds, with leading zeros
+            "s": ( clk ) => ("" + clk.s).padStart(2, "0"),
+            //Microseconds
+            "u": ( clk ) => ("" + clk.ms).padStart(3, "0") +
+                ("" + clk.us).padStart(3, "0"),
+            //Milliseconds
+            "v": ( clk ) => ("" + clk.ms).padStart(3, "0"),
+
+            //TIMEZONE
+            //Timezone identifier
+            "e": ( clk ) => clk.myoptions.timezone,
+            //Whether or not the date is in daylight saving time
+            "I": ( clk ) => clk.myoptions.isDST ? "DST" : "",
+            //Difference to Greenwich time (GMT) in hours
+            "O": ( clk ) => (clk.tzH < 0
+                        ? "+" +
+                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                        : tzH > 0
+                        ? ("" + clk.tzH * -1).padStart(2, "0")
+                        : "+00") + "00",
+            //Difference to Greenwich time (GMT) with colon between hours and minutes
+            "P": ( clk ) => (clk.tzH < 0
+                        ? "+" +
+                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                        : clk.tzH > 0
+                        ? ("" + clk.tzH * -1).padStart(2, "0")
+                        : "+00") + ":00",
+            //Timezone abbreviation
+            /*"T": ( clk ) => timezone_abbrev...*/
+            //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
+            "Z": ( clk ) => clk.tzS < 0
+                        ? "" + Math.abs(clk.tzS)
+                        : clk.tzS > 0
+                        ? "" + clk.tzS * -1
+                        : "0",
+
+            //FULL DATE/TIME
+            // ISO 8601 date | Example 2004-02-12T15:19:21+00:00
+            "c": ( clk ) => clk.y +
+                    "-" +
+                    (clk.mo + 1 + "").padStart(2, "0") +
+                    "-" +
+                    ("" + clk.dt).padStart(2, "0") +
+                    "T" +
+                    ("" + clk.h).padStart(2, "0") +
+                    ":" +
+                    ("" + clk.m).padStart(2, "0") +
+                    ":" +
+                    ("" + clk.s).padStart(2, "0") +
+                    (clk.tzH < 0
+                        ? "+" +
+                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                        : tzh > 0
+                        ? ("" + clk.tzh * -1).padStart(2, "0")
+                        : "+00") +
+                    ":00",
+            //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
+            "r": ( clk ) => new Intl.DateTimeFormat(clk.myoptions.langSet, {
+                        weekday: "short",
+                    }).format(clk.mytimestamp_sysdiff) +
+                    ", " +
+                    clk.dt +
+                    " " +
+                    new Intl.DateTimeFormat(clk.myoptions.langSet, {
+                        month: "short",
+                    }).format(clk.mytimestamp_sysdiff) +
+                    " " +
+                    clk.y +
+                    " " +
+                    ("" + clk.h).padStart(2, "0") +
+                    ":" +
+                    ("" + clk.m).padStart(2, "0") +
+                    ":" +
+                    ("" + clk.s).padStart(2, "0") +
+                    " " +
+                    (clk.tzH < 0
+                        ? "+" +
+                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                        : clk.tzh > 0
+                        ? ("" + clk.tzh * -1).padStart(2, "0")
+                        : "+00") +
+                    "00",
+            //Seconds since the Unix Epoch
+            "U": ( clk ) => Math.floor(clk.mytimestamp / 1000)
+
+        };
 
         /* Define some helper functions */
         let _newGuid = () => {
@@ -583,141 +686,19 @@ if (!Number.prototype.map) {
                 const { myoptions } = clk;
                 for (var n = 0; n <= myoptions.timeFormat.length; n++) {
                     chr = myoptions.timeFormat.charAt(n);
-                    switch (chr) {
-                        case "a": //Lowercase Ante meridiem and Post meridiem
-                            timeStr += clk.ap.toLowerCase();
-                            break;
-                        case "A": //Uppercase Ante meridiem and Post meridiem
-                            timeStr += clk.ap;
-                            break;
-                        case "B": //Swatch Internet time
-                            timeStr += clk.swt; //000 through 999
-                            break;
-                        case "g": //12-hour format of an hour without leading zeros
-                            timeStr += clk.H12;
-                            break;
-                        case "G": //24-hour format of an hour without leading zeros
-                            timeStr += clk.h;
-                            break;
-                        case "h": //12-hour format of an hour with leading zeros
-                            timeStr += ("" + clk.H12).padStart(2, "0");
-                            break;
-                        case "H": //24-hour format of an hour with leading zeros
-                            timeStr += ("" + clk.h).padStart(2, "0");
-                            break;
-                        case "i": //Minutes with leading zeros
-                            timeStr += ("" + clk.m).padStart(2, "0");
-                            break;
-                        case "s": //Seconds, with leading zeros
-                            timeStr += ("" + clk.s).padStart(2, "0");
-                            break;
-                        case "u": //Microseconds
-                            timeStr +=
-                                ("" + clk.ms).padStart(3, "0") +
-                                ("" + clk.us).padStart(3, "0");
-                            break;
-                        case "v": //Milliseconds
-                            timeStr += ("" + clk.ms).padStart(3, "0");
-                            break;
-
-                        //TIMEZONE
-                        case "e": //Timezone identifier
-                            timeStr += myoptions.timezone;
-                            break;
-                        case "I": //Whether or not the date is in daylight saving time
-                            timeStr += myoptions.isDST ? "DST" : "";
-                            break;
-                        case "O": //Difference to Greenwich time (GMT) in hours
-                            timeStr +=
-                                (clk.tzH < 0
-                                    ? "+" +
-                                      ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                                    : tzH > 0
-                                    ? ("" + clk.tzH * -1).padStart(2, "0")
-                                    : "+00") + "00";
-                            break;
-                        case "P": //Difference to Greenwich time (GMT) with colon between hours and minutes
-                            timeStr +=
-                                (clk.tzH < 0
-                                    ? "+" +
-                                      ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                                    : clk.tzH > 0
-                                    ? ("" + clk.tzH * -1).padStart(2, "0")
-                                    : "+00") + ":00";
-                            break;
-                        /*case "T": //Timezone abbreviation
-                            timeStr += timezone_abbrev...
-                            break;*/
-                        case "Z": //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
-                            timeStr +=
-                                clk.tzS < 0
-                                    ? "" + Math.abs(clk.tzS)
-                                    : clk.tzS > 0
-                                    ? "" + clk.tzS * -1
-                                    : "0";
-                            break;
-
-                        //FULL DATE/TIME
-                        case "c": // ISO 8601 date | Example 2004-02-12T15:19:21+00:00
-                            timeStr +=
-                                clk.y +
-                                "-" +
-                                (clk.mo + 1 + "").padStart(2, "0") +
-                                "-" +
-                                ("" + clk.dt).padStart(2, "0") +
-                                "T" +
-                                ("" + clk.h).padStart(2, "0") +
-                                ":" +
-                                ("" + clk.m).padStart(2, "0") +
-                                ":" +
-                                ("" + clk.s).padStart(2, "0") +
-                                (clk.tzH < 0
-                                    ? "+" +
-                                      ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                                    : tzh > 0
-                                    ? ("" + clk.tzh * -1).padStart(2, "0")
-                                    : "+00") +
-                                ":00";
-                            break;
-                        case "r": //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
-                            timeStr +=
-                                new Intl.DateTimeFormat(myoptions.langSet, {
-                                    weekday: "short",
-                                }).format(clk.mytimestamp_sysdiff) +
-                                ", " +
-                                clk.dt +
-                                " " +
-                                new Intl.DateTimeFormat(myoptions.langSet, {
-                                    month: "short",
-                                }).format(clk.mytimestamp_sysdiff) +
-                                " " +
-                                clk.y +
-                                " " +
-                                ("" + clk.h).padStart(2, "0") +
-                                ":" +
-                                ("" + clk.m).padStart(2, "0") +
-                                ":" +
-                                ("" + clk.s).padStart(2, "0") +
-                                " " +
-                                (clk.tzH < 0
-                                    ? "+" +
-                                      ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                                    : clk.tzh > 0
-                                    ? ("" + clk.tzh * -1).padStart(2, "0")
-                                    : "+00") +
-                                "00";
-                            break;
-                        case "U": //Seconds since the Unix Epoch
-                            timeStr += Math.floor(clk.mytimestamp / 1000);
-                            break;
-                        case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
-                            timeStr += myoptions.timeFormat.charAt(++n);
-                            break;
-                        case "%":
-                            [ timeStr, n ] = processLiterals( myoptions, n, false, timeStr, chr );
-                            break;
-                        default:
-                            timeStr += chr;
+                    if( chr in timeFormatCharacters ) {
+                        timeStr += timeFormatCharacters[chr]( clk );
+                    } else {
+                        switch (chr) {
+                            case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
+                                timeStr += myoptions.timeFormat.charAt(++n);
+                                break;
+                            case "%":
+                                [ timeStr, n ] = processLiterals( myoptions, n, false, timeStr, chr );
+                                break;
+                            default:
+                                timeStr += chr;
+                        }
                     }
                 }
                 return '<span class="clocktime">' + timeStr + '</span>';
