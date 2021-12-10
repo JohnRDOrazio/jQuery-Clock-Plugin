@@ -489,8 +489,9 @@ if (!Number.prototype.map) {
             formatDateString = ( myoptions, clk ) => {
                     /* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
                     let dateStr = "";
+                    let chr;
                     for (var n = 0; n <= myoptions.dateFormat.length; n++) {
-                        let chr = myoptions.dateFormat.charAt(n);
+                        chr = myoptions.dateFormat.charAt(n);
                         switch (chr) {
                             //DAY
                             case "d": //Day of the Month, 2 digits with leading zeros
@@ -577,7 +578,7 @@ if (!Number.prototype.map) {
                                 dateStr += myoptions.dateFormat.charAt(++n);
                                 break;
                             case "%":
-                                dateStr = processLiterals( myoptions, n, true, dateStr, chr );
+                                [ dateStr, n ] = processLiterals( myoptions, n, true, dateStr, chr );
                                 break;
                             default:
                                 dateStr += chr;
@@ -588,9 +589,10 @@ if (!Number.prototype.map) {
             formatTimeString = ( myoptions, clk ) => {
                 /* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
                 let timeStr = "";
-                for (var nn = 0; nn <= myoptions.timeFormat.length; nn++) {
-                    let chrr = myoptions.timeFormat.charAt(nn);
-                    switch (chrr) {
+                let chr;
+                for (var n = 0; n <= myoptions.timeFormat.length; n++) {
+                    chr = myoptions.timeFormat.charAt(n);
+                    switch (chr) {
                         case "a": //Lowercase Ante meridiem and Post meridiem
                             timeStr += clk.ap.toLowerCase();
                             break;
@@ -718,13 +720,13 @@ if (!Number.prototype.map) {
                             timeStr += Math.floor(clk.mytimestamp / 1000);
                             break;
                         case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
-                            timeStr += myoptions.timeFormat.charAt(++nn);
+                            timeStr += myoptions.timeFormat.charAt(++n);
                             break;
                         case "%":
-                            timeStr = processLiterals( myoptions, nn, false, timeStr, chrr );
+                            [ timeStr, n ] = processLiterals( myoptions, n, false, timeStr, chr );
                             break;
                         default:
-                            timeStr += chrr;
+                            timeStr += chr;
                     }
                 }
                 return '<span class="clocktime">' + timeStr + '</span>';
@@ -777,7 +779,7 @@ if (!Number.prototype.map) {
                 } else {
                     currStr += currentChr;
                 }
-                return currStr;
+                return [ currStr, n ];
             };
 
         this.each(() => {
