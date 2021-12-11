@@ -361,42 +361,19 @@ if (!Number.prototype.map) {
         };
 
         this.destroy = () => {
-            return _this.each((el) => {
-                let el_id = $(el).attr("id");
-                if (_jqClock.hasOwnProperty(el_id)) {
-                    clearTimeout(_jqClock[el_id]);
-                    delete _jqClock[el_id];
-                }
-                $(el).html("");
-                if ($(el).hasClass("jqclock")) {
-                    $(el).removeClass("jqclock");
-                }
-                $(el).removeData("clockoptions");
+            return _this.each((idx,selfRef) => {
+                pluginMethods["destroy"](selfRef);
             });
         };
-
         this.stop = () => {
-            return _this.each((el) => {
-                let el_id = $(el).attr("id");
-                if (_jqClock.hasOwnProperty(el_id)) {
-                    clearTimeout(_jqClock[el_id]);
-                    delete _jqClock[el_id];
-                }
+            return _this.each((idx,selfRef) => {
+                pluginMethods["stop"](selfRef);
             });
         };
 
         this.start = () => {
-            return _this.each((el) => {
-                let el_id = $(el).attr("id");
-                let current_options = $(el).data("clockoptions");
-                if (
-                    current_options !== undefined &&
-                    _jqClock.hasOwnProperty(el_id) === false
-                ) {
-                    _jqClock[el_id] = setTimeout(() => {
-                        _updateClock($(el));
-                    }, current_options.rate);
-                }
+            return _this.each((idx,selfRef) => {
+                pluginMethods["start"](selfRef);
             });
         };
 
@@ -568,8 +545,8 @@ if (!Number.prototype.map) {
             "U": ( clk ) => Math.floor(clk.mytimestamp / 1000)
         },
         pluginMethods = {
-            "destroy": ( params ) => {
-                const { el_id, selfRef } = params;
+            "destroy": ( selfRef ) => {
+                let el_id = $(selfRef).attr("id");
                 if (_jqClock.hasOwnProperty(el_id)) {
                     clearTimeout(_jqClock[el_id]);
                     delete _jqClock[el_id];
@@ -580,15 +557,15 @@ if (!Number.prototype.map) {
                 }
                 $(selfRef).removeData("clockoptions");
             },
-            "stop": ( params ) => {
-                const { el_id } = params;
+            "stop": ( selfRef ) => {
+                let el_id = $(selfRef).attr("id");
                 if (_jqClock.hasOwnProperty(el_id)) {
                     clearTimeout(_jqClock[el_id]);
                     delete _jqClock[el_id];
                 }
             },
-            "start": ( params ) => {
-                const { el_id, selfRef } = params;
+            "start": ( selfRef ) => {
+                let el_id = $(selfRef).attr("id");
                 let current_options = $(selfRef).data("clockoptions");
                 if (
                     current_options !== undefined &&
@@ -921,10 +898,9 @@ if (!Number.prototype.map) {
 
                 initInstance( this, options );
             } else if (typeof options === "string") {
-                let el_id = $(this).attr("id");
                 let selfRef = this;
                 if( options in pluginMethods ) {
-                    pluginMethods[options]( { el_id: el_id, selfRef: selfRef } );
+                    pluginMethods[options]( selfRef );
                 } else {
                     console.error( "You are calling an undefined method on a jqClock instance" );
                 }
