@@ -1,0 +1,31 @@
+{
+  "name": "@JohnRDOrazio/jquery-clock-plugin",
+  "version": "2.3.6",
+  "description": "jQuery plugin to turn a dom element into a jQuery Clock that can take an initial timestamp (even server generated, or NTP generated) instead of client system time, supports internationalization (48 locales) and PHP Style Format Characters, and work independently from the system clock. Supports microsecond time. Can be easily styled with three simple css rules",
+  "main": "jqClock-lite.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnRDOrazio/jQuery-Clock-Plugin.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/JohnRDOrazio"
+  },
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "jquery-clock",
+    "jqclock"
+  ],
+  "dependencies": {
+    "jquery": "~3"
+  }
+  "author": "JohnRDOrazio",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/issues"
+  },
+  "homepage": "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin#readme"
+}
