@@ -1,4 +1,6 @@
-Turns a given dom element into a jQuery Clock that can take an initial timestamp (even server generated, or NTP generated) instead of client system time, supports internationalization (48 locales) and PHP Style Format Characters, and is relatively independent from system clock. Supports microsecond time. Can be easily styled with three simple css rules.
+[![CodeFactor](https://www.codefactor.io/repository/github/johnrdorazio/jquery-clock-plugin/badge)](https://www.codefactor.io/repository/github/johnrdorazio/jquery-clock-plugin)
+
+Turn a given dom element into a jQuery Clock that can take an initial timestamp (even server generated, or NTP generated) instead of client system time, supports internationalization (48 locales) and PHP Style Format Characters, and is relatively independent from system clock. Supports microsecond time. Can be easily styled with three simple css rules.
 Version, options and methods supported can be obtained dynamically through the following three properties of the **$.clock** object:
 ```JavaScript
 $.clock.version; //will return the current version number, so you can be sure which version of the script you are using
