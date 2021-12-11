@@ -139,7 +139,7 @@ if (!Date.prototype.hasOwnProperty("swatchTime")) {
 // https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
 if (!String.prototype.padStart) {
-    String.prototype.padStart = function padStart(targetLength, padString) {
+    String.prototype.padStart = function (targetLength, padString) {
         targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
         padString = String(padString || " ");
         if (this.length > targetLength) {
@@ -176,7 +176,7 @@ if (!Number.prototype.map) {
  */
 
 //BEGIN JQUERY CLOCK PLUGIN
-(function ($) {
+(($) => {
     $.clock = {
         version: "2.3.6",
         options: [
@@ -354,30 +354,30 @@ if (!Number.prototype.map) {
     var _jqClock = _jqClock || {};
 
     $.fn.clock = function (options) {
-        var _this = this;
+        let _this = this;
 
         this.initialize = function () {
             return this;
         };
 
-        this.destroy = function () {
-            return _this.each(() => {
-                var el_id = $(this).attr("id");
+        this.destroy = () => {
+            return _this.each((el) => {
+                let el_id = $(el).attr("id");
                 if (_jqClock.hasOwnProperty(el_id)) {
                     clearTimeout(_jqClock[el_id]);
                     delete _jqClock[el_id];
                 }
-                $(this).html("");
-                if ($(this).hasClass("jqclock")) {
-                    $(this).removeClass("jqclock");
+                $(el).html("");
+                if ($(el).hasClass("jqclock")) {
+                    $(el).removeClass("jqclock");
                 }
-                $(this).removeData("clockoptions");
+                $(el).removeData("clockoptions");
             });
         };
 
-        this.stop = function () {
-            return _this.each(() => {
-                var el_id = $(this).attr("id");
+        this.stop = () => {
+            return _this.each((el) => {
+                let el_id = $(el).attr("id");
                 if (_jqClock.hasOwnProperty(el_id)) {
                     clearTimeout(_jqClock[el_id]);
                     delete _jqClock[el_id];
@@ -385,17 +385,16 @@ if (!Number.prototype.map) {
             });
         };
 
-        this.start = function () {
-            return _this.each(() => {
-                var el_id = $(this).attr("id");
-                var current_options = $(this).data("clockoptions");
+        this.start = () => {
+            return _this.each((el) => {
+                let el_id = $(el).attr("id");
+                let current_options = $(el).data("clockoptions");
                 if (
                     current_options !== undefined &&
                     _jqClock.hasOwnProperty(el_id) === false
                 ) {
-                    var __this = this;
-                    _jqClock[el_id] = setTimeout(function () {
-                        _updateClock($(__this));
+                    _jqClock[el_id] = setTimeout(() => {
+                        _updateClock($(el));
                     }, current_options.rate);
                 }
             });
