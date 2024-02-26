@@ -871,7 +871,7 @@ if (!Number.prototype.map) {
                 //IF A TIMESTAMP HAS BEEN PASSED IN
                 if (options.timestamp != "localsystime") {
                     if ( seemsToBePHPTimestamp( options, sysDateObj ) ) {
-                        options = normalizePHPTimestamp( options );
+                        options = normalizePHPTimestamp( options, sysDateObj );
                     }
                     else {
                         options.sysdiff = options.timestamp - sysDateObj.getTime();
