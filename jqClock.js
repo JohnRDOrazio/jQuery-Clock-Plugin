@@ -1,6 +1,6 @@
 /**
  * jQuery Clock plugin
- * Copyright (c) 2010 John R D'Orazio (priest@johnromanodorazio.com)
+ * Copyright (c) 2024 John R D'Orazio (priest@johnromanodorazio.com)
  * Licensed under the Apache 2.0 license:
  * https://www.apache.org/licenses/LICENSE-2.0
  *
@@ -163,21 +163,21 @@ if (!Number.prototype.map) {
 }
 //END NUMBER.PROTOTYPE.MAP
 
-/* Might be able to use performance.now:
+/* Makes use of performance.now:
  * https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
  * Unlike other timing data available to JavaScript (for example Date.now),
  * the timestamps returned by Performance.now() are not limited to one-millisecond resolution.
- * Instead, they represent times as floating-point numbers with up to microsecond precision.
+ * Instead, they represent time as a floating-point number with up to microsecond precision.
  * Also unlike Date.now(), the values returned by Performance.now() always increase at a constant rate,
  * independent of the system clock (which might be adjusted manually or skewed by software like NTP).
- * Otherwise, performance.timeOrigin + performance.now() will be approximately equal to Date.now(). <<<<<<<<
+ * Otherwise, performance.timeOrigin + performance.now() will be approximately equal to Date.now().
  * See also https://developers.google.com/web/updates/2012/08/When-milliseconds-are-not-enough-performance-now
  */
 
 //BEGIN JQUERY CLOCK PLUGIN
 (($) => {
     $.clock = {
-        version: "2.3.6",
+        version: "2.3.7",
         options: [
             {
                 type: "string",
@@ -211,57 +211,14 @@ if (!Number.prototype.map) {
                     {
                         name: "langSet",
                         description:
-                            "two letter locale to be used for the translation of Day names and Month names",
+                            "valid BCP47 locale tag to be used for the translation of Day names and Month names (currently 69 valid tags, can optionally be combined with region)",
                         type: "String",
                         values: [
-                            "am",
-                            "ar",
-                            "bn",
-                            "bg",
-                            "ca",
-                            "zh",
-                            "hr",
-                            "cs",
-                            "da",
-                            "nl",
-                            "en",
-                            "et",
-                            "fi",
-                            "fr",
-                            "de",
-                            "el",
-                            "gu",
-                            "hi",
-                            "hu",
-                            "id",
-                            "it",
-                            "ja",
-                            "kn",
-                            "ko",
-                            "lv",
-                            "lt",
-                            "ms",
-                            "ml",
-                            "mr",
-                            "mo",
-                            "ps",
-                            "fa",
-                            "pl",
-                            "pt",
-                            "ro",
-                            "ru",
-                            "sr",
-                            "sk",
-                            "sl",
-                            "es",
-                            "sw",
-                            "sv",
-                            "ta",
-                            "te",
-                            "th",
-                            "tr",
-                            "uk",
-                            "vi",
+                            "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr",
+                            "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo",
+                            "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta",
+                            "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs",
+                            "pes", "prs", "swc", "swh", "tnf", "zsm"
                         ],
                     },
                     {
