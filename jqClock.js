@@ -288,7 +288,7 @@ if (!Number.prototype.map) {
     Object.freeze($.clock);
 
     //_jqClock contains references to each clock's settimeouts
-    let _jqClock = _jqClock || {};
+    let _jqClock = {};
 
     $.fn.clock = function (options) {
         let _this = this;
@@ -397,7 +397,7 @@ if (!Number.prototype.map) {
             "O": ( clk ) => (clk.tzH < 0
                         ? "+" +
                         ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                        : tzH > 0
+                        : clk.tzH > 0
                         ? ("" + clk.tzH * -1).padStart(2, "0")
                         : "+00") + "00",
             //Difference to Greenwich time (GMT) with colon between hours and minutes
@@ -432,8 +432,8 @@ if (!Number.prototype.map) {
                     (clk.tzH < 0
                         ? "+" +
                         ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                        : tzh > 0
-                        ? ("" + clk.tzh * -1).padStart(2, "0")
+                        : clk.tzH > 0
+                        ? ("" + clk.tzH * -1).padStart(2, "0")
                         : "+00") +
                     ":00",
             //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
