@@ -94,7 +94,7 @@ if (!Date.prototype.hasOwnProperty("daysInMonth")) {
             30,
             31,
             30,
-            31,
+            31
         ][this.getMonth()];
     };
 }
@@ -134,25 +134,6 @@ if (!Date.prototype.hasOwnProperty("swatchTime")) {
 }
 //END DATE PROTOTYPE EXTENSION
 
-//Most browsers support String.prototype.padStart, unfortunately Internet Explorer does not... So this is to make sure it is available
-// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
-if (!String.prototype.padStart) {
-    String.prototype.padStart = function (targetLength, padString) {
-        targetLength = targetLength >> 0; //floor if number or convert non-number to 0;
-        padString = String(padString || " ");
-        if (this.length > targetLength) {
-            return String(this);
-        } else {
-            targetLength = targetLength - this.length;
-            if (targetLength > padString.length) {
-                padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
-            }
-            return padString.slice(0, targetLength) + String(this);
-        }
-    };
-}
-//END STRING.PROTOTYPE.PADSTART
 
 //Let's implement a Number.map function
 //source:https://stackoverflow.com/questions/10756313/javascript-jquery-map-a-range-of-numbers-to-another-range-of-numbers#comment40722057_23202637
