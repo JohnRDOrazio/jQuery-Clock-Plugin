@@ -10,10 +10,10 @@
  * Possible options parameters:
  * @timestamp defaults to clients current time
  * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
- * @langSet defaults to "en", possible values are: "am", "ar", "bn", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "de", "el", "gu", "hi", "hu", "id", "it", "ja", "kn", "ko", "lv", "lt", "ms", "ml", "mr", "mo", "ps", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "ta", "te", "th", "tr", "uk", "vi"
+ * @langSet defaults to "en", possible values are: "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm"
  * @calendar defaults to "true", possible value are: boolean "true" or "false"
- * @dateFormat defaults to "l, F j, Y" when langSet=="en", else to "l, j F Y"
- * @timeFormat defaults to "h:i:s A" when langSet=="en", else to "H:i:s"
+ * @dateFormat defaults to "l, F j, Y" when langSet==="en", else to "l, j F Y"
+ * @timeFormat defaults to "h:i:s A" when langSet==="en", else to "H:i:s"
  * @isDST possible values are boolean "true" or "false", if not passed in will calculate based on client time
  *
  *   $("#mydiv").clock(); >> will display in English and in 12 hour format
