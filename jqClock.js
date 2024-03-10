@@ -189,13 +189,13 @@ if (!Number.prototype.map) {
                 type: "string",
                 value: "stop",
                 description:
-                    "Passing in 'stop' to an already initialized clock will clear the setTimeout for that clock to stop it from ticking",
+                    "Passing in 'stop' to an already initialized clock will clear the setTimeout for that clock to stop it from ticking"
             },
             {
                 type: "string",
                 value: "start",
                 description:
-                    "Passing in 'start' to an already initialized clock will restart the setTimeout for that clock to get it ticking again, as though it had never lost time",
+                    "Passing in 'start' to an already initialized clock will restart the setTimeout for that clock to get it ticking again, as though it had never lost time"
             },
             {
                 type: "object",
@@ -206,7 +206,7 @@ if (!Number.prototype.map) {
                         description:
                             "Either a javascript timestamp as produces by [JAVASCRIPT new Date().getTime()] or a php timestamp as produced by [PHP time()] ",
                         type: "unix timestamp",
-                        values: ["javascript timestamp", "php timestamp"],
+                        values: ["javascript timestamp", "php timestamp"]
                     },
                     {
                         name: "langSet",
@@ -219,14 +219,14 @@ if (!Number.prototype.map) {
                             "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta",
                             "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs",
                             "pes", "prs", "swc", "swh", "tnf", "zsm"
-                        ],
+                        ]
                     },
                     {
                         name: "calendar",
                         description:
                             "Whether the date should be displayed together with the time",
                         type: "Boolean",
-                        values: [true, false],
+                        values: [true, false]
                     },
                     {
                         name: "dateFormat",
@@ -251,8 +251,8 @@ if (!Number.prototype.map) {
                             "L",
                             "o",
                             "Y",
-                            "y",
-                        ],
+                            "y"
+                        ]
                     },
                     {
                         name: "timeFormat",
@@ -277,32 +277,32 @@ if (!Number.prototype.map) {
                             "Z",
                             "c",
                             "r",
-                            "U",
-                        ],
+                            "U"
+                        ]
                     },
                     {
                         name: "isDST",
                         description:
                             "When a client side timestamp is used, whether DST is active will be automatically determined. However this cannot be determined for a server-side timestamp which must be passed in as UTC, in that can case it can be set with this option",
                         type: "Boolean",
-                        values: [true, false],
+                        values: [true, false]
                     },
                     {
                         name: "rate",
                         description:
                             "Defines the rate at which the clock will update, in milliseconds",
                         type: "Integer",
-                        values: "1 - 9007199254740991 (recommended 10-60000)",
-                    },
-                ],
-            },
+                        values: "1 - 9007199254740991 (recommended 10-60000)"
+                    }
+                ]
+            }
         ],
         methods: {
             destroy:
                 "Chaining clock().destroy() has the same effect as passing the 'destroy' option as in clock('destroy')",
             stop: "Chaining clock().stop() has the same effect as passing the 'stop' option as in clock('stop')",
             start: "Chaining clock().start() has the same effect as passing the 'start' option as in clock('start')",
-        },
+        }
     };
     Object.freeze($.clock);
 
@@ -332,18 +332,14 @@ if (!Number.prototype.map) {
             //A textual representation of a day, three letters
             "D": ( clk ) => new Intl.DateTimeFormat(
                 clk.myoptions.langSet,
-                {
-                    weekday: "short",
-                }
+                { weekday: "short" }
             ).format(clk.mytimestamp_sysdiff),
             //Day of the month without leading zeros
             "j": ( clk ) => clk.dt,
             //A full textual representation of the day of the week
             "l": ( clk ) => new Intl.DateTimeFormat(
                 clk.myoptions.langSet,
-                {
-                    weekday: "long",
-                }
+                { weekday: "long" }
             ).format(clk.mytimestamp_sysdiff),
             // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
             "N": ( clk ) => clk.dy === 0 ? 7 : clk.dy,
@@ -362,18 +358,14 @@ if (!Number.prototype.map) {
             //A full textual representation of a month, such as January or March
             "F": ( clk ) => new Intl.DateTimeFormat(
                 clk.myoptions.langSet,
-                {
-                    month: "long",
-                }
+                { month: "long" }
             ).format(clk.mytimestamp_sysdiff),
             //Numeric representation of a month, with leading zeros
             "m": ( clk ) => (clk.mo + 1 + "").padStart(2, "0"),
             //A short textual representation of a month, three letters
             "M": ( clk ) => new Intl.DateTimeFormat(
                 clk.myoptions.langSet,
-                {
-                    month: "short",
-                }
+                { month: "short" }
             ).format(clk.mytimestamp_sysdiff),
             //Numeric representation of a month, without leading zeros
             "n": ( clk ) => clk.mo + 1,
@@ -569,16 +561,16 @@ if (!Number.prototype.map) {
                     clk.correction;
 
                 clk.mytimestamp_sysdiff = new Date(clk.mytimestamp);
-                clk.h = clk.mytimestamp_sysdiff.getHours();
-                clk.m = clk.mytimestamp_sysdiff.getMinutes();
-                clk.s = clk.mytimestamp_sysdiff.getSeconds();
-                clk.ms = clk.mytimestamp_sysdiff.getMilliseconds();
-                clk.us = ("" + (clk.pfnow % 1)).substring(2, 5);
-                clk.dy = clk.mytimestamp_sysdiff.getDay();
-                clk.dt = clk.mytimestamp_sysdiff.getDate();
-                clk.mo = clk.mytimestamp_sysdiff.getMonth();
-                clk.y = clk.mytimestamp_sysdiff.getFullYear();
-                clk.ly = clk.mytimestamp_sysdiff.isLeapYear();
+                clk.h   = clk.mytimestamp_sysdiff.getHours();
+                clk.m   = clk.mytimestamp_sysdiff.getMinutes();
+                clk.s   = clk.mytimestamp_sysdiff.getSeconds();
+                clk.ms  = clk.mytimestamp_sysdiff.getMilliseconds();
+                clk.us  = ("" + (clk.pfnow % 1)).substring(2, 5);
+                clk.dy  = clk.mytimestamp_sysdiff.getDay();
+                clk.dt  = clk.mytimestamp_sysdiff.getDate();
+                clk.mo  = clk.mytimestamp_sysdiff.getMonth();
+                clk.y   = clk.mytimestamp_sysdiff.getFullYear();
+                clk.ly  = clk.mytimestamp_sysdiff.isLeapYear();
                 clk.doy = clk.mytimestamp_sysdiff.getDOY();
                 clk.woy = clk.mytimestamp_sysdiff.getWOY();
                 clk.iso8601Year = clk.mytimestamp_sysdiff.getWOY(true);
@@ -586,9 +578,9 @@ if (!Number.prototype.map) {
                 clk.swt = clk.mytimestamp_sysdiff.swatchTime();
                 clk.tzH = parseInt(clk.myoptions.tzOffset / 60);
                 clk.tzS = parseInt(clk.myoptions.tzOffset * 60);
-                clk.ap = "AM";
-                clk.calendElem = "";
-                clk.clockElem = "";
+                clk.ap  = "AM";
+                clk.calendElem  = "";
+                clk.clockElem   = "";
                 if (clk.h > 11) {
                     clk.ap = "PM";
                 }
