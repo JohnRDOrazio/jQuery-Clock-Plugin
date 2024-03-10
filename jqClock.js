@@ -33,18 +33,14 @@
 //THE FOLLOWING EXTENSION OF THE DATE PROTOTYPE WAS TAKEN FROM: https://stackoverflow.com/a/26778394/394921
 if (!Date.prototype.hasOwnProperty("stdTimezoneOffset")) {
     Date.prototype.stdTimezoneOffset = function () {
-        var fy = this.getFullYear();
+        const fy = this.getFullYear();
         if (!Date.prototype.stdTimezoneOffset.cache.hasOwnProperty(fy)) {
-            var maxOffset = new Date(fy, 0, 1).getTimezoneOffset();
-            var monthsTestOrder = [6, 7, 5, 8, 4, 9, 3, 10, 2, 11, 1];
+            let maxOffset = new Date(fy, 0, 1).getTimezoneOffset();
+            const monthsTestOrder = [6, 7, 5, 8, 4, 9, 3, 10, 2, 11, 1];
 
-            for (var mi = 0; mi < 12; mi++) {
-                var offset = new Date(
-                    fy,
-                    monthsTestOrder[mi],
-                    1
-                ).getTimezoneOffset();
-                if (offset != maxOffset) {
+            for (let mi = 0; mi < 12; mi++) {
+                const offset = new Date(fy, monthsTestOrder[mi], 1).getTimezoneOffset();
+                if (offset !== maxOffset) {
                     maxOffset = Math.max(maxOffset, offset);
                     break;
                 }
@@ -63,27 +59,28 @@ if (!Date.prototype.hasOwnProperty("isDST")) {
 if (!Date.prototype.hasOwnProperty("isLeapYear")) {
     //source: https://stackoverflow.com/a/26426761/394921
     Date.prototype.isLeapYear = function () {
-        var year = this.getFullYear();
-        if ((year & 3) != 0) return false;
-        return year % 100 != 0 || year % 400 == 0;
+        const year = this.getFullYear();
+        if ((year & 3) !== 0) return false;
+        return year % 100 !== 0 || year % 400 === 0;
     };
 }
 if (!Date.prototype.hasOwnProperty("getDOY")) {
     // Get Day of Year
-    //source: https://stackoverflow.com/a/26426761/394921
-    //maybe can use the solution [here](https://stackoverflow.com/a/28919172/394921) also: Math.round((new Date().setHours(23) - new Date(new Date().getYear()+1900, 0, 1, 0, 0, 0))/1000/60/60/24);
+    // source: https://stackoverflow.com/a/26426761/394921
+    // maybe can use the solution [here](https://stackoverflow.com/a/28919172/394921) also:
+    //   Math.round((new Date().setHours(23) - new Date(new Date().getYear()+1900, 0, 1, 0, 0, 0))/1000/60/60/24);
     Date.prototype.getDOY = function () {
-        var dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-        var mn = this.getMonth();
-        var dn = this.getDate();
-        var dayOfYear = dayCount[mn] + dn;
+        const dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        const mn = this.getMonth();
+        const dn = this.getDate();
+        let dayOfYear = dayCount[mn] + dn;
         if (mn > 1 && this.isLeapYear()) dayOfYear++;
         return dayOfYear;
     };
 }
 if (!Date.prototype.hasOwnProperty("daysInMonth")) {
-    //Get number of days in the current month
-    //source: https://stackoverflow.com/questions/1184334/get-number-days-in-a-specified-month-using-javascript#comment36681053_1464716
+    // Get number of days in the current month
+    // source: https://stackoverflow.com/questions/1184334/get-number-days-in-a-specified-month-using-javascript#comment36681053_1464716
     Date.prototype.daysInMonth = function () {
         return [
             31,
@@ -104,15 +101,17 @@ if (!Date.prototype.hasOwnProperty("daysInMonth")) {
 if (!Date.prototype.hasOwnProperty("getWOY")) {
     //Get Week Number in the Year
     //source: https://stackoverflow.com/a/6117889/394921
-    Date.prototype.getWOY = function (getY) {
-        var d = new Date(+this);
-        d.setHours(0, 0, 0, 0);
-        d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    Date.prototype.getWOY = function (getY = false) {
+        const d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
+        d.setUTCHours(0, 0, 0, 0);
+        let dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
         if (getY) {
-            return d.getFullYear();
+            return d.getUTCFullYear();
         } else {
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
             return Math.ceil(
-                ((d - new Date(d.getFullYear(), 0, 1)) / 8.64e7 + 1) / 7
+                ((d - yearStart) / 8.64e7 + 1) / 7
             );
         }
     };
@@ -351,31 +350,23 @@ if (!Number.prototype.map) {
     Object.freeze($.clock);
 
     //_jqClock contains references to each clock's settimeouts
-    var _jqClock = _jqClock || {};
+    let _jqClock = _jqClock || {};
 
     $.fn.clock = function (options) {
         let _this = this;
 
-        this.initialize = function () {
-            return this;
-        };
+        this.initialize = () => _this;
 
-        this.destroy = () => {
-            return _this.each((idx,selfRef) => {
-                pluginMethods["destroy"](selfRef);
-            });
-        };
-        this.stop = () => {
-            return _this.each((idx,selfRef) => {
-                pluginMethods["stop"](selfRef);
-            });
-        };
+        this.destroy    = () => _this.each((idx,selfRef) => {
+            pluginMethods["destroy"](selfRef);
+        });
+        this.stop       = () => _this.each((idx,selfRef) => {
+            pluginMethods["stop"](selfRef);
+        });
 
-        this.start = () => {
-            return _this.each((idx,selfRef) => {
-                pluginMethods["start"](selfRef);
-            });
-        };
+        this.start      = () => _this.each((idx,selfRef) => {
+            pluginMethods["start"](selfRef);
+        });
 
         const dateFormatCharacters = {
             //DAY
@@ -571,7 +562,7 @@ if (!Number.prototype.map) {
                     current_options !== undefined &&
                     _jqClock.hasOwnProperty(el_id) === false
                 ) {
-                    _jqClock[el_id] = setTimeout(function () {
+                    _jqClock[el_id] = setTimeout(() => {
                         _updateClock($(selfRef));
                     }, current_options.rate);
                 }
@@ -579,22 +570,22 @@ if (!Number.prototype.map) {
         };
 
         /* Define some helper functions */
-        let _newGuid = () => {
+        const _newGuid = () => {
                 return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-                    .replace(/[xy]/g, function (c) {
-                        let r = (Math.random() * 16) | 0,
-                            v = c == "x" ? r : (r & 0x3) | 0x8;
+                    .replace(/[xy]/g, (c) => {
+                        const r = (Math.random() * 16) | 0,
+                              v = c === "x" ? r : (r & 0x3) | 0x8;
                         return v.toString(16);
                     })
                     .toUpperCase();
             },
             _ordSuffix = (ord) => {
                 let ord_suffix = ""; //st, nd, rd, th
-                if (ord === 1 || (ord % 10 === 1 && ord != 11)) {
+                if (ord === 1 || (ord % 10 === 1 && ord !== 11)) {
                     ord_suffix = "st";
-                } else if (ord === 2 || (ord % 10 === 2 && ord != 12)) {
+                } else if (ord === 2 || (ord % 10 === 2 && ord !== 12)) {
                     ord_suffix = "nd";
-                } else if (ord === 3 || (ord % 10 === 3 && ord != 13)) {
+                } else if (ord === 3 || (ord % 10 === 3 && ord !== 13)) {
                     ord_suffix = "rd";
                 } else {
                     ord_suffix = "th";
@@ -721,10 +712,10 @@ if (!Number.prototype.map) {
                     : true;
                 options.dateFormat =
                     options.dateFormat ||
-                    (options.langSet == "en" ? "l, F j, Y" : "l, j F Y");
+                    (options.langSet === "en" ? "l, F j, Y" : "l, j F Y");
                 options.timeFormat =
                     options.timeFormat ||
-                    (options.langSet == "en" ? "h:i:s A" : "H:i:s");
+                    (options.langSet === "en" ? "h:i:s A" : "H:i:s");
                 options.timezone = options.timezone || "localsystimezone"; //should only really be passed in when a server timestamp is passed
                 options.isDST = options.hasOwnProperty("isDST")
                     ? options.isDST
@@ -739,7 +730,7 @@ if (!Number.prototype.map) {
                 }
                 if (typeof options.calendar === "string") {
                     options.calendar = Boolean(
-                        options.calendar == "false" ? false : true
+                        options.calendar === "false" ? false : true
                     );
                 } else if (typeof options.calendar !== "boolean") {
                     options.calendar = Boolean(options.calendar); //do our best to get a boolean value
@@ -755,7 +746,7 @@ if (!Number.prototype.map) {
                 }
                 if (typeof options.isDST === "string") {
                     options.isDST = Boolean(
-                        options.isDST == "true" ? true : false
+                        options.isDST === "true" ? true : false
                     );
                 } else if (typeof options.isDST !== "boolean") {
                     options.isDST = Boolean(options.isDST);
@@ -769,12 +760,12 @@ if (!Number.prototype.map) {
                 let pos = n + 1;
                 let str = forDateStr ? myoptions.dateFormat : myoptions.timeFormat;
                 while (pos < str.length) {
-                    if (str.charAt(pos) == "%") {
+                    if (str.charAt(pos) === "%") {
                         break;
                     }
                     pos++;
                 }
-                if (pos > n + 1 && pos != str.length) {
+                if (pos > n + 1 && pos !== str.length) {
                     currStr += str.substring(n + 1, pos);
                     n += pos - n;
                 } else {
@@ -783,7 +774,7 @@ if (!Number.prototype.map) {
                 return [ currStr, n ];
             },
             seemsToBePHPTimestamp = ( options, sysDateObj ) => {
-                let digitCountDiff =
+                const digitCountDiff =
                 (sysDateObj.getTime() + "").length -
                 (options.timestamp + "").length;
                 return digitCountDiff > 2;
@@ -831,13 +822,12 @@ if (!Number.prototype.map) {
                 }
             };
 
-        this.each(() => {
+        this.each((idx, selfRef) => {
             if (typeof options === "undefined" || typeof options === "object") {
                 //this is useful only for client timestamps...
                 //used immediately for the default value of options.isDST...
-                let highPrecisionTimestamp =
-                    performance.timeOrigin + performance.now();
-                let sysDateObj = new Date(highPrecisionTimestamp);
+                const highPrecisionTimestamp = performance.timeOrigin + performance.now();
+                const sysDateObj = new Date(highPrecisionTimestamp);
                 //TODO: if server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
                 //       no use using a client timestamps check for DST when a server timestamp is passed!
 
@@ -851,7 +841,7 @@ if (!Number.prototype.map) {
                 options.tzOffset = sysDateObj.getTimezoneOffset();
 
                 //divide by 60 to get hours from minutes
-                let tzOffset = options.tzOffset / 60;
+                const tzOffset = options.tzOffset / 60;
 
                 /* **********************************************
                  * If we are using the current client timestamp,
@@ -869,7 +859,7 @@ if (!Number.prototype.map) {
                  */
 
                 //IF A TIMESTAMP HAS BEEN PASSED IN
-                if (options.timestamp != "localsystime") {
+                if (options.timestamp !== "localsystime") {
                     if ( seemsToBePHPTimestamp( options, sysDateObj ) ) {
                         options = normalizePHPTimestamp( options, sysDateObj );
                     }
@@ -877,7 +867,7 @@ if (!Number.prototype.map) {
                         options.sysdiff = options.timestamp - sysDateObj.getTime();
                         /* ARE THE NEXT FEW LINES AT ALL USEFUL??? */
                         //options.timezone has most probably not been set, let's do some guesswork
-                        if (options.timezone == "localsystimezone") {
+                        if (options.timezone === "localsystimezone") {
                             options = initTimezone( options, tzOffset );
                         }
                         /* MIGHT WANT TO DOUBLE CHECK IF THE PRECEDING LOGIC IS AT ALL USEFUL... */
@@ -887,7 +877,7 @@ if (!Number.prototype.map) {
                 //OTHERWISE IF NO TIMESTAMP HAS BEEN PASSED IN
                 else {
                     //options.timezone has most probably not been set, let's do some guesswork
-                    if (options.timezone == "localsystimezone") {
+                    if (options.timezone === "localsystimezone") {
                         options = initTimezone( options, tzOffset );
                     }
                 }
@@ -898,7 +888,6 @@ if (!Number.prototype.map) {
 
                 initInstance( this, options );
             } else if (typeof options === "string") {
-                let selfRef = this;
                 if( options in pluginMethods ) {
                     pluginMethods[options]( selfRef );
                 } else {
