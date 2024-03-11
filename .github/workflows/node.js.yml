@@ -32,7 +32,7 @@ jobs:
       run: google-closure-compiler --js jqClock.js --js_output_file jqClock.min.js --language_in ECMASCRIPT_2019 --language_out ECMASCRIPT_2019
     - name: Update jqClock-lite.js based on current jqClock.js
       run: |
-        cp jqClock.js jqClock-lite-js
+        cp jqClock.js jqClock-lite.js
         perl -i -p0e 's/,\n        options: \[\n(.*?)\n        \}//s' jqClock-lite.js
     - name: Minify jqClock-lite.js to jqClock-lite.min.js
       run: google-closure-compiler --js jqClock-lite.js --js_output_file jqClock-lite.min.js --language_in ECMASCRIPT_2019 --language_out ECMASCRIPT_2019
