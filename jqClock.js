@@ -589,7 +589,7 @@ if (!Number.prototype.map) {
                     let dateStr = "";
                     let chr;
                     const { myoptions } = clk;
-                    for (var n = 0; n <= myoptions.dateFormat.length; n++) {
+                    for (let n = 0; n <= myoptions.dateFormat.length; n++) {
                         chr = myoptions.dateFormat.charAt(n);
                         if( chr in dateFormatCharacters ) {
                             dateStr += dateFormatCharacters[chr]( clk );
@@ -613,7 +613,7 @@ if (!Number.prototype.map) {
                 let timeStr = "";
                 let chr;
                 const { myoptions } = clk;
-                for (var n = 0; n <= myoptions.timeFormat.length; n++) {
+                for (let n = 0; n <= myoptions.timeFormat.length; n++) {
                     chr = myoptions.timeFormat.charAt(n);
                     if( chr in timeFormatCharacters ) {
                         timeStr += timeFormatCharacters[chr]( clk );
