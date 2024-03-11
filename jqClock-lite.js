@@ -637,9 +637,12 @@ if (!Number.prototype.map) {
                 //used immediately for the default value of options.isDST...
                 const highPrecisionTimestamp = performance.timeOrigin + performance.now();
                 const sysDateObj = new Date(highPrecisionTimestamp);
-                //TODO: if server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
-                //       no use using a client timestamps check for DST when a server timestamp is passed!
 
+                // If a server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
+                // It's no use using a client timestamp's check for DST when a server timestamp is passed!
+                // To fix this, we will give a console warning when a server timestamp is passed but isDST is not...
+                // In order to do that, we need to save a reference to the original isDST option before ensuring default options
+                const origDST = options.isDST || null;
                 options = ensureDefaultOptions( options, sysDateObj );
                 options = normalizeOptions( options );
 
@@ -671,6 +674,9 @@ if (!Number.prototype.map) {
                 if (options.timestamp !== "localsystime") {
                     if ( seemsToBePHPTimestamp( options, sysDateObj ) ) {
                         options = normalizePHPTimestamp( options, sysDateObj );
+                        if( null === origDST ) {
+                            console.warn('jqClock: cannot automatically determine whether DST is in effect for a server side timestamp, please supply the `isDST` option');
+                        }
                     }
                     else {
                         options.sysdiff = options.timestamp - sysDateObj.getTime();
