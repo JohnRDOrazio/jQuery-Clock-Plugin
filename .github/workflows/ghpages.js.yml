@@ -7,7 +7,7 @@ on:
   pull_request:
     branches: [ "master" ]
     paths:
-     - jqClock.js
+     - jqClock.min.js
 
 jobs:
   build:
