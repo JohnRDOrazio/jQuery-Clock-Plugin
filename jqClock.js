@@ -8,9 +8,9 @@
  * Sets time in clock div and calls itself every second
  * Can take options as JSON object
  * Possible options parameters:
- * @timestamp defaults to clients current time
+ * @timestamp defaults to clients current time, using the performance API
  * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
- * @langSet defaults to "en", possible values are: "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm"
+ * @langSet defaults to navigator language else "en", possible values are: "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm" (can optionally add region)
  * @calendar defaults to "true", possible value are: boolean "true" or "false"
  * @dateFormat defaults to "l, F j, Y" when langSet==="en", else to "l, j F Y"
  * @timeFormat defaults to "h:i:s A" when langSet==="en", else to "H:i:s"
@@ -185,9 +185,10 @@ if (!Number.prototype.map) {
                     {
                         name: "timestamp",
                         description:
-                            "Either a javascript timestamp as produces by [JAVASCRIPT new Date().getTime()] or a php timestamp as produced by [PHP time()] ",
+                            "Either a javascript timestamp as produced by [JAVASCRIPT new Date().getTime()] or a php timestamp as produced by [PHP time()] ",
                         type: "unix timestamp",
-                        values: ["javascript timestamp", "php timestamp"]
+                        values: ["javascript timestamp", "php timestamp"],
+                        default: "\"localsystime\" which defaults to `new Date(performance.timeOrigin + performance.now()).getTime()`"
                     },
                     {
                         name: "langSet",
@@ -200,14 +201,16 @@ if (!Number.prototype.map) {
                             "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta",
                             "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs",
                             "pes", "prs", "swc", "swh", "tnf", "zsm"
-                        ]
+                        ],
+                        default: "navigator.language || \"en\""
                     },
                     {
                         name: "calendar",
                         description:
                             "Whether the date should be displayed together with the time",
                         type: "Boolean",
-                        values: [true, false]
+                        values: [true, false],
+                        default: true
                     },
                     {
                         name: "dateFormat",
@@ -233,7 +236,8 @@ if (!Number.prototype.map) {
                             "o",
                             "Y",
                             "y"
-                        ]
+                        ],
+                        default: "langSet === \"en\" ? \"l, F j, Y\" : \"l, j F Y\""
                     },
                     {
                         name: "timeFormat",
@@ -259,12 +263,13 @@ if (!Number.prototype.map) {
                             "c",
                             "r",
                             "U"
-                        ]
+                        ],
+                        default: "langSet === \"en\" ? \"h:i:s A\" : \"H:i:s\""
                     },
                     {
                         name: "isDST",
                         description:
-                            "When a client side timestamp is used, whether DST is active will be automatically determined. However this cannot be determined for a server-side timestamp which must be passed in as UTC, in that can case it can be set with this option",
+                            "When a client side timestamp is used, whether DST is active will be automatically determined. However this cannot be determined for a server-side timestamp which must be passed in as UTC, in that case it can be set with this option",
                         type: "Boolean",
                         values: [true, false]
                     },
@@ -273,7 +278,8 @@ if (!Number.prototype.map) {
                         description:
                             "Defines the rate at which the clock will update, in milliseconds",
                         type: "Integer",
-                        values: "1 - 9007199254740991 (recommended 10-60000)"
+                        values: "1 - 9007199254740991 (recommended min 10 - max 60000)",
+                        default: 500
                     }
                 ]
             }
@@ -636,7 +642,7 @@ if (!Number.prototype.map) {
                 options = options || {};
                 /* I prefer this method to jQuery.extend because we can dynamically set each option based on a preceding option's value */
                 options.timestamp = options.timestamp || "localsystime";
-                options.langSet = options.langSet || "en";
+                options.langSet = options.langSet || navigator.language || "en";
                 options.calendar = options.hasOwnProperty("calendar")
                     ? options.calendar
                     : true;
