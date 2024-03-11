@@ -14,7 +14,7 @@
  * @calendar defaults to "true", possible value are: boolean "true" or "false"
  * @dateFormat defaults to "l, F j, Y" when langSet==="en", else to "l, j F Y"
  * @timeFormat defaults to "h:i:s A" when langSet==="en", else to "H:i:s"
- * @isDST possible values are boolean "true" or "false", if not passed in will calculate based on client time
+ * @isDST possible values are boolean `true` or `false`, if not passed in will be calculated based on client time (default)
  *
  *   $("#mydiv").clock(); >> will display in English and in 12 hour format
  *   $("#mydiv").clock({"langSet":"it"}); >> will display in Italian and in 24 hour format
@@ -144,7 +144,7 @@ if (!Number.prototype.map) {
 }
 //END NUMBER.PROTOTYPE.MAP
 
-/* Makes use of performance.now:
+/* Makes use of the Performance API:
  * https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
  * Unlike other timing data available to JavaScript (for example Date.now),
  * the timestamps returned by Performance.now() are not limited to one-millisecond resolution.
