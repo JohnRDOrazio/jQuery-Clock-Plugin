@@ -104,7 +104,7 @@ if (!Date.prototype.hasOwnProperty("getWOY")) {
     Date.prototype.getWOY = function (getY = false) {
         const d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
         d.setUTCHours(0, 0, 0, 0);
-        let dayNum = d.getUTCDay() || 7;
+        const dayNum = d.getUTCDay() || 7;
         d.setUTCDate(d.getUTCDate() + 4 - dayNum);
         if (getY) {
             return d.getUTCFullYear();
@@ -590,9 +590,10 @@ if (!Number.prototype.map) {
 
                 $(el).html(clk.calendElem + clk.clockElem);
                 let el_id = $(el).attr("id");
-                _jqClock[el_id] = setTimeout(() => {
-                    _updateClock( $(el) );
-                }, clk.myoptions.rate);
+                _jqClock[el_id] = setTimeout(
+                    () => { _updateClock( $(el) ); },
+                    clk.myoptions.rate
+                );
             },
             formatDateString = ( clk ) => {
                     /* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
@@ -769,9 +770,9 @@ if (!Number.prototype.map) {
                 const highPrecisionTimestamp = performance.timeOrigin + performance.now();
                 const sysDateObj = new Date(highPrecisionTimestamp);
 
-                // If a server timestamp is passed in and options.isDST is not, then options.isDST isn't any good...
+                // If a server timestamp is passed in and options.isDST is not, then the default options.isDST isn't any good...
                 // It's no use using a client timestamp's check for DST when a server timestamp is passed!
-                // To fix this, we will give a console warning when a server timestamp is passed but isDST is not...
+                // To fix this, we will give a console warning when a server timestamp is passed but the isDST option is not...
                 // In order to do that, we need to save a reference to the original isDST option before ensuring default options
                 const origDST = options.isDST || null;
                 options = ensureDefaultOptions( options, sysDateObj );
