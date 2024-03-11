@@ -71,74 +71,6 @@
    }
   </style>
 
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-  <script type="text/javascript" src="jqClock.min.js"></script>
-  <script type="text/javascript">
-    var SECOND = 1000;
-    var MINUTE = 60 * SECOND;
-    var HOUR   = 60 * MINUTE;
-    var DAY    = 24 * HOUR;
-    var WEEK   = 7 * DAY;
-    
-    var customtimestamp = new Date();
-    customtimestamp = customtimestamp.getTime();
-    customtimestamp = customtimestamp+(2*WEEK)+(2*HOUR)+(10*MINUTE)+(10*SECOND);
-
-    var clock_options = [
-     {}, //clock1
-     {"langSet":"it","timeFormat":"H %o'clock,% i %minutes,% s %seconds%"}, //clock2
-     {"dateFormat":"D, M jS, Y ( N - z | W | L )"}, //clock3
-     {"calendar":false,"timeFormat":"H:i:s.v e I (@B)","rate":50}, //clock4
-     {"timestamp":customtimestamp,"langSet":"ru"}
-    ];
-   
-    $(document).ready(function(){
-    
-      $("#jqclock_version").text($.clock.version);
-      
-      for(var n=0;n<5;n++){
-        var i = n+1;
-        //initial creation of each clock
-        $("#clock"+i).clock(clock_options[n]);
-        $("#destroyclock"+i).data("index",i);
-        $("#stopclock"+i).data("index",i);
-       
-        //set click handler for destroy buttons
-        $("#destroyclock"+i).click(function(){ 
-          var m = $(this).data("index");
-          console.log($(this).text()+' == '+'DESTROY CLOCK '+m);
-          if($(this).text() == ('DESTROY CLOCK '+m)){
-            $("#clock"+m).clock("destroy").text('This div can be turned into a dynamic clock');
-            $(this).text('RECREATE CLOCK '+m);
-            $(this).attr("title",'$("#clock'+m+'").clock('+(Object.keys(clock_options[m-1]).length === 0 ? '' : JSON.stringify(clock_options[m-1]) )+')');
-          }
-          else if($(this).text() == ('RECREATE CLOCK '+m)){
-            $("#clock"+m).clock(clock_options[m-1]);
-            $(this).text('DESTROY CLOCK '+m);
-            $(this).attr("title",'$("#clock'+m+'").clock("destroy")');
-          }
-        });
-       
-        //set click handler for stop buttons
-        $("#stopclock"+i).click(function(){ 
-          var m = $(this).data("index");
-          console.log($(this).text()+' == '+'STOP CLOCK '+m);
-          if($(this).text() == 'STOP CLOCK '+m){
-            $("#clock"+m).clock("stop");
-            $(this).text('START CLOCK '+m);
-            $(this).attr("title",'$("#clock'+m+'").clock("start")');
-          }
-          else if($(this).text() == 'START CLOCK '+m){
-            $("#clock"+m).clock("start");
-            $(this).text('STOP CLOCK '+m);
-            $(this).attr("title",'$("#clock'+m+'").clock("stop")');
-          }
-        });
-      
-      }
-                                                 
-    });    
-  </script>
 </head>
 
 <body>
@@ -235,5 +167,73 @@
 
  <footer>
   <p>&copy; Copyright 2011 by <a href="mailto:priest@johnromanodorazio.com" title="Send me an email">John Romano D'Orazio</a> (screen name Lwangaman)</p>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="jqClock.min.js"></script>
+  <script type="text/javascript">
+    const SECOND = 1000;
+    const MINUTE = 60 * SECOND;
+    const HOUR   = 60 * MINUTE;
+    const DAY    = 24 * HOUR;
+    const WEEK   = 7 * DAY;
+    
+    let customtimestamp = new Date();
+    customtimestamp = customtimestamp.getTime();
+    customtimestamp = customtimestamp+(2*WEEK)+(2*HOUR)+(10*MINUTE)+(10*SECOND);
+
+    let clock_options = [
+     {}, //clock1
+     {"langSet":"it","timeFormat":"H %o'clock,% i %minutes,% s %seconds%"}, //clock2
+     {"dateFormat":"D, M jS, Y ( N - z | W | L )"}, //clock3
+     {"calendar":false,"timeFormat":"H:i:s.v e I (@B)","rate":50}, //clock4
+     {"timestamp":customtimestamp,"langSet":"ru"} //clock5
+    ];
+   
+    $(document).ready(function(){
+    
+      $("#jqclock_version").text($.clock.version);
+      
+      for(let n=0;n<5;n++){
+        let i = n+1;
+        //initial creation of each clock
+        $("#clock"+i).clock(clock_options[n]);
+        $("#destroyclock"+i).data("index",i);
+        $("#stopclock"+i).data("index",i);
+       
+        //set click handler for destroy buttons
+        $("#destroyclock"+i).click(function(){ 
+          let m = $(this).data("index");
+          console.log($(this).text()+' == '+'DESTROY CLOCK '+m);
+          if($(this).text() == ('DESTROY CLOCK '+m)){
+            $("#clock"+m).clock("destroy").text('This div can be turned into a dynamic clock');
+            $(this).text('RECREATE CLOCK '+m);
+            $(this).attr("title",'$("#clock'+m+'").clock('+(Object.keys(clock_options[m-1]).length === 0 ? '' : JSON.stringify(clock_options[m-1]) )+')');
+          }
+          else if($(this).text() == ('RECREATE CLOCK '+m)){
+            $("#clock"+m).clock(clock_options[m-1]);
+            $(this).text('DESTROY CLOCK '+m);
+            $(this).attr("title",'$("#clock'+m+'").clock("destroy")');
+          }
+        });
+       
+        //set click handler for stop buttons
+        $("#stopclock"+i).click(function(){ 
+          let m = $(this).data("index");
+          console.log($(this).text()+' == '+'STOP CLOCK '+m);
+          if($(this).text() == 'STOP CLOCK '+m){
+            $("#clock"+m).clock("stop");
+            $(this).text('START CLOCK '+m);
+            $(this).attr("title",'$("#clock'+m+'").clock("start")');
+          }
+          else if($(this).text() == 'START CLOCK '+m){
+            $("#clock"+m).clock("start");
+            $(this).text('STOP CLOCK '+m);
+            $(this).attr("title",'$("#clock'+m+'").clock("stop")');
+          }
+        });
+      
+      }
+                                                 
+    });    
+  </script>
  </footer>
 </body>
