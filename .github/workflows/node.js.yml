@@ -1,0 +1,48 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+     - jqClock.js
+  pull_request:
+    branches: [ "master" ]
+    paths:
+     - jqClock.js
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Use Node.js LTS
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        cache: 'npm'
+    - name: Install google-closure-compiler
+      run: npm i -g google-closure-compiler
+    - name: Minify jqClock.js to jqClock.min.js
+      run: google-closure-compiler --js jqClock.js --js_output_file jqClock.min.js --language_in ECMASCRIPT_2019 --language_out ECMASCRIPT_2019
+    - name: Update jqClock-lite.js based on current jqClock.js
+      run: |
+        cp jqClock.js jqClock-lite-js
+        perl -i -p0e 's/,\n        options: \[\n(.*?)\n        \}//s' jqClock-lite.js
+    - name: Minify jqClock-lite.js to jqClock-lite.min.js
+      run: google-closure-compiler --js jqClock-lite.js --js_output_file jqClock-lite.min.js --language_in ECMASCRIPT_2019 --language_out ECMASCRIPT_2019
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v6
+      with:
+        branch: generate-litejs-and-minify
+    - name: Check outputs
+      if: ${{ steps.cpr.outputs.pull-request-number }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
