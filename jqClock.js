@@ -302,14 +302,14 @@ if (!Number.prototype.map) {
         this.initialize = () => _this;
 
         this.destroy    = () => _this.each((idx,selfRef) => {
-            pluginMethods["destroy"](selfRef);
+            pluginMethods.destroy(selfRef);
         });
         this.stop       = () => _this.each((idx,selfRef) => {
-            pluginMethods["stop"](selfRef);
+            pluginMethods.stop(selfRef);
         });
 
         this.start      = () => _this.each((idx,selfRef) => {
-            pluginMethods["start"](selfRef);
+            pluginMethods.start(selfRef);
         });
 
         const dateFormatCharacters = {
@@ -400,27 +400,29 @@ if (!Number.prototype.map) {
             //Whether or not the date is in daylight saving time
             "I": ( clk ) => clk.myoptions.isDST ? "DST" : "",
             //Difference to Greenwich time (GMT) in hours
-            "O": ( clk ) => (clk.tzH < 0
-                        ? "+" +
-                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                        : clk.tzH > 0
+            "O": ( clk ) => (
+                clk.tzH < 0
+                    ? "+" + ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                    : clk.tzH > 0
                         ? ("" + clk.tzH * -1).padStart(2, "0")
-                        : "+00") + "00",
+                        : "+00"
+                ) + "00",
             //Difference to Greenwich time (GMT) with colon between hours and minutes
-            "P": ( clk ) => (clk.tzH < 0
-                        ? "+" +
-                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
-                        : clk.tzH > 0
+            "P": ( clk ) => (
+                clk.tzH < 0
+                    ? "+" + ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                    : clk.tzH > 0
                         ? ("" + clk.tzH * -1).padStart(2, "0")
-                        : "+00") + ":00",
+                        : "+00"
+                ) + ":00",
             //Timezone abbreviation
             /*"T": ( clk ) => timezone_abbrev...*/
             //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
             "Z": ( clk ) => clk.tzS < 0
                         ? "" + Math.abs(clk.tzS)
                         : clk.tzS > 0
-                        ? "" + clk.tzS * -1
-                        : "0",
+                            ? "" + clk.tzS * -1
+                            : "0",
 
             //FULL DATE/TIME
             // ISO 8601 date | Example 2004-02-12T15:19:21+00:00
@@ -435,12 +437,13 @@ if (!Number.prototype.map) {
                     ("" + clk.m).padStart(2, "0") +
                     ":" +
                     ("" + clk.s).padStart(2, "0") +
-                    (clk.tzH < 0
-                        ? "+" +
-                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                    (
+                        clk.tzH < 0
+                        ? "+" + ("" + Math.abs(clk.tzH)).padStart(2, "0")
                         : clk.tzH > 0
-                        ? ("" + clk.tzH * -1).padStart(2, "0")
-                        : "+00") +
+                            ? ("" + clk.tzH * -1).padStart(2, "0")
+                            : "+00"
+                    ) +
                     ":00",
             //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
             "r": ( clk ) => new Intl.DateTimeFormat(clk.myoptions.langSet, {
@@ -461,12 +464,13 @@ if (!Number.prototype.map) {
                     ":" +
                     ("" + clk.s).padStart(2, "0") +
                     " " +
-                    (clk.tzH < 0
-                        ? "+" +
-                        ("" + Math.abs(clk.tzH)).padStart(2, "0")
+                    (
+                        clk.tzH < 0
+                        ? "+" + ("" + Math.abs(clk.tzH)).padStart(2, "0")
                         : clk.tzh > 0
-                        ? ("" + clk.tzh * -1).padStart(2, "0")
-                        : "+00") +
+                            ? ("" + clk.tzh * -1).padStart(2, "0")
+                            : "+00"
+                    ) +
                     "00",
             //Seconds since the Unix Epoch
             "U": ( clk ) => Math.floor(clk.mytimestamp / 1000)
