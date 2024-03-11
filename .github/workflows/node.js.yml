@@ -39,6 +39,8 @@ jobs:
     - name: Create Pull Request
       id: cpr
       uses: peter-evans/create-pull-request@v6
+      with:
+        branch: generate-litejs-and-minify
     - name: Check outputs
       if: ${{ steps.cpr.outputs.pull-request-number }}
       run: |
