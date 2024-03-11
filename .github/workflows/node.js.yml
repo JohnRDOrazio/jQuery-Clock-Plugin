@@ -46,16 +46,3 @@ jobs:
       run: |
         echo "Pull Request Number - ${{ steps.cpr-master.outputs.pull-request-number }}"
         echo "Pull Request URL - ${{ steps.cpr-master.outputs.pull-request-url }}"
-    - name: Create Pull Request for GH Pages
-      id: cpr-ghpages
-      uses: peter-evans/create-pull-request@v6
-      with:
-        branch: update-gh-pages
-        add-paths: |
-          *.js
-        base: gh-pages
-    - name: Check outputs
-      if: ${{ steps.cpr-ghpages.outputs.pull-request-number }}
-      run: |
-        echo "Pull Request Number - ${{ steps.cpr-ghpages.outputs.pull-request-number }}"
-        echo "Pull Request URL - ${{ steps.cpr-ghpages.outputs.pull-request-url }}"
