@@ -10,16 +10,16 @@
  * Possible options parameters:
  * @timestamp defaults to clients current time, using the performance API
  * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
- * @langSet defaults to navigator language else "en", possible values are: "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm" (can optionally add region)
+ * @locale defaults to navigator language else "en", possible values are: "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm" (can optionally add region)
  * @calendar defaults to "true", possible value are: boolean "true" or "false"
- * @dateFormat defaults to "l, F j, Y" when langSet==="en", else to "l, j F Y"
- * @timeFormat defaults to "h:i:s A" when langSet==="en", else to "H:i:s"
+ * @dateFormat defaults to Intl.DateTimeFormat options object { "dateStyle": "full" }; can take string with PHP style format characters; if set to false @calendar will be false
+ * @timeFormat defaults to Intl.DateTimeFormat options object { "timeStyle": "medium" }; can take string with PHP style format characters;
  * @isDST possible values are boolean `true` or `false`, if not passed in will be calculated based on client time (default)
  *
  *   $("#mydiv").clock(); >> will display in English and in 12 hour format
- *   $("#mydiv").clock({"langSet":"it"}); >> will display in Italian and in 24 hour format
- *   $("#mydiv").clock({"langSet":"en","timeFormat":"H:i:s"}); >> will display in English but in 24 hour format
- *   $("#mydiv").clock({"calendar":false}); >> will remove the date from the clock and display only the time
+ *   $("#mydiv").clock({"locale":"it"}); >> will display in Italian and in 24 hour format
+ *   $("#mydiv").clock({"locale":"en","timeFormat":"H:i:s"}); >> will display in English but in 24 hour format
+ *   $("#mydiv").clock({"dateFormat":false}); >> will remove the date from the clock and display only the time
  *
  *   Custom timestamp example, say we have a hidden input with id='timestmp' the value of which is determined server-side with server's current time:
  *
@@ -173,6 +173,7 @@ if (!Number.prototype.map) {
         this.destroy    = () => _this.each((idx,selfRef) => {
             pluginMethods.destroy(selfRef);
         });
+
         this.stop       = () => _this.each((idx,selfRef) => {
             pluginMethods.stop(selfRef);
         });
@@ -181,20 +182,22 @@ if (!Number.prototype.map) {
             pluginMethods.start(selfRef);
         });
 
+        const isObject = ( myVar ) => Object.prototype.toString.call( myVar ) === '[object Object]';
+
         const dateFormatCharacters = {
             //DAY
             //Day of the Month, 2 digits with leading zeros
             "d": ( clk ) => ("" + clk.dt).padStart(2, "0"),
             //A textual representation of a day, three letters
             "D": ( clk ) => new Intl.DateTimeFormat(
-                clk.myoptions.langSet,
+                clk.myoptions.locale,
                 { weekday: "short" }
             ).format(clk.mytimestamp_sysdiff),
             //Day of the month without leading zeros
             "j": ( clk ) => clk.dt,
             //A full textual representation of the day of the week
             "l": ( clk ) => new Intl.DateTimeFormat(
-                clk.myoptions.langSet,
+                clk.myoptions.locale,
                 { weekday: "long" }
             ).format(clk.mytimestamp_sysdiff),
             // ISO-8601 numeric representation of the day of the week (1-7, 1=Monday)
@@ -213,14 +216,14 @@ if (!Number.prototype.map) {
             //MONTH
             //A full textual representation of a month, such as January or March
             "F": ( clk ) => new Intl.DateTimeFormat(
-                clk.myoptions.langSet,
+                clk.myoptions.locale,
                 { month: "long" }
             ).format(clk.mytimestamp_sysdiff),
             //Numeric representation of a month, with leading zeros
             "m": ( clk ) => (clk.mo + 1 + "").padStart(2, "0"),
             //A short textual representation of a month, three letters
             "M": ( clk ) => new Intl.DateTimeFormat(
-                clk.myoptions.langSet,
+                clk.myoptions.locale,
                 { month: "short" }
             ).format(clk.mytimestamp_sysdiff),
             //Numeric representation of a month, without leading zeros
@@ -285,7 +288,10 @@ if (!Number.prototype.map) {
                         : "+00"
                 ) + ":00",
             //Timezone abbreviation
-            /*"T": ( clk ) => timezone_abbrev...*/
+            "T": ( clk ) => new Intl.DateTimeFormat( clk.myoptions.locale, {
+                timeZone: clk.myoptions.timezone,
+                timeZoneName: "short"
+            } ).format( clk.mytimestamp_sysdiff ),
             //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
             "Z": ( clk ) => clk.tzS < 0
                         ? "" + Math.abs(clk.tzS)
@@ -315,13 +321,13 @@ if (!Number.prototype.map) {
                     ) +
                     ":00",
             //» RFC 2822 formatted date | Example: Thu, 21 Dec 2000 16:01:07 +0200
-            "r": ( clk ) => new Intl.DateTimeFormat(clk.myoptions.langSet, {
+            "r": ( clk ) => new Intl.DateTimeFormat(clk.myoptions.locale, {
                         weekday: "short",
                     }).format(clk.mytimestamp_sysdiff) +
                     ", " +
                     clk.dt +
                     " " +
-                    new Intl.DateTimeFormat(clk.myoptions.langSet, {
+                    new Intl.DateTimeFormat(clk.myoptions.locale, {
                         month: "short",
                     }).format(clk.mytimestamp_sysdiff) +
                     " " +
@@ -344,6 +350,12 @@ if (!Number.prototype.map) {
             //Seconds since the Unix Epoch
             "U": ( clk ) => Math.floor(clk.mytimestamp / 1000)
         },
+        dateFormatOptions = [
+            "calendar", "numberingSystem", "weekday", "era", "year", "month", "day", "dateStyle"
+        ],
+        timeFormatOptions = [
+            "numberingSystem", "hour12", "hourCycle", "timeZone", "timeZoneName", "hour", "minute", "second", "fractionalSecondDigits", "dayPeriod", "timeStyle"
+        ],
         pluginMethods = {
             "destroy": ( selfRef ) => {
                 let el_id = $(selfRef).attr("id");
@@ -372,7 +384,7 @@ if (!Number.prototype.map) {
                     _jqClock.hasOwnProperty(el_id) === false
                 ) {
                     _jqClock[el_id] = setTimeout(
-                        () => { _updateClock($(selfRef)); },
+                        () => { _updateClock( selfRef ); },
                         current_options.rate
                     );
                 }
@@ -461,15 +473,18 @@ if (!Number.prototype.map) {
                 $(el).html(clk.calendElem + clk.clockElem);
                 let el_id = $(el).attr("id");
                 _jqClock[el_id] = setTimeout(
-                    () => { _updateClock( $(el) ); },
+                    () => { _updateClock( el ); },
                     clk.myoptions.rate
                 );
             },
             formatDateString = ( clk ) => {
+                let dateStr = "";
+                let chr;
+                const { myoptions } = clk;
+                if( isObject( myoptions.dateFormat ) ) {
+                    dateStr = new Intl.DateTimeFormat(myoptions.locale, myoptions.dateFormat).format(clk.mytimestamp_sysdiff);
+                } else {
                     /* Format Date String according to PHP style Format Characters http://php.net/manual/en/function.date.php */
-                    let dateStr = "";
-                    let chr;
-                    const { myoptions } = clk;
                     for (let n = 0; n <= myoptions.dateFormat.length; n++) {
                         chr = myoptions.dateFormat.charAt(n);
                         if( chr in dateFormatCharacters ) {
@@ -487,27 +502,32 @@ if (!Number.prototype.map) {
                             }
                         }
                     }
-                    return '<span class="clockdate">' + dateStr + "</span>";
+                }
+                return '<span class="clockdate">' + dateStr + "</span>";
             },
             formatTimeString = ( clk ) => {
-                /* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
                 let timeStr = "";
                 let chr;
                 const { myoptions } = clk;
-                for (let n = 0; n <= myoptions.timeFormat.length; n++) {
-                    chr = myoptions.timeFormat.charAt(n);
-                    if( chr in timeFormatCharacters ) {
-                        timeStr += timeFormatCharacters[chr]( clk );
-                    } else {
-                        switch (chr) {
-                            case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
-                                timeStr += myoptions.timeFormat.charAt(++n);
-                                break;
-                            case "%":
-                                [ timeStr, n ] = processLiterals( myoptions, n, false, timeStr, chr );
-                                break;
-                            default:
-                                timeStr += chr;
+                if( isObject( myoptions.timeFormat ) ) {
+                    timeStr = new Intl.DateTimeFormat(myoptions.locale, myoptions.timeFormat).format(clk.mytimestamp_sysdiff);
+                } else {
+                    /* Prepare Time String using PHP style Format Characters http://php.net/manual/en/function.date.php */
+                    for (let n = 0; n <= myoptions.timeFormat.length; n++) {
+                        chr = myoptions.timeFormat.charAt(n);
+                        if( chr in timeFormatCharacters ) {
+                            timeStr += timeFormatCharacters[chr]( clk );
+                        } else {
+                            switch (chr) {
+                                case String.fromCharCode(92): //backslash character, which would have to be a double backslash in the original string!!!
+                                    timeStr += myoptions.timeFormat.charAt(++n);
+                                    break;
+                                case "%":
+                                    [ timeStr, n ] = processLiterals( myoptions, n, false, timeStr, chr );
+                                    break;
+                                default:
+                                    timeStr += chr;
+                            }
                         }
                     }
                 }
@@ -517,16 +537,22 @@ if (!Number.prototype.map) {
                 options = options || {};
                 /* I prefer this method to jQuery.extend because we can dynamically set each option based on a preceding option's value */
                 options.timestamp = options.timestamp || "localsystime";
-                options.langSet = options.langSet || navigator.language || "en";
+                if( options.hasOwnProperty( "langSet" ) ) {
+                    console.warn( 'the `langSet` option has been changed to `locale` since v2.3.7 and will be removed in a future release. Please use `locale` in place of `langSet`.' );
+                }
+                options.locale = options.locale || options.langSet || navigator.language || "en";
+                if( options.hasOwnProperty( "calendar" ) ) {
+                    console.warn( 'the `calendar` option is deprecated since jqclock v2.3.7 and will be removed in a future release. Please use `dateFormat: false` instead of `calendar: false` to remove the calendar from the jQuery Clock.' );
+                }
                 options.calendar = options.hasOwnProperty("calendar")
                     ? options.calendar
                     : true;
                 options.dateFormat =
-                    options.dateFormat ||
-                    (options.langSet === "en" ? "l, F j, Y" : "l, j F Y");
+                    options.dateFormat ??
+                    { "dateStyle": "full" };
                 options.timeFormat =
                     options.timeFormat ||
-                    (options.langSet === "en" ? "h:i:s A" : "H:i:s");
+                    { "timeStyle": "medium" };
                 options.timezone = options.timezone || "localsystimezone"; //should only really be passed in when a server timestamp is passed
                 options.isDST = options.hasOwnProperty("isDST")
                     ? options.isDST
@@ -536,8 +562,8 @@ if (!Number.prototype.map) {
             },
             normalizeOptions = (options) => {
                 //ensure we have correct value types
-                if (typeof options.langSet !== "string") {
-                    options.langSet = "" + options.langSet;
+                if (typeof options.locale !== "string") {
+                    options.locale = "" + options.locale;
                 }
                 if (typeof options.calendar === "string") {
                     options.calendar = Boolean(
@@ -547,10 +573,39 @@ if (!Number.prototype.map) {
                     options.calendar = Boolean(options.calendar); //do our best to get a boolean value
                 }
                 if (typeof options.dateFormat !== "string") {
-                    options.dateFormat = "" + options.dateFormat;
+                    if( isObject( options.dateFormat ) ) {
+                        if ( Object.keys( options.dateFormat ).every( key => dateFormatOptions.includes( key ) ) === false ) {
+                            const extra = Object.keys( options.dateFormat ).reduce((acc,curr) => { if(dateFormatOptions.includes(curr) === false){ acc.push(curr) }; return acc; },[]);
+                            console.error( `unrecognized options passed to dateFormat option: ${ extra.join(', ') }. Valid options are: ${ dateFormatOptions.join(', ') }` );
+                        } else {
+                            options.calendar = true;
+                        }
+                    } else if ( options.dateFormat === false ) {
+                        options.calendar = false;
+                    } else {
+                        console.error( `dateFormat option has unsupported type, must be either string or object instead is ${ Object.prototype.toString.call( options.dateFormat ) }` );
+                        options.dateFormat = false;
+                        options.calendar = false;
+                    }
+                } else {
+                    if( options.dateFormat === 'false' ) {
+                        options.dateFormat = false;
+                        options.calendar = false;
+                    } else {
+                        options.calendar = true;
+                    }
                 }
                 if (typeof options.timeFormat !== "string") {
-                    options.timeFormat = "" + options.dateFormat;
+                    if( isObject( options.timeFormat ) ) {
+                        if ( Object.keys( options.timeFormat ).every( key => timeFormatOptions.includes( key ) ) === false ) {
+                            const extra = Object.keys( options.timeFormat ).reduce((acc,curr) => { if(timeFormatOptions.includes(curr) === false){ acc.push(curr) }; return acc; },[]);
+                            console.error( `unrecognized options passed to timeFormat option: ${ extra.join(', ') }. Valid options are: ${ timeFormatOptions.join(', ') }` );
+                        }
+                    } else {
+                        console.error( `timeFormat option has unsupported type, must be either string or object instead is ${ Object.prototype.toString.call( options.dateFormat ) }` );
+                        //let's try to salvage the situation if at all possible...
+                        options.timeFormat = "" + options.timeFormat;
+                    }
                 }
                 if (typeof options.timezone !== "string") {
                     options.timezone = "" + options.timezone;
@@ -629,7 +684,7 @@ if (!Number.prototype.map) {
                 $(selfRef).data("clockoptions", options);
                 //only allow one associated settimeout at a time! basically, only one plugin instance per dom element
                 if (_jqClock.hasOwnProperty($(selfRef).attr("id")) === false) {
-                    _updateClock($(selfRef));
+                    _updateClock(selfRef);
                 }
             };
 
@@ -644,7 +699,7 @@ if (!Number.prototype.map) {
                 // It's no use using a client timestamp's check for DST when a server timestamp is passed!
                 // To fix this, we will give a console warning when a server timestamp is passed but the isDST option is not...
                 // In order to do that, we need to save a reference to the original isDST option before ensuring default options
-                const origDST = options.isDST || null;
+                const origDST = isObject(options) && options.isDST ? options.isDST : null;
                 options = ensureDefaultOptions( options, sysDateObj );
                 options = normalizeOptions( options );
 
