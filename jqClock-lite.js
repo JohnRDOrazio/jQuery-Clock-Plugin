@@ -371,9 +371,10 @@ if (!Number.prototype.map) {
                     current_options !== undefined &&
                     _jqClock.hasOwnProperty(el_id) === false
                 ) {
-                    _jqClock[el_id] = setTimeout(() => {
-                        _updateClock($(selfRef));
-                    }, current_options.rate);
+                    _jqClock[el_id] = setTimeout(
+                        () => { _updateClock($(selfRef)); },
+                        current_options.rate
+                    );
                 }
             }
         };
@@ -567,8 +568,8 @@ if (!Number.prototype.map) {
                 return options;
             },
             processLiterals = ( myoptions, n, forDateStr, currStr, currentChr ) => {
+                const str = forDateStr ? myoptions.dateFormat : myoptions.timeFormat;
                 let pos = n + 1;
-                let str = forDateStr ? myoptions.dateFormat : myoptions.timeFormat;
                 while (pos < str.length) {
                     if (str.charAt(pos) === "%") {
                         break;
@@ -585,8 +586,8 @@ if (!Number.prototype.map) {
             },
             seemsToBePHPTimestamp = ( options, sysDateObj ) => {
                 const digitCountDiff =
-                (sysDateObj.getTime() + "").length -
-                (options.timestamp + "").length;
+                    (sysDateObj.getTime() + "").length -
+                    (options.timestamp + "").length;
                 return digitCountDiff > 2;
             },
             normalizePHPTimestamp = ( options, sysDateObj ) => {
