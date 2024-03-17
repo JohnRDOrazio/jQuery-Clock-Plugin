@@ -95,8 +95,8 @@
       </td>
       <td>
         <div>
-          <h2>Clock that uses Italian language for the calendar, and string literals in the time</h2>
-          <pre><code>      $("#clock2").clock({"langSet":"it","timeFormat":"H %o'clock,% i %minutes,% s %seconds%"});</code></pre>
+          <h2>Clock that uses English, and string literals in the time</h2>
+          <pre><code>      $("#clock2").clock({"locale":"en","timeFormat":"H %o'clock,% i %minutes,% s %seconds and all is well!%"});</code></pre>
           <div id="clock2" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock2" title="$('#clock2').clock('destroy')">DESTROY CLOCK 2</button>
@@ -122,7 +122,7 @@
       <td>
         <div>
           <h2>Clock without calendar, using 24 hour format and displaying milliseconds, timezone, daylight savings time (if applicable) and swatch time, updating every 50 ms</h2>
-          <pre><code>      $("#clock4").clock({"calendar":false,"timeFormat":"H:i:s.v e I (@B)","rate":50});</code></pre>
+          <pre><code>      $("#clock4").clock({"dateFormat":false,"timeFormat":"H:i:s.v e I (@B)","rate":50});</code></pre>
           <div id="clock4" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock4" title="$('#clock4').clock('destroy')">DESTROY CLOCK 4</button>
@@ -136,11 +136,11 @@
     <tr>
       <td>
         <div>
-          <h2>Clock with custom timestamp (2 weeks, 2 hours, 10 minutes and 10 seconds ahead) and Russian language</h2>
-          <pre><code>      var customtimestamp = new Date();
+          <h2>Clock with custom timestamp (2 weeks, 2 hours, 10 minutes and 10 seconds ahead) and random language picked from all possible BCP 47 tags</h2>
+          <pre><code>      let customtimestamp = new Date();
       customtimestamp = customtimestamp.getTime();
       customtimestamp = customtimestamp+1123200000+10800000+14000;
-      $("#clock5").clock({"timestamp":customtimestamp,"langSet":"ru"});</code></pre>
+      $("#clock5").clock({"timestamp": customtimestamp, "locale": randomLocale});</code></pre>
           <div id="clock5" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock5" title="$('#clock5').clock('destroy')">DESTROY CLOCK 5</button>
@@ -175,17 +175,17 @@
     const HOUR   = 60 * MINUTE;
     const DAY    = 24 * HOUR;
     const WEEK   = 7 * DAY;
-    
+    const validLocales = [ "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm", navigator.language ];
+    const randomLocale = validLocales[~~(Math.random() * validLocales.length)];
     let customtimestamp = new Date();
     customtimestamp = customtimestamp.getTime();
     customtimestamp = customtimestamp+(2*WEEK)+(2*HOUR)+(10*MINUTE)+(10*SECOND);
-
     let clock_options = [
      {}, //clock1
-     {"langSet":"it","timeFormat":"H %o'clock,% i %minutes,% s %seconds%"}, //clock2
-     {"dateFormat":"D, M jS, Y ( N - z | W | L )"}, //clock3
-     {"calendar":false,"timeFormat":"H:i:s.v e I (@B)","rate":50}, //clock4
-     {"timestamp":customtimestamp,"langSet":"ru"} //clock5
+     { "locale": "en", "timeFormat": "H %o'clock,% i %minutes,% s %seconds and all is well!%" }, //clock2
+     { "dateFormat": "D, M jS, Y ( N - z | W | L )" }, //clock3
+     { "dateFormat": false, "timeFormat": "H:i:s.v e I (@B)", "rate": 50}, //clock4
+     { "timestamp": customtimestamp, "locale": randomLocale } //clock5
     ];
    
     $(document).ready(function(){
