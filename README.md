@@ -1,7 +1,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/johnrdorazio/jquery-clock-plugin/badge)](https://www.codefactor.io/repository/github/johnrdorazio/jquery-clock-plugin)
 
-Turn a given dom element into a jQuery Clock that can take an initial timestamp (even server generated, or NTP generated) instead of client system time, supports internationalization (48 locales) and PHP Style Format Characters, and is relatively independent from system clock. Supports microsecond time. Can be easily styled with three simple css rules.
-Version, options and methods supported can be obtained dynamically through the following three properties of the **$.clock** object:
+Turn a given dom element into a jQuery Clock that can take an initial timestamp (even server generated, or NTP generated) instead of client system time, supports internationalization (any BCP 47 language tag supported by the browser), PHP Style Format Characters *OR* `Intl.DateTimeFormat` options, and is relatively independent from system clock. Supports microsecond time. Can be easily styled with three simple css rules.
+Version, options and methods supported can be obtained dynamically through the following three properties of the **$.clock** object (except for `-lite` version):
 ```JavaScript
 $.clock.version; //will return the current version number, so you can be sure which version of the script you are using
 $.clock.options; //will return all possible options that can be passed to the jQuery clock plugin, with type description and accepted values
@@ -33,9 +33,44 @@ $("div#clock").clock();
 
 ## Show or hide calendar
 
-By default prints the date together with the time, but can be used for time only:
-```JavaScript
-$("div#clock").clock({"calendar":false});
+By default prints the date together with the time, but can be used for time only.
+```diff
+- $("div#clock").clock({"calendar":false});   // DEPRECATED since v2.3.7
++ $("div#clock").clock({"dateFormat":false}); // SUPPORTED since v2.3.7
+```
+
+## Format Date and Time using `Intl.DateTimeFormat` options
+
+When using `Intl.DateTimeFormat` options ***dateFormat*** parameter, supported options are `dateStyle` (can have a value of `full`, `long`, `medium`, or `short`) *OR* a combination of the following:
+`calendar`, `numberingSystem`, `weekday`, `era`, `year`, `month`, `day`. For supported values for each of these parameters see [Mozilla Docs Intl/DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat).
+
+**Example:**
+```Javascript
+const dateFmtOptions = {
+  "calendar": "gregory",
+  "weekday":  "long",
+  "era":      "short",
+  "year":     "numeric",
+  "month":    "long",
+  "day":      "numeric"
+}
+$("div#clock").clock({"dateFormat": dateFmtOptions});
+```
+
+When using `Intl.DateTimeFormat` options for the ***timeFormat*** parameter, supported options are `timeStyle` (can have a value of `full`, `long`, `medium`, or `short`) *OR* a combination of the following:
+`numberingSystem`, `hour12`, `hourCycle`, `timeZone`, `timeZoneName`, `hour`, `minute`, `second`, `fractionalSecondDigits`, `dayPeriod`. For supported values for each of these parameters see [Mozilla Docs Intl/DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat).
+
+**Example:**
+```Javascript
+const timeFmtOptions = {
+  "hour": "2-digit",
+  "minute": "numeric",
+  "second": "numeric",
+  "timeZone": "America/New_York",
+  "timeZoneName": "longGeneric",
+  "hourCycle": "h23"
+}
+$("div#clock").clock({"timeFormat": timeFmtOptions});
 ```
 
 ## Format Date and Time using PHP style Format Characters
@@ -75,6 +110,7 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 $("div#clock").clock({"dateFormat":"D, F n, Y"});
 ```
 
+
 PHP Style Format Characters (such as those found [here](http://php.net/manual/en/function.date.php "PHP Format Characters")) supported by the ***timeFormat*** parameter are:
 
 | Format Character  | Description                                | Example Returned values |
@@ -96,6 +132,7 @@ PHP Style Format Characters (such as those found [here](http://php.net/manual/en
 | *I* (capital i) | Whether the date is in daylight saving time  | *DST* if Daylight Savings Time, otherwise nothing  |
 | *O* | Difference to Greenwich time (GMT) in hours              | Example: *+0200*  |
 | *P* | Difference to Greenwich time (GMT) with colon between hours and minutes | Example: *+02:00* |
+| *T* | Timezone abbreviation, if known; otherwise the GMT offset| Example: UTC+05   |
 | *Z* | Timezone offset in Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive. | *-43200* through *50400* |
 | *Full Date/Time*   | ---                                       | ---               |
 | *c* | ISO 8601 date                                            | 2004-02-12T15:19:21+00:00 |
