@@ -272,7 +272,7 @@ $("div#clock").clock("start");
 
 The chainability of the plugin passes an instance of the plugin itself, such that it's public methods can be invoked by the variable that might reference the first instantiation. The plugin includes a destroy(), a start() and a stop() method that are equivalent to the handlers of the same name.
 ```JavaScript
-var $clocks = $("div.clock").clock(); //turn all divs with a "clock" class into jQuery Clocks
+const $clocks = $("div.clock").clock(); //turn all divs with a "clock" class into jQuery Clocks
 $clocks.stop(); //will stop all jQuery Clocks on divs with a "clock" class
 $clocks.start(); //will start all jQuery Clocks on divs with a "clock" class
 $clocks.first().stop(); //will stop the jQuery Clock on the first div with a "clock" class
@@ -285,14 +285,14 @@ $("#bigben").clock().start(); //will (re-)start the already initialized jQuery C
 
 All and any parameters can be modified on an already initialized clock. Any modifications will be noticeable on the next tick of the clock.
 ```JavaScript
-var $clocks = $("div.clock").clock(); //turn all divs with a "clock" class into jQuery Clocks
+const $clocks = $("div.clock").clock(); //turn all divs with a "clock" class into jQuery Clocks
 $clocks.first().clock({langSet:"vi"}); //change the locale of the jQuery Clock on the first div with a "clock" class and set it to Vietnamese
 $clocks.clock({timeFormat:"H:i:s.v",rate:50}); //change the timeFormat on the jQuery Clocks on all divs with a "clock" class so that they display milliseconds, and update the tick rate of the clocks to 50 milliseconds
 ```
 
 # Styling
 
-The plugin adds a "jqclock" class to the dom element that the clock is applied to (usually a div). And the internal html structure that is created is like this:
+The plugin adds a `jqclock` class to the dom element that the clock is applied to (usually a div). And the internal html structure that is created is like this:
 ```HTML
 <div class="jqclock">
   <span class="clockdate"></span>
@@ -302,13 +302,20 @@ The plugin adds a "jqclock" class to the dom element that the clock is applied t
 The clock can be styled accordingly in one's own stylesheet. Some sample styling is included to give an idea:
 ```CSS
   .jqclock { display:inline-block; text-align:center; border: 1px Black solid; background: LightYellow; padding: 10px; margin:20px; }
-  .clockdate { color: DarkRed; margin-bottom: 10px; font-size: 18px; display: block;}
-  .clocktime { border: 2px inset White; background: Black; padding: 5px; font-size: 14px; font-family: "Courier"; color: LightGreen; margin: 2px; display: block; }
+  .jqclock > .clockdate { color: DarkRed; margin-bottom: 10px; font-size: 18px; display: block;}
+  .jqclock > .clocktime { border: 2px inset White; background: Black; padding: 5px; font-size: 14px; font-family: "Courier"; color: LightGreen; margin: 2px; display: block; }
 ```
 
 # Releases
 
 Newer releases don't necessarily mean better, it really depends on what you are expecting to get out of this plugin. So here is a quick overview of the releases so you can decide for yourself which version might best suit your needs.
+
+## [v2.3.7](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.7 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.7")
+* Enhancement: add support for `Intl.DateTimeFormat` 0ad6c61
+* Enhancement: further modernize the javascript to ECMA 2020: e6a657f, a23b4a5, a744e56
+* Bugfix: f754c2d
+* Bugfix: fix missing parameter 9c4a7bd
+* Remove `padStart` polyfill (now supported in all major browsers)
 
 ## [v2.3.6](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.6 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.6")
 
