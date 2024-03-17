@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <head>
- <!-- version 1.1.6 of this page (so I know what I'm looking at) -->
+ <!-- version 1.1.7 of this page (so I know what I'm looking at) -->
  <title>jQuery Clock Plugin client side example</title>
   <meta charset="UTF-8">
 
   <link rel="icon" type="image/png" href="clock_favicon.png" /> 
-  
+
   <link rel="stylesheet" type="text/css" href="jqClock.css" />  
   <style>
     pre { background-color: white; width: 90%; text-align: left; margin: 0px auto; padding: 9px 3px; border: 2px groove white; }
@@ -96,7 +96,10 @@
       <td>
         <div>
           <h2>Clock that uses English, and string literals in the time</h2>
-          <pre><code>  $("#clock2").clock({"locale":"en","timeFormat":"H %o'clock,% i %minutes,% s %seconds and all is well!%"});</code></pre>
+          <pre><code>  $("#clock2").clock({
+    "locale": "en",
+    "timeFormat": `%It's% h %o'clock% A%,% i %minutes,% s %seconds and all is well!%`
+  });</code></pre>
           <div id="clock2" class="clockdiv">This div will be turned into a dynamic clock</div>
           <div class="button-wrapper">
             <button id="destroyclock2" title="$('#clock2').clock('destroy')">DESTROY CLOCK 2</button>
@@ -105,7 +108,7 @@
         </div>
       </td>
     </tr>
-   
+
     <!-- SECOND ROW -->
     <tr>
       <td>
@@ -131,7 +134,7 @@
         </div>
       </td>
     </tr>
-   
+
     <!-- THIRD ROW -->
     <tr>
       <td>
@@ -163,7 +166,7 @@
     </tr>
    </tbody>
   </table>
- 
+
 
  <footer>
   <p>&copy; Copyright 2011 by <a href="mailto:priest@johnromanodorazio.com" title="Send me an email">John Romano D'Orazio</a> (screen name Lwangaman)</p>
@@ -177,19 +180,20 @@
     const WEEK   = 7 * DAY;
     const validLocales = [ "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm", navigator.language ];
     const randomLocale = validLocales[~~(Math.random() * validLocales.length)];
+    const languageNames = new Intl.DisplayNames(["en"], { type: "language" });
     let customtimestamp = new Date();
     customtimestamp = customtimestamp.getTime();
     customtimestamp = customtimestamp+(2*WEEK)+(2*HOUR)+(10*MINUTE)+(10*SECOND);
-    let clock_options = [
+    const clock_options = [
      {}, //clock1
-     { "locale": "en", "timeFormat": "H %o'clock,% i %minutes,% s %seconds and all is well!%" }, //clock2
+     { "locale": "en", "timeFormat": `%It's% h %o'clock% A%,% i %minutes,% s %seconds and all is well!%` }, //clock2
      { "dateFormat": "D, M jS, Y ( N - z | W | L )" }, //clock3
      { "dateFormat": false, "timeFormat": "H:i:s.v e I (@B)", "rate": 50}, //clock4
      { "timestamp": customtimestamp, "locale": randomLocale } //clock5
     ];
-   
+
     $(document).ready(function(){
-    
+
       $("#jqclock_version").text($.clock.version);
       $('#randomLocale').text($('#randomLocale').text().replace('randomLocale',`"${randomLocale}"`) );
       for(let n=0;n<5;n++){
@@ -198,7 +202,7 @@
         $("#clock"+i).clock(clock_options[n]);
         $("#destroyclock"+i).data("index",i);
         $("#stopclock"+i).data("index",i);
-       
+
         //set click handler for destroy buttons
         $("#destroyclock"+i).click(function(){ 
           let m = $(this).data("index");
@@ -214,7 +218,7 @@
             $(this).attr("title",'$("#clock'+m+'").clock("destroy")');
           }
         });
-       
+
         //set click handler for stop buttons
         $("#stopclock"+i).click(function(){ 
           let m = $(this).data("index");
@@ -230,10 +234,12 @@
             $(this).attr("title",'$("#clock'+m+'").clock("stop")');
           }
         });
-      
+
       }
-                                                 
-    });    
+
+      $('#clock5').prepend(`<div>${languageNames.of(randomLocale)}</div>`);
+
+    });
   </script>
  </footer>
 </body>
