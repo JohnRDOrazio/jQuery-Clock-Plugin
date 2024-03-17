@@ -311,11 +311,11 @@ The clock can be styled accordingly in one's own stylesheet. Some sample styling
 Newer releases don't necessarily mean better, it really depends on what you are expecting to get out of this plugin. So here is a quick overview of the releases so you can decide for yourself which version might best suit your needs.
 
 ## [v2.3.7](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.7 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.7")
-* Enhancement: add support for `Intl.DateTimeFormat` 0ad6c61
-* Enhancement: further modernize the javascript to ECMA 2020: e6a657f, a23b4a5, a744e56
-* Bugfix: f754c2d
-* Bugfix: fix missing parameter 9c4a7bd
-* Remove `padStart` polyfill (now supported in all major browsers)
+* Enhancement: add support for `Intl.DateTimeFormat` [0ad6c61](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/0ad6c61dac4981816c117b9e4b2746355303348b)
+* Enhancement: further modernize the javascript to ECMA 2020: [e6a657f](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/e6a657fbaa58c7890985eeb24a943f426c85af60), [a23b4a5](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/a23b4a5b33f77b34c22062c1d9a8e8f652851c24), [a744e56](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/a744e56299cd52e1c94555d1d30698ce2acdc9e5)
+* Bugfix: calling object parameter without object [f754c2d](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/f754c2ddaa1fce087229f6d9ed753755e3364ccc)
+* Bugfix: fix missing parameter [9c4a7bd](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/9c4a7bdaa0bfc3552c52df659d2099e8b6229c88)
+* Remove `padStart` polyfill (now supported in all major browsers) [5ffc2de](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/5ffc2de28032848fa3ac48388701873797e28f79)
 
 ## [v2.3.6](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.6 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.6")
 
