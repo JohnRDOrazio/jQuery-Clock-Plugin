@@ -312,10 +312,13 @@ Newer releases don't necessarily mean better, it really depends on what you are 
 
 ## [v2.3.7](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.7 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.7")
 * Enhancement: add support for `Intl.DateTimeFormat` [0ad6c61](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/0ad6c61dac4981816c117b9e4b2746355303348b)
-* Enhancement: further modernize the javascript to ECMA 2020: [e6a657f](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/e6a657fbaa58c7890985eeb24a943f426c85af60), [a23b4a5](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/a23b4a5b33f77b34c22062c1d9a8e8f652851c24), [a744e56](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/a744e56299cd52e1c94555d1d30698ce2acdc9e5)
+* Enhancement: further modernize the javascript to ECMA 2020: [e6a657f](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/e6a657fbaa58c7890985eeb24a943f426c85af60), [a23b4a5](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/a23b4a5b33f77b34c22062c1d9a8e8f652851c24), [a744e56](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/a744e56299cd52e1c94555d1d30698ce2acdc9e5), [6f5c8ac](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/6f5c8ac3290bd34e44125563587aa5902dbfd7e1)
+* Enhancement: support PHP format character `T`
 * Bugfix: calling object parameter without object [f754c2d](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/f754c2ddaa1fce087229f6d9ed753755e3364ccc)
 * Bugfix: fix missing parameter [9c4a7bd](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/9c4a7bdaa0bfc3552c52df659d2099e8b6229c88)
 * Remove `padStart` polyfill (now supported in all major browsers) [5ffc2de](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/commit/5ffc2de28032848fa3ac48388701873797e28f79)
+* `calendar` option deprecated; use `dateFormat: false` instead of `calendar: false` to remove calendar output
+* `langSet` option deprecated; use `locale` option instead
 
 ## [v2.3.6](https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.6 "https://github.com/JohnRDOrazio/jQuery-Clock-Plugin/releases/tag/v2.3.6")
 
