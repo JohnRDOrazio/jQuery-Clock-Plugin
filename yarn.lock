@@ -5,9 +5,9 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@JohnRDOrazio/jquery-clock-plugin@workspace:.":
+"@johnrdorazio/jquery-clock-plugin@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@JohnRDOrazio/jquery-clock-plugin@workspace:."
+  resolution: "@johnrdorazio/jquery-clock-plugin@workspace:."
   dependencies:
     jquery: "npm:~3"
   languageName: unknown
