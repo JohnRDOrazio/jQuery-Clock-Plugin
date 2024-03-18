@@ -288,7 +288,7 @@ if (!Number.prototype.map) {
                         : "+00"
                 ) + ":00",
             //Timezone abbreviation
-            "T": ( clk ) => new Intl.DateTimeFormat( clk.myoptions.locale, {
+            "T": ( clk ) => /(UTC|GMT)\+/.test( clk.myoptions.timezone ) ? clk.myoptions.timezone : new Intl.DateTimeFormat( clk.myoptions.locale, {
                 timeZone: clk.myoptions.timezone,
                 timeZoneName: "short"
             } ).formatToParts( clk.mytimestamp_sysdiff ).filter(e => e.type === 'timeZoneName')[0].value,
