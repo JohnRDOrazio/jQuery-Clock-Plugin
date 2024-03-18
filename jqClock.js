@@ -423,7 +423,7 @@ if (!Number.prototype.map) {
             "T": ( clk ) => new Intl.DateTimeFormat( clk.myoptions.locale, {
                 timeZone: clk.myoptions.timezone,
                 timeZoneName: "short"
-            } ).format( clk.mytimestamp_sysdiff ),
+            } ).formatToParts( clk.mytimestamp_sysdiff ).filter(e => e.type === 'timeZoneName')[0].value,
             //Timezone offset in seconds. The offset for timezones west of UTC is always negative, and for those east of UTC is always positive.
             "Z": ( clk ) => clk.tzS < 0
                         ? "" + Math.abs(clk.tzS)
