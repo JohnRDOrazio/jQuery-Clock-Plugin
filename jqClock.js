@@ -11,8 +11,7 @@
  * @timestamp defaults to clients current time, using the performance API
  * @timezone defaults to detection of client timezone, but can be passed in as a string such as "UTC-6" when using server generated timestamps
  * @locale defaults to navigator language else "en", possible values are: "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu", "id", "in", "it", "iw", "ja", "kn", "ko", "lt", "lv", "ml", "mo", "mr", "ms", "nb", "nl", "no", "pl", "pt", "ro", "ru", "sh", "sk", "sl", "sr", "sv", "sw", "ta", "te", "th", "tl", "tr", "uk", "ur", "vi", "zh", "arb", "cmn", "cnr", "drw", "ekk", "fil", "lvs", "pes", "prs", "swc", "swh", "tnf", "zsm" (can optionally add region)
- * @calendar defaults to "true", possible value are: boolean "true" or "false"
- * @dateFormat defaults to Intl.DateTimeFormat options object { "dateStyle": "full" }; can take string with PHP style format characters; if set to false @calendar will be false
+ * @dateFormat defaults to Intl.DateTimeFormat options object { "dateStyle": "full" }; can take string with PHP style format characters; if set to false will remove calendar output
  * @timeFormat defaults to Intl.DateTimeFormat options object { "timeStyle": "medium" }; can take string with PHP style format characters;
  * @isDST possible values are boolean `true` or `false`, if not passed in will be calculated based on client time (default)
  *
@@ -400,7 +399,10 @@ if (!Number.prototype.map) {
 
             //TIMEZONE
             //Timezone identifier
-            "e": ( clk ) => clk.myoptions.timezone,
+            "e": ( clk ) => /(UTC|GMT)\+/.test( clk.myoptions.timezone ) ? clk.myoptions.timezone : new Intl.DateTimeFormat( clk.myoptions.locale, {
+                    timeZone: clk.myoptions.timezone,
+                    timeZoneName: "long"
+                } ).formatToParts( clk.mytimestamp_sysdiff ).filter(e => e.type === 'timeZoneName')[0].value,
             //Whether or not the date is in daylight saving time
             "I": ( clk ) => clk.myoptions.isDST ? "DST" : "",
             //Difference to Greenwich time (GMT) in hours
