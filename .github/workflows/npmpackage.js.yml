@@ -17,6 +17,8 @@ jobs:
           corepack enable
           yarn set version stable
           yarn
+          echo 'npmAuthToken: "${{ secrets.NPM_TOKEN }}"' >> .yarnrc.yml
+          echo 'npmPublishAccess: "public"' >> .yarnrc.yml
           yarn npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
