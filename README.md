@@ -76,10 +76,10 @@ $("div#clock").clock({"timeFormat": timeFmtOptions});
 ## Format Date and Time using PHP style Format Characters
 
 There are two options that allow us to use PHP style Format Characters:
-* "dateFormat" -> for formatting the date string
-* "timeFormat" -> for formatting the time string
+* `dateFormat` -> for formatting the date string
+* `timeFormat` -> for formatting the time string
 
-PHP Style Format Characters (such as those found [here](http://php.net/manual/en/function.date.php "PHP Format Characters")) supported by the ***dateFormat*** parameter are:
+PHP Style Format Characters (such as those found [here](https://www.php.net/manual/en/datetime.format.php "PHP Format Characters")) supported by the ***dateFormat*** parameter are:
 
 | Format Character  | Description                                | Example Returned values |
 | ----------------- | ------------------------------------------ | ------------------- |
@@ -111,7 +111,7 @@ $("div#clock").clock({"dateFormat":"D, F n, Y"});
 ```
 
 
-PHP Style Format Characters (such as those found [here](http://php.net/manual/en/function.date.php "PHP Format Characters")) supported by the ***timeFormat*** parameter are:
+PHP Style Format Characters (such as those found [here](https://www.php.net/manual/en/datetime.format.php "PHP Format Characters")) supported by the ***timeFormat*** parameter are:
 
 | Format Character  | Description                                | Example Returned values |
 | ----------------- | ------------------------------------------ | ----------------- |
