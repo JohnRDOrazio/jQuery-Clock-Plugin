@@ -185,11 +185,12 @@ $("div#clock").clock({"timeFormat":"H:i:s 50%(@B)"});
 Uses the native ECMA script [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat") object for the translations of the days of the week and months of the year.
 Supported locales with the date they were added to the [specification](https://tc39.es/ecma402/#sec-intl-locale-constructor "https://tc39.es/ecma402/#sec-intl-locale-constructor") can be found in the [Unicode BCP 47 specification](https://www.iana.org/assignments/language-subtag-registry "https://www.iana.org/assignments/language-subtag-registry") list.
 
-The desired locale can be set using the "**langSet**" option:
+The desired locale can be set using the "**locale**" option:
 
 **Example:**
-```JavaScript
-$("div#clock").clock({"langSet":"de"});
+```diff
+- $("div#clock").clock({"langSet":"de"}); //DEPRECATED since v2.3.7
++ $("div#clock").clock({"locale":"de"});  //IMPLEMENTED since v2.3.7
 ```
 
 ## Update Speed
@@ -286,13 +287,13 @@ $("#bigben").clock().start(); //will (re-)start the already initialized jQuery C
 All and any parameters can be modified on an already initialized clock. Any modifications will be noticeable on the next tick of the clock.
 ```JavaScript
 const $clocks = $("div.clock").clock(); //turn all divs with a "clock" class into jQuery Clocks
-$clocks.first().clock({langSet:"vi"}); //change the locale of the jQuery Clock on the first div with a "clock" class and set it to Vietnamese
+$clocks.first().clock({locale:"vi"}); //change the locale of the jQuery Clock on the first div with a "clock" class and set it to Vietnamese
 $clocks.clock({timeFormat:"H:i:s.v",rate:50}); //change the timeFormat on the jQuery Clocks on all divs with a "clock" class so that they display milliseconds, and update the tick rate of the clocks to 50 milliseconds
 ```
 
 # Styling
 
-The plugin adds a `jqclock` class to the dom element that the clock is applied to (usually a div). And the internal html structure that is created is like this:
+The plugin adds a `jqclock` class to the dom element that the clock is applied to (usually a div). And the resulting html structure that is created is as follows:
 ```HTML
 <div class="jqclock">
   <span class="clockdate"></span>
