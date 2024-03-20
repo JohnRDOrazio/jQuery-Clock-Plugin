@@ -278,8 +278,8 @@ $clocks.stop(); //will stop all jQuery Clocks on divs with a "clock" class
 $clocks.start(); //will start all jQuery Clocks on divs with a "clock" class
 $clocks.first().stop(); //will stop the jQuery Clock on the first div with a "clock" class
 
-$("#bigben").clock().stop(); //will initialize a jQuery Clock on the div with id = "bigben" and stop it in it's tracks...
-$("#bigben").clock().start(); //will (re-)start the already initialized jQuery Clock on the div with id = "bigben"
+const $bigben = $("#bigben").clock().stop(); //will initialize a jQuery Clock on the div with id = "bigben" and stop it in it's tracks...
+$bigben.start(); //will (re-)start the already initialized jQuery Clock on the div with id = "bigben"
 ```
 
 ## Modifying parameters on initialized jQuery Clocks
